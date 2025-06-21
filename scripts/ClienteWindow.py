@@ -71,10 +71,3 @@ class ClienteWindow(QtWidgets.QMainWindow):
         celular = celular_temp
 
         print("\nEmail: " + email, "\nSenha: " + senha,"\nCelular: " + celular, "\n")
-
-
-
-app = QtWidgets.QApplication(sys.argv)
-janela = ClienteWindow()
-janela.showMaximized()
-app.exec()
