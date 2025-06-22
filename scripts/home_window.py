@@ -1,11 +1,9 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QMainWindow 
+from PyQt6.QtWidgets import QApplication, QMainWindow
 import cliente_window, balanco_window, relatorio_window
 import sys
-import pandas as pd
 
-
-from grafico import Exibir_Grafico
+from database import ConsultaSQL
 
 """
 Tela HOME (se estiver logado), linka a todas as outras.. por enquanto ao menos
@@ -20,8 +18,6 @@ class HomeWindow(QMainWindow):
         #Variável para verificar se as respectivas telas estão abertas
         self.balanco_window = None
         self.perfil_window = None
-
-        Exibir_Grafico(self.frame_grafico.layout())
         
         #TODO Gerar o PDF contendo um relatório - a decidir estrutura
         # É UM POPUP de confirmação
@@ -45,7 +41,7 @@ class HomeWindow(QMainWindow):
         if not self.perfil_window:
             self.perfil_window = cliente_window.ClienteWindow()
         self.perfil_window.showMaximized()
-
+    
     #TODO
     def btn_desconectar(self):
         ...
