@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS tb_registro(
 	transacao_id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    moeda VARCHAR(20) NOT NULL,
     tipo enum('entrada','saída'),
     categoria enum('alimentação','contas','estudo','lazer','saúde','outros','transporte'),
     data_realizada DATE NOT NULL,
@@ -34,10 +33,9 @@ INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, nasciment
     '2000-01-01'
 );
 
-INSERT INTO tb_registro(nome, valor, moeda, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
+INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
 	'Salário',
     '12.000',
-    'USD$',
     'Entrada',
     'Outros',
     CURRENT_DATE(),
