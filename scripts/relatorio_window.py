@@ -39,17 +39,17 @@ class RelatorioWindow(QDialog):
 
         pdf.drawString(10,750, "nome")
         pdf.drawString(110,750, "valor")
-        pdf.drawString(210,750, "moeda")
-        pdf.drawString(310,750, "data_realizada")
-        pdf.drawString(410,750, "categoria")
+        pdf.drawString(210,750, "tipo")
+        pdf.drawString(310,750, "categoria")
+        pdf.drawString(410,750, "data_realizada")
 
         for i in range(0, len(dados_lidos)):
             y = y + 50
-            pdf.drawString(10,750 - y, str(dados_lidos[i][0]))
-            pdf.drawString(110,750 - y, str(dados_lidos[i][1]))
-            pdf.drawString(210,750 - y, str(dados_lidos[i][2]))
-            pdf.drawString(310,750 - y, str(dados_lidos[i][3]))
-            pdf.drawString(410,750 - y, str(dados_lidos[i][4]))
+            pdf.drawString(10,750 - y, str(dados_lidos[i][1]))
+            pdf.drawString(110,750 - y, str(dados_lidos[i][2]))
+            pdf.drawString(210,750 - y, str(dados_lidos[i][3]))
+            pdf.drawString(310,750 - y, str(dados_lidos[i][4]))
+            pdf.drawString(410,750 - y, str(dados_lidos[i][5]))
 
         pdf.save()
         

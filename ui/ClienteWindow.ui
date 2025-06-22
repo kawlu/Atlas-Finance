@@ -90,7 +90,7 @@ border: none;</string>
              <string notr="true">min-width: 75px;</string>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/icons/globe-2.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/icons/globe.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -1388,7 +1388,7 @@ color: #0D192B;</string>
   <tabstop>btn_salvar</tabstop>
  </tabstops>
  <resources>
-  <include location="../assets/png/icons.qrc"/>
+  <include location="../assets/png/icons_.qrc"/>
  </resources>
  <connections/>
 </ui>
