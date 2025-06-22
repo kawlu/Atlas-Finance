@@ -35,11 +35,11 @@ INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, nasciment
 );
 
 INSERT INTO tb_registro(nome, valor, moeda, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
-	'Propina',
-    '630.00',
+	'Salário',
+    '12.000',
     'USD$',
-    'entrada',
-    'outros',
+    'Entrada',
+    'Outros',
     CURRENT_DATE(),
     '1'
 );
