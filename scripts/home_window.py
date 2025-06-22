@@ -41,6 +41,9 @@ class HomeWindow(QMainWindow):
             self.perfil_window = cliente_window.ClienteWindow()
         self.perfil_window.showMaximized()
     
+    def get_grafico(self):
+        ...
+
     #TODO
     def btn_desconectar(self):
         ...
