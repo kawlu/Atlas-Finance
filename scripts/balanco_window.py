@@ -151,9 +151,9 @@ class BalancoWindow(QDialog):
                 """)
                 erro_msg.exec()
 
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     window = BalancoWindow()
-#     window.resize(1250, 700)
-#     window.show()
-#     sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = BalancoWindow()
+    window.resize(1250, 700)
+    window.show()
+    sys.exit(app.exec())
