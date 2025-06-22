@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>800</height>
+    <height>878</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -118,6 +118,9 @@ border: none;
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btn_home">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 min-width: 10px;
@@ -131,6 +134,9 @@ font-size: 16px;</string>
           </item>
           <item alignment="Qt::AlignHCenter">
            <widget class="QPushButton" name="btn_perfil">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 min-width: 10px;
@@ -157,6 +163,9 @@ font-size: 16px;</string>
           </item>
           <item>
            <widget class="QPushButton" name="btn_logoff">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 min-width: 10px;
@@ -249,6 +258,9 @@ font-size: 16px;</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(219, 219, 219);
 color: rgb(13, 25, 43);
@@ -270,6 +282,9 @@ min-height: 20px;</string>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="styleSheet">
              <string notr="true">QComboBox {
@@ -596,6 +611,9 @@ font-weight: bold;</string>
                           <horstretch>0</horstretch>
                           <verstretch>0</verstretch>
                          </sizepolicy>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
                         </property>
                         <property name="styleSheet">
                          <string notr="true">color: rgb(219, 219, 219);
