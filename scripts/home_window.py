@@ -1,7 +1,9 @@
-from PyQt6 import QtWidgets, uic
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDialog
-import ClienteWindow, BalancoWindow, RelatorioWindow
+from PyQt6 import uic
+from PyQt6.QtWidgets import QApplication, QMainWindow
+import cliente_window, balanco_window, relatorio_window
 import sys
+
+from database import ConsultaSQL
 
 """
 Tela HOME (se estiver logado), linka a todas as outras.. por enquanto ao menos
@@ -11,7 +13,7 @@ class HomeWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        uic.loadUi("ui/HomeWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/HomeWindow.ui", self)  # type: ignore[attr-defined]
         
         #Variável para verificar se as respectivas telas estão abertas
         self.balanco_window = None
@@ -19,24 +21,24 @@ class HomeWindow(QMainWindow):
         
         #TODO Gerar o PDF contendo um relatório - a decidir estrutura
         # É UM POPUP de confirmação
-        self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)  # type: ignore
-        self.btn_logoff.clicked.connect(self.btn_desconectar)   # type: ignore
-        self.btn_editar.clicked.connect(self.btn_balanco)   # type: ignore
-        self.btn_perfil.clicked.connect(self.btn_cliente)   # type: ignore
+        self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)  # type: ignore[attr-defined]
+        self.btn_logoff.clicked.connect(self.btn_desconectar)   # type: ignore[attr-defined]
+        self.btn_editar.clicked.connect(self.btn_balanco)   # type: ignore[attr-defined]
+        self.btn_perfil.clicked.connect(self.btn_cliente)   # type: ignore[attr-defined]
      
     #FUNÇÕES DOS BOTÕES   
     def btn_gerar_relatorio(self):
-        popup = RelatorioWindow.RelatorioWindow()
+        popup = relatorio_window.RelatorioWindow()
         popup.exec() 
         
     def btn_balanco(self):
         if not self.balanco_window:
-            self.balanco_window = BalancoWindow.BalancoWindow()
+            self.balanco_window = balanco_window.BalancoWindow()
         self.balanco_window.show()
         
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = ClienteWindow.ClienteWindow()
+            self.perfil_window = cliente_window.ClienteWindow()
         self.perfil_window.showMaximized()
     
     #TODO

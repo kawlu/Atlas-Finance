@@ -61,7 +61,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="lbl_Titulo">
               <property name="font">
                <font>
                 <pointsize>22</pointsize>
@@ -116,7 +116,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="lbl_Nome">
               <property name="font">
                <font>
                 <pointsize>15</pointsize>
@@ -133,13 +133,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="textEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QLineEdit" name="input_Nome">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -193,7 +187,7 @@ max-height: 40px;</string>
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="lbl_Tipo">
               <property name="font">
                <font>
                 <pointsize>15</pointsize>
@@ -210,7 +204,7 @@ max-height: 40px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_2">
+             <widget class="QComboBox" name="cbox_Tipo">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -274,7 +268,7 @@ max-height: 90px;</string>
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="lbl_Categoria">
               <property name="font">
                <font>
                 <pointsize>15</pointsize>
@@ -291,7 +285,7 @@ max-height: 90px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox">
+             <widget class="QComboBox" name="cbox_Categoria">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -386,7 +380,7 @@ max-height: 300px;</string>
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label_5">
+             <widget class="QLabel" name="lbl_Data">
               <property name="font">
                <font>
                 <pointsize>15</pointsize>
@@ -403,19 +397,7 @@ max-height: 300px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="textEdit_2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>402</width>
-                <height>42</height>
-               </size>
-              </property>
+             <widget class="QLineEdit" name="input_Data">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -469,7 +451,7 @@ max-height: 40px;</string>
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="lbl_Valor">
               <property name="font">
                <font>
                 <pointsize>15</pointsize>
@@ -486,19 +468,7 @@ max-height: 40px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="textEdit_3">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>402</width>
-                <height>42</height>
-               </size>
-              </property>
+             <widget class="QLineEdit" name="input_Valor">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -552,49 +522,7 @@ max-height: 40px;</string>
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton">
-              <property name="font">
-               <font>
-                <pointsize>13</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="cursor">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(141, 10, 10);
-color: rgb(255, 255, 255);
-padding: 10px 20px;
-border-radius: 12px;
-min-width: 150px;
-min-height: 30px;</string>
-              </property>
-              <property name="text">
-               <string>Cancelar</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_15">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Maximum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="btn_Confirmar">
               <property name="font">
                <font>
                 <pointsize>13</pointsize>

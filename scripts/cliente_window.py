@@ -15,7 +15,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
 
         # Carrega tela principal
-        uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self)
+        uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self) # type: ignore[attr-defined]
         self.setWindowTitle("Atlas Finance - Usuário")
         appIcon = QtGui.QIcon("")
         self.setWindowIcon(appIcon)
@@ -24,28 +24,28 @@ class ClienteWindow(QtWidgets.QMainWindow):
         senha = ""
         celular = ""
 
-        self.btn_editar_email.clicked.connect(self.habilitar_edit_email)
-        self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha)
-        self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
-        self.btn_salvar.clicked.connect(self.salvar)
+        self.btn_editar_email.clicked.connect(self.habilitar_edit_email) # type: ignore[attr-defined]
+        self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha) # type: ignore[attr-defined]
+        self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular) # type: ignore[attr-defined]
+        self.btn_salvar.clicked.connect(self.salvar) # type: ignore[attr-defined]
 
-        self.cmbox_pais.addItems(lista_paises)
+        self.cmbox_pais.addItems(lista_paises) # type: ignore[attr-defined]
 
     def habilitar_edit_email(self):
-        self.edit_email.setEnabled(not self.edit_email.isEnabled())
-        self.edit_email.setFocus()
+        self.edit_email.setEnabled(not self.edit_email.isEnabled()) # type: ignore[attr-defined]
+        self.edit_email.setFocus() # type: ignore[attr-defined]
     def habilitar_edit_senha(self):
-        self.edit_senha.setEnabled(not self.edit_senha.isEnabled())
-        self.edit_senha.setFocus()
+        self.edit_senha.setEnabled(not self.edit_senha.isEnabled()) # type: ignore[attr-defined]
+        self.edit_senha.setFocus() # type: ignore[attr-defined]
     def habilitar_edit_celular(self):
-        self.edit_celular.setEnabled(not self.edit_celular.isEnabled())
-        self.edit_celular.setFocus()
+        self.edit_celular.setEnabled(not self.edit_celular.isEnabled()) # type: ignore[attr-defined]
+        self.edit_celular.setFocus() # type: ignore[attr-defined]
 
     def salvar(self):
         #TODO: verificar se nada mudou
-        email_temp = self.edit_email.text()
-        senha_temp = self.edit_senha.text()
-        celular_temp = re.sub(r'\D', '', self.edit_celular.text().strip())
+        email_temp = self.edit_email.text() # type: ignore[attr-defined]
+        senha_temp = self.edit_senha.text() # type: ignore[attr-defined]
+        celular_temp = re.sub(r'\D', '', self.edit_celular.text().strip()) # type: ignore[attr-defined]
 
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         if not re.match(regex_email, email_temp):
