@@ -3,6 +3,7 @@ from database import ConsultaSQL
 import matplotlib.pyplot as plt
 import numpy as np
 import calendar
+import locale
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class Exibir_Grafico():
@@ -27,8 +28,12 @@ class Exibir_Grafico():
         if df.empty:
             print("Nenhum dado disponível para gerar o gráfico.")
 
+        try:
+            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  # Linux/Mac
+        except:
+            locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil')  # Windows fallback
 
-        # Converte número do mês para nome abreviado
+        # Aplica os nomes dos meses em pt-br abreviados
         df["mes_nome"] = df["mes"].apply(lambda x: calendar.month_abbr[x].capitalize())
 
         # Lista única dos meses (ordenada)
@@ -66,4 +71,5 @@ class Exibir_Grafico():
         canvas = FigureCanvas(fig)
         canvas.updateGeometry()
 
+        #Redimensiona gráfico
         self.destino_layout.addWidget(canvas, stretch=1)
