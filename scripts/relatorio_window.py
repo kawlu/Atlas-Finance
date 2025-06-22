@@ -29,7 +29,7 @@ class RelatorioWindow(QDialog):
     #TODO Adaptar
     def gerar_pdf(self):
         db = ConsultaSQL()
-        dados_lidos = db.consultar(query="SELECT * FROM tb_registro")
+        dados_lidos = db.consultar_PDF(query="SELECT * FROM tb_registro")
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
         pdf = canvas.Canvas("teste.pdf")
