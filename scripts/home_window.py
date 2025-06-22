@@ -15,7 +15,7 @@ class HomeWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        uic.loadUi("ui/HomeWindow.ui", self)  # type: ignore[attr-defined]
+        uic.loadUi("ui/HomeWindow.ui", self)
         
         #Variável para verificar se as respectivas telas estão abertas
         self.balanco_window = None
@@ -25,13 +25,13 @@ class HomeWindow(QMainWindow):
         
         #TODO Gerar o PDF contendo um relatório - a decidir estrutura
         # É UM POPUP de confirmação
-        self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)  # type: ignore[attr-defined]
-        self.btn_logoff.clicked.connect(self.btn_desconectar)   # type: ignore[attr-defined]
-        self.btn_editar.clicked.connect(self.btn_balanco)   # type: ignore[attr-defined]
-        self.btn_perfil.clicked.connect(self.btn_cliente)   # type: ignore[attr-defined]
+        self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)
+        self.btn_logoff.clicked.connect(self.btn_desconectar)
+        self.btn_editar.clicked.connect(self.btn_balanco)
+        self.btn_perfil.clicked.connect(self.btn_cliente)
         
      
-    #FUNÇÕES DOS BOTÕES   
+    #MÉTODOS DOS BOTÕES   
     def btn_gerar_relatorio(self):
         popup = relatorio_window.RelatorioWindow()
         popup.exec() 

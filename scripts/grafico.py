@@ -27,6 +27,8 @@ class Exibir_Grafico():
         # Garante que há dados antes de tentar plotar
         if df.empty:
             print("Nenhum dado disponível para gerar o gráfico.")
+            #TODO criar uma label avisando na tela
+            return
 
         try:
             locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  # Linux/Mac

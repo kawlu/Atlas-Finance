@@ -7,10 +7,10 @@ db = ConsultaSQL()
 class NovoRegistroWindow(QDialog):
     def __init__(self, balanco_window):
         super().__init__()
-        uic.loadUi("ui/NovoRegistroWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/NovoRegistroWindow.ui", self)
         self.balanco_window = balanco_window
 
-        self.btn_Confirmar.clicked.connect(self.adicionar_registro)  # type: ignore
+        self.btn_Confirmar.clicked.connect(self.adicionar_registro)
 
     def adicionar_registro(self):
         nome = self.input_Nome.text()
@@ -46,12 +46,12 @@ class NovoRegistroWindow(QDialog):
 class BalancoWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/BalancoWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/BalancoWindow.ui", self)
 
         self.novo_registro_window = None
 
-        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)  # type: ignore
-        self.btn_excluir_registro.clicked.connect(self.excluir_registro)  # type: ignore
+        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)
+        self.btn_excluir_registro.clicked.connect(self.excluir_registro)
 
         self.carregar_registros()
 

@@ -815,6 +815,9 @@ color: rgb(13, 25, 43);</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(219, 219, 219);</string>
+            </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
