@@ -31,7 +31,6 @@ class ConsultaSQL():
         with self.banco.cursor() as cursor:
             cursor.execute(query, params)
             colunas = [desc[0] for desc in cursor.description]
-            print(cursor.description)
             dados = cursor.fetchall()
             return pd.DataFrame(dados, columns=colunas)
 
