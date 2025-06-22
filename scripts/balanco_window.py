@@ -2,11 +2,7 @@ from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
 import sys
 from database import ConsultaSQL
-
-
-# Conexão com o banco
 db = ConsultaSQL()
-
 
 class NovoRegistroWindow(QDialog):
     def __init__(self, balanco_window):
@@ -14,7 +10,6 @@ class NovoRegistroWindow(QDialog):
         uic.loadUi("ui/NovoRegistroWindow.ui", self)  # type: ignore
         self.balanco_window = balanco_window
 
-        # Botão confirmar
         self.btn_Confirmar.clicked.connect(self.adicionar_registro)  # type: ignore
 
     def adicionar_registro(self):
@@ -34,10 +29,8 @@ class NovoRegistroWindow(QDialog):
 
                 db.editar(query, valores)
 
-                # Buscar o ID recém-inserido
                 transacao_id = db.consultar("SELECT LAST_INSERT_ID()")[0][0]
 
-                # Atualizar a tabela na interface principal
                 self.balanco_window.adicionar_na_tabela(
                     (transacao_id, nome, tipo, categoria, data_realizada, valor)
                 )
@@ -62,7 +55,6 @@ class BalancoWindow(QDialog):
 
         self.carregar_registros()
 
-        # Opcional: esconder a coluna do ID visualmente
         self.tabela_Registros.setColumnHidden(0, True)
 
     def abrir_novo_registro(self):
@@ -99,41 +91,69 @@ class BalancoWindow(QDialog):
         linha_selecionada = self.tabela_Registros.currentRow()
 
         if linha_selecionada < 0:
-            QtWidgets.QMessageBox.warning(
-                self, "Aviso", "Selecione um registro para excluir."
-            )
+            aviso = QtWidgets.QMessageBox(self)
+            aviso.setWindowTitle("Aviso")
+            aviso.setText("Selecione um registro para excluir.")
+            aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
+
+            aviso.setStyleSheet("""
+                QLabel { color: #0D192B; }
+                QPushButton { color: #0D192B; }
+            """)
+            aviso.exec()
             return
 
-        # Pegando o ID (na coluna 0, que está escondida)
         transacao_id = self.tabela_Registros.item(linha_selecionada, 0).text()
 
-        resposta = QtWidgets.QMessageBox.question(
-            self,
-            "Confirmação",
-            f"Tem certeza que deseja excluir o registro ID {transacao_id}?",
-            QtWidgets.QMessageBox.StandardButton.Yes
-            | QtWidgets.QMessageBox.StandardButton.No,
+        confirm = QtWidgets.QMessageBox(self)
+        confirm.setWindowTitle("Confirmação")
+        confirm.setText(f"Tem certeza que deseja excluir o registro ID {transacao_id}?")
+        confirm.setIcon(QtWidgets.QMessageBox.Icon.Question)
+        confirm.setStandardButtons(
+            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
         )
+
+        confirm.button(QtWidgets.QMessageBox.StandardButton.Yes).setText("Confirmar")
+        confirm.button(QtWidgets.QMessageBox.StandardButton.No).setText("Cancelar")
+
+        confirm.setStyleSheet("""
+            QLabel { color: #0D192B; }
+            QPushButton { color: #0D192B; }
+        """)
+
+        resposta = confirm.exec()
 
         if resposta == QtWidgets.QMessageBox.StandardButton.Yes:
             try:
                 sql = "DELETE FROM tb_registro WHERE transacao_id = %s"
                 db.editar(sql, (transacao_id,))
 
-                # Remove da interface
                 self.tabela_Registros.removeRow(linha_selecionada)
 
-                QtWidgets.QMessageBox.information(
-                    self, "Sucesso", "Registro excluído com sucesso."
-                )
-            except Exception as erro:
-                QtWidgets.QMessageBox.critical(
-                    self, "Erro", f"Erro ao excluir registro:\n{erro}"
-                )
+                informacao = QtWidgets.QMessageBox(self)
+                informacao.setWindowTitle("Sucesso")
+                informacao.setText("Registro excluído com sucesso.")
+                informacao.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                informacao.setStyleSheet("""
+                    QLabel { color: #0D192B; }
+                    QPushButton { color: #0D192B; }
+                """)
+                informacao.exec()
 
+            except Exception as erro:
+                erro_msg = QtWidgets.QMessageBox(self)
+                erro_msg.setWindowTitle("Erro")
+                erro_msg.setText(f"Erro ao excluir registro:\n{erro}")
+                erro_msg.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+                erro_msg.setStyleSheet("""
+                    QLabel { color: #0D192B; }
+                    QPushButton { color: #0D192B; }
+                """)
+                erro_msg.exec()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = BalancoWindow()
+    window.resize(100, 600)
     window.show()
     sys.exit(app.exec())
