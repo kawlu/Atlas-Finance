@@ -56,6 +56,9 @@ class HomeWindow(QMainWindow):
         self.grafico.update_grafico(mes)
     
 if __name__ == "__main__":
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
     app = QApplication(sys.argv)
     window = HomeWindow()
     window.showMaximized()

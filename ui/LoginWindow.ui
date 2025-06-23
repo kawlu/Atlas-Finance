@@ -222,7 +222,9 @@
             </property>
             <property name="styleSheet">
              <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(219, 219, 219);</string>
+background-color: rgb(219, 219, 219);
+border: 1px;
+border-radius: 40px;</string>
             </property>
             <property name="text">
              <string>Login</string>
@@ -233,6 +235,10 @@ background-color: rgb(219, 219, 219);</string>
            <widget class="QPushButton" name="pushButton">
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px;
+border-radius: 20px;</string>
             </property>
             <property name="text">
              <string>Crie sua conta</string>
@@ -264,7 +270,9 @@ background-color: rgb(219, 219, 219);</string>
     <item>
      <widget class="QFrame" name="frame_2">
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(219, 219, 219);</string>
+       <string notr="true">background-color: rgb(219, 219, 219);
+border: 1px;
+border-radius: 20px;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -273,22 +281,6 @@ background-color: rgb(219, 219, 219);</string>
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>0</width>
-           <height>100</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item>
         <widget class="QFrame" name="frame_8">
          <property name="maximumSize">
@@ -309,6 +301,22 @@ background-color: rgb(219, 219, 219);</string>
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item>
            <widget class="QLabel" name="label_7">
             <property name="styleSheet">
