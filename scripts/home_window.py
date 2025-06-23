@@ -21,7 +21,9 @@ class HomeWindow(QMainWindow):
         self.balanco_window = None
         self.perfil_window = None
 
-        Exibir_Grafico(self.frame_grafico.layout(), self.lbl_warning)
+        self.grafico = Exibir_Grafico(self.frame_grafico.layout())
+        self.cmb_mes.currentIndexChanged.connect(self.atualizar_grafico_global)
+        self.atualizar_grafico_global()
         
         #TODO Gerar o PDF contendo um relatório - a decidir estrutura
         # É UM POPUP de confirmação
@@ -30,7 +32,6 @@ class HomeWindow(QMainWindow):
         self.btn_editar.clicked.connect(self.btn_balanco)
         self.btn_perfil.clicked.connect(self.btn_cliente)
         
-     
     #MÉTODOS DOS BOTÕES   
     def btn_gerar_relatorio(self):
         popup = relatorio_window.RelatorioWindow()
@@ -49,6 +50,10 @@ class HomeWindow(QMainWindow):
     #TODO
     def btn_desconectar(self):
         ...
+        
+    def atualizar_grafico_global(self):
+        mes = self.cmb_mes.currentIndex()
+        self.grafico.update_grafico(mes)
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)

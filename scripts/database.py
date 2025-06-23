@@ -11,7 +11,6 @@ class ConsultaSQL():
         )
         try:
             self.banco.ping(reconnect=True)  # Tenta reconectar
-            print("Banco de dados conectado!")
         except pymysql.MySQLError:
             print("Falha na conexão com o banco de dados.")
 

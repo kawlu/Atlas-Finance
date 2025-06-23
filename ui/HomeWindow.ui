@@ -848,18 +848,7 @@ color: rgb(13, 25, 43);</string>
                <property name="styleSheet">
                 <string notr="true">background-color: rgb(219, 219, 219);</string>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_14">
-                <item>
-                 <widget class="QLabel" name="lbl_warning">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(13, 25, 43);</string>
-                  </property>
-                  <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#0d192b;&quot;&gt;Nenhum dado disponível para gerar o gráfico&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <layout class="QHBoxLayout" name="horizontalLayout_14"/>
               </widget>
              </item>
             </layout>
