@@ -227,18 +227,16 @@ min-height: 40px;</string>
         </property>
         <property name="font">
          <font>
-          <pointsize>-1</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(13, 25, 43);
-font-weight: bold;
-font-size: 18px;</string>
+</string>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>242</number>
+         <number>206</number>
         </attribute>
         <column>
          <property name="text">
