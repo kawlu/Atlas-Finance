@@ -21,7 +21,7 @@ class HomeWindow(QMainWindow):
         self.balanco_window = None
         self.perfil_window = None
 
-        Exibir_Grafico(self.frame_grafico.layout())
+        Exibir_Grafico(self.frame_grafico.layout(), self.lbl_warning)
         
         #TODO Gerar o PDF contendo um relatório - a decidir estrutura
         # É UM POPUP de confirmação
