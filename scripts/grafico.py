@@ -17,7 +17,7 @@ class Exibir_Grafico():
             except:
                 locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil')
             #Agrupamento por mês e ano
-            df = self.sql.consultar("""
+            df = self.sql.pd_consultar("""
                 SELECT 
                     YEAR(data_realizada) AS ano,
                     MONTH(data_realizada) AS mes,
@@ -54,7 +54,7 @@ class Exibir_Grafico():
             )
         else:
             # Mostrar evolução do mês específico por ano
-            df = self.sql.consultar(f"""
+            df = self.sql.pd_consultar(f"""
                 SELECT 
                     YEAR(data_realizada) AS ano,
                     tipo,
@@ -96,6 +96,12 @@ class Exibir_Grafico():
         ax.bar(x - width/2, valores_entrada, width, label='Entradas', color="#057927")
         ax.bar(x + width/2, valores_saida, width, label='Saídas', color='#B40606')
 
+        for i in range(len(x)):
+            ax.text(x[i] - width/2, valores_entrada[i], f"R${valores_entrada[i]:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."), 
+                    ha='center', va='bottom', fontsize=8, color='black')
+            ax.text(x[i] + width/2, valores_saida[i], f"R${valores_saida[i]:,.2f}".replace(",", "v").replace(".", ",").replace("v", "."), 
+                    ha='center', va='bottom', fontsize=8, color='black')
+        
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45)
         ax.set_title(titulo, fontsize=14)
