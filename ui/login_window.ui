@@ -78,7 +78,7 @@
              </size>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;img src=&quot;:/Logo/Logo Atlas.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/icons/Logo_Atlasmini.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
@@ -387,7 +387,7 @@ background-color: rgb(219, 219, 219);</string>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="Icons.qrc"/>
+  <include location="../assets/png/icons_.qrc"/>
  </resources>
  <connections/>
 </ui>
