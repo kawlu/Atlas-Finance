@@ -28,8 +28,11 @@ class Exibir_Grafico():
                 ORDER BY ano, mes, tipo
             """)
 
-            self.check_df(df)
-
+            if df.empty:
+                self.limpar_grafico()
+                return
+                
+            
             df["mes_ano"] = df.apply(
                 lambda row: f"{calendar.month_abbr[row['mes']].capitalize()}/{int(row['ano'])}", axis=1
             )
@@ -65,8 +68,10 @@ class Exibir_Grafico():
                 ORDER BY ano
             """)
 
-            self.check_df(df)
-
+            if df.empty:
+                self.limpar_grafico()
+                return
+            
             anos = sorted(df["ano"].unique())
             x = np.arange(len(anos))
 
@@ -119,7 +124,3 @@ class Exibir_Grafico():
             widget = self.destino_layout.itemAt(i).widget()
             if widget is not None:
                 widget.setParent(None)
-    
-    def check_df(self, df):
-        if df.empty:
-                self.limpar_grafico()
