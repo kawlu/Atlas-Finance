@@ -1,7 +1,7 @@
 import pymysql
 import pandas as pd
 
-class ConsultaSQL():
+class ConsultaSQL:
     def __init__(self):
         self.banco = pymysql.connect(
             host="localhost",
@@ -14,16 +14,15 @@ class ConsultaSQL():
         except pymysql.MySQLError:
             print("Falha na conexão com o banco de dados.")
 
-    def consultar_PDF(self, query, params=None):
-        """Executa SELECT"""
+    def consultar(self, query, params=None):
+        """Executa SELECT e retorna lista de tuplas"""
         if not self.banco:
             raise ConnectionError("Banco de dados não conectado.")
         with self.banco.cursor() as cursor:
             cursor.execute(query, params)
-            resultado = cursor.fetchall()
-            return resultado
-        
-    def consultar(self, query, params=None) -> pd.DataFrame:
+            return cursor.fetchall()
+
+    def consultar_PDF(self, query, params=None) -> pd.DataFrame:
         """Executa SELECT e retorna DataFrame"""
         if not self.banco:
             raise ConnectionError("Banco de dados não conectado.")
@@ -44,5 +43,3 @@ class ConsultaSQL():
     def fechar_conexao(self):
         """Fecha a conexão com o banco"""
         self.banco.close()
-
-    
