@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS db_finance;
+CREATE DATABASE IF NOT EXISTS db_finance;More actions
 USE db_finance;
 
 CREATE TABLE IF NOT EXISTS tb_usuario(
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS tb_registro(
 	transacao_id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
+    moeda VARCHAR(20) NOT NULL,
     tipo enum('entrada','saída'),
     categoria enum('alimentação','contas','estudo','lazer','saúde','outros','transporte'),
     data_realizada DATE NOT NULL,
@@ -33,11 +34,12 @@ INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, nasciment
     '2000-01-01'
 );
 
-INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
-	'Salário',
-    '12.000',
-    'Entrada',
-    'Outros',
+INSERT INTO tb_registro(nome, valor, moeda, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
+	'Propina',
+    '630.00',
+    'USD$',
+    'entrada',
+    'outros',
     CURRENT_DATE(),
     '1'
 );
@@ -52,7 +54,6 @@ ORDER BY U.nome;
 
 # Join pra pegar valor total
 SELECT U.nome 'Nome', SUM(R.valor) 'Soma-Total'
-FROM tb_registro AS R
+FROM tb_registro AS RMore actions
 INNER JOIN tb_usuario AS U ON R.fk_usuario_id = U.pk_usuario_id
 GROUP BY U.nome
-ORDER BY SUM(R.valor) DESC;
