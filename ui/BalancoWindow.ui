@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Balano</class>
+ <widget class="QWidget" name="Balano">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
+    <width>1100</width>
     <height>700</height>
    </rect>
   </property>
@@ -217,7 +217,7 @@ min-height: 40px;</string>
       <item>
        <widget class="QTableWidget" name="tabela_Registros">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
@@ -227,12 +227,12 @@ min-height: 40px;</string>
         </property>
         <property name="font">
          <font>
-          <weight>75</weight>
-          <bold>true</bold>
+          <pointsize>-1</pointsize>
          </font>
         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(13, 25, 43);
+font-size: 18px;
 </string>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
