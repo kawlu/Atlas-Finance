@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Balanco</class>
+ <widget class="QWidget" name="Balanco">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
+    <width>1100</width>
     <height>700</height>
    </rect>
   </property>
@@ -186,7 +186,7 @@ min-width: 300px;
 min-height: 40px;</string>
            </property>
            <property name="text">
-            <string>Excluir Selecionados</string>
+            <string>Excluir Registro Selecionado</string>
            </property>
            <property name="iconSize">
             <size>
@@ -227,13 +227,22 @@ min-height: 40px;</string>
         </property>
         <property name="font">
          <font>
-          <weight>75</weight>
-          <bold>true</bold>
+          <pointsize>-1</pointsize>
          </font>
+        </property>
+        <property name="cursor" stdset="0">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(13, 25, 43);
+font-size: 18px;
 </string>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
          <number>206</number>

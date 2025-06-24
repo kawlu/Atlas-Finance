@@ -1,43 +1,63 @@
 from PyQt6 import uic, QtWidgets
-from PyQt6.QtWidgets import QApplication, QDialog
-from PyQt6.QtWidgets import QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
 import sys
 from database import ConsultaSQL
+from datetime import datetime
+import re
+
 db = ConsultaSQL()
+
+def tratar_data_para_banco(data_str):
+    return datetime.strptime(data_str, "%d/%m/%Y").strftime("%Y-%m-%d")
+
+def tratar_data_para_exibir(data_str):
+    return datetime.strptime(data_str, "%Y-%m-%d").strftime("%d/%m/%Y")
+
+def tratar_valor_para_banco(valor_str):
+    valor_limpo = re.sub(r'[^\d,]', '', valor_str) 
+    valor = valor_limpo.replace('.', '').replace(',', '.')
+    return float(valor)
+
+def tratar_valor_para_exibir(valor_float):
+    return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 class NovoRegistroWindow(QDialog):
     def __init__(self, balanco_window):
         super().__init__()
-        uic.loadUi("ui/NovoRegistroWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/NovoRegistroWindow.ui", self)
         self.balanco_window = balanco_window
 
-        self.btn_Confirmar.clicked.connect(self.adicionar_registro)  # type: ignore
+        self.btn_Confirmar.clicked.connect(self.adicionar_registro)
 
     def adicionar_registro(self):
         nome = self.input_Nome.text()
-        tipo = self.cbox_Tipo.currentText()
+        tipo = self.cbox_Tipo.currentText().lower()
         categoria = self.cbox_Categoria.currentText()
         data_realizada = self.input_Data.text()
         valor = self.input_Valor.text()
 
         if nome and tipo and categoria and data_realizada and valor:
             try:
-                valor = float(valor.replace(',', '.'))  # Corrige valor com vírgula ou ponto
+                data_banco = tratar_data_para_banco(data_realizada)
+                valor_banco = tratar_valor_para_banco(valor)
 
                 query = """
                     INSERT INTO tb_registro (nome, valor, tipo, categoria, data_realizada, fk_usuario_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """
-                valores = (nome, valor, tipo, categoria, data_realizada, 1)
+                valores = (nome, valor_banco, tipo, categoria, data_banco, 1)
 
                 db.editar(query, valores)
 
                 transacao_id = db.consultar("SELECT LAST_INSERT_ID()")[0][0]
 
                 self.balanco_window.adicionar_na_tabela(
-                    (transacao_id, nome, tipo, categoria, data_realizada, valor)
+                    (transacao_id, nome, tipo, categoria, data_banco, valor_banco)
                 )
 
+                self.balanco_window.atualizar_saldo_total()
+
+                self.limpar_campos()
                 self.close()
 
             except Exception as e:
@@ -45,17 +65,23 @@ class NovoRegistroWindow(QDialog):
         else:
             QtWidgets.QMessageBox.warning(self, "Aviso", "Preencha todos os campos corretamente.")
 
+    def limpar_campos(self):
+        self.input_Nome.clear()
+        self.cbox_Tipo.setCurrentIndex(0)
+        self.cbox_Categoria.setCurrentIndex(0)
+        self.input_Data.setDate(datetime.now())
+        self.input_Valor.clear()
 
 
 class BalancoWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/BalancoWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/BalancoWindow.ui", self)
 
         self.novo_registro_window = None
 
-        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)  # type: ignore
-        self.btn_excluir_registro.clicked.connect(self.excluir_registro)  # type: ignore
+        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)
+        self.btn_excluir_registro.clicked.connect(self.excluir_registro)
 
         self.carregar_registros()
 
@@ -79,6 +105,8 @@ class BalancoWindow(QDialog):
             for row_data in registros:
                 self.adicionar_na_tabela(row_data)
 
+            self.atualizar_saldo_total()
+
         except Exception as e:
             print("Erro ao carregar registros:", e)
 
@@ -86,10 +114,21 @@ class BalancoWindow(QDialog):
         row_number = self.tabela_Registros.rowCount()
         self.tabela_Registros.insertRow(row_number)
 
-        for column_number, data in enumerate(dados):
+        transacao_id, nome, tipo, categoria, data_realizada, valor = dados
+
+        nome = str(nome).title()
+        tipo = str(tipo).capitalize()
+        categoria = str(categoria).capitalize()
+        data_formatada = tratar_data_para_exibir(str(data_realizada))
+        valor_formatado = tratar_valor_para_exibir(float(valor))
+
+        itens = [transacao_id, nome, tipo, categoria, data_formatada, valor_formatado]
+
+        for column_number, data in enumerate(itens):
             self.tabela_Registros.setItem(
                 row_number, column_number, QTableWidgetItem(str(data))
             )
+
 
     def excluir_registro(self):
         linha_selecionada = self.tabela_Registros.currentRow()
@@ -99,11 +138,6 @@ class BalancoWindow(QDialog):
             aviso.setWindowTitle("Aviso")
             aviso.setText("Selecione um registro para excluir.")
             aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
-
-            aviso.setStyleSheet("""
-                QLabel { color: #0D192B; }
-                QPushButton { color: #0D192B; }
-            """)
             aviso.exec()
             return
 
@@ -123,14 +157,6 @@ class BalancoWindow(QDialog):
             QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
         )
 
-        confirm.button(QtWidgets.QMessageBox.StandardButton.Yes).setText("Confirmar")
-        confirm.button(QtWidgets.QMessageBox.StandardButton.No).setText("Cancelar")
-
-        confirm.setStyleSheet("""
-            QLabel { color: #0D192B; }
-            QPushButton { color: #0D192B; }
-        """)
-
         resposta = confirm.exec()
 
         if resposta == QtWidgets.QMessageBox.StandardButton.Yes:
@@ -140,30 +166,34 @@ class BalancoWindow(QDialog):
 
                 self.tabela_Registros.removeRow(linha_selecionada)
 
-                informacao = QtWidgets.QMessageBox(self)
-                informacao.setWindowTitle("Sucesso")
-                informacao.setText("Registro excluído com sucesso.")
-                informacao.setIcon(QtWidgets.QMessageBox.Icon.Information)
-                informacao.setStyleSheet("""
-                    QLabel { color: #0D192B; }
-                    QPushButton { color: #0D192B; }
-                """)
-                informacao.exec()
+                self.atualizar_saldo_total()
+
+                QtWidgets.QMessageBox.information(self, "Sucesso", "Registro excluído com sucesso.")
 
             except Exception as erro:
-                erro_msg = QtWidgets.QMessageBox(self)
-                erro_msg.setWindowTitle("Erro")
-                erro_msg.setText(f"Erro ao excluir registro:\n{erro}")
-                erro_msg.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-                erro_msg.setStyleSheet("""
-                    QLabel { color: #0D192B; }
-                    QPushButton { color: #0D192B; }
-                """)
-                erro_msg.exec()
+                QtWidgets.QMessageBox.critical(self, "Erro", f"Erro ao excluir registro:\n{erro}")
+
+    def atualizar_saldo_total(self):
+        try:
+            query = "SELECT tipo, valor FROM tb_registro"
+            df = db.pd_consultar(query)
+
+            if df.empty:
+                saldo = 0
+            else:
+                entradas = df[df['tipo'] == 'entrada']['valor'].sum()
+                saidas = df[df['tipo'] == 'saída']['valor'].sum()
+                saldo = entradas - saidas
+
+            saldo_formatado = tratar_valor_para_exibir(saldo)
+
+            self.lbl_valor_total.setText(saldo_formatado)
+
+        except Exception as e:
+            print("Erro ao atualizar saldo total:", e)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = BalancoWindow()
-    window.resize(1250, 700)
     window.show()
     sys.exit(app.exec())

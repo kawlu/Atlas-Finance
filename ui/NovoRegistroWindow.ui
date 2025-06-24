@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>NovoRegistro</class>
+ <widget class="QWidget" name="NovoRegistro">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>816</width>
-    <height>788</height>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -397,7 +397,10 @@ max-height: 300px;</string>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="input_Data">
+             <widget class="QDateEdit" name="input_Data">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -407,8 +410,14 @@ max-height: 300px;</string>
                <string notr="true">min-width: 400px;
 color: rgb(13, 25, 43);
 min-height: 40px;
-max-width: 400px;
-max-height: 40px;</string>
+max-width: 600px;
+max-height: 700px;</string>
+              </property>
+              <property name="displayFormat">
+               <string>dd/MM/yyyy</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
