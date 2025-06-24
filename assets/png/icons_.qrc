@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>Logo_Atlasmini.png</file>
     <file>star.png</file>
     <file>themes.png</file>
     <file>Logo Atlas.png</file>

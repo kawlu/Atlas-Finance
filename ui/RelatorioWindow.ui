@@ -41,6 +41,9 @@
           <bold>false</bold>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000;</string>
+        </property>
         <property name="text">
          <string>Deseja emitir o relatório?</string>
         </property>

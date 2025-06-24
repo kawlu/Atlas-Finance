@@ -8,6 +8,7 @@ sys.path.append(str(parent_directory))
 from listas.dados_combo import lista_paises
 import icons_rc
 import re
+import os
 
 class ClienteWindow(QtWidgets.QMainWindow):
     
@@ -40,6 +41,15 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def habilitar_edit_celular(self):
         self.edit_celular.setEnabled(not self.edit_celular.isEnabled()) # type: ignore[attr-defined]
         self.edit_celular.setFocus() # type: ignore[attr-defined]
+
+    def getUsuario(self):
+        with open("ActiveUser.txt", "r") as f:
+            id_usuario = f.readline()
+
+        query = f"""
+            SELECT * FROM tb_usuario
+            WHERE pk_usuario_id = '{id_usuario}'
+        """
 
     def salvar(self):
         #TODO: verificar se nada mudou
