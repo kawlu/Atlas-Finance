@@ -1173,6 +1173,11 @@ QComboBox QAbstractItemView {
                        <string>R$ 3000,00</string>
                       </property>
                      </item>
+                     <item>
+                      <property name="text">
+                       <string>R$ 1600,00</string>
+                      </property>
+                     </item>
                     </widget>
                    </item>
                    <item>
