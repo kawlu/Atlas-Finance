@@ -61,9 +61,19 @@ class NovoRegistroWindow(QDialog):
                 self.close()
 
             except Exception as e:
-                QtWidgets.QMessageBox.critical(self, "Erro", f"Erro ao inserir registro:\n{e}")
+                erro = QtWidgets.QMessageBox(self)
+                erro.setWindowTitle("Erro")
+                erro.setText(f"Erro ao inserir registro:\n{e}")
+                erro.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+                erro.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
+                erro.exec()
         else:
-            QtWidgets.QMessageBox.warning(self, "Aviso", "Preencha todos os campos corretamente.")
+              aviso = QtWidgets.QMessageBox(self)
+              aviso.setWindowTitle("Aviso")
+              aviso.setText("Preencha todos os campos corretamente.")
+              aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
+              aviso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
+              aviso.exec()
 
     def limpar_campos(self):
         self.input_Nome.clear()
@@ -143,6 +153,7 @@ class BalancoWindow(QDialog):
             return
 
         transacao_id = self.tabela_Registros.item(linha_selecionada, 0).text()
+        nome_registro = self.tabela_Registros.item(linha_selecionada, 1).text()
 
         try:
             transacao_id = int(transacao_id)
@@ -157,7 +168,7 @@ class BalancoWindow(QDialog):
 
         confirm = QtWidgets.QMessageBox(self)
         confirm.setWindowTitle("Confirmação")
-        confirm.setText(f"Tem certeza que deseja excluir o registro ID {transacao_id}?")
+        confirm.setText(f"Tem certeza que deseja excluir o registro \"{nome_registro}\"?")
         confirm.setIcon(QtWidgets.QMessageBox.Icon.Question)
 
         btn_sim = confirm.addButton("SIM", QtWidgets.QMessageBox.ButtonRole.YesRole)
@@ -177,7 +188,7 @@ class BalancoWindow(QDialog):
 
                 sucesso = QtWidgets.QMessageBox(self)
                 sucesso.setWindowTitle("Sucesso")
-                sucesso.setText("Registro excluído com sucesso.")
+                sucesso.setText(f"Registro \"{nome_registro}\" excluído com sucesso.")
                 sucesso.setIcon(QtWidgets.QMessageBox.Icon.Information)
                 sucesso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
                 sucesso.exec()
@@ -189,6 +200,7 @@ class BalancoWindow(QDialog):
                 erro_msg.setIcon(QtWidgets.QMessageBox.Icon.Critical)
                 erro_msg.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
                 erro_msg.exec()
+
 
     def atualizar_saldo_total(self):
         try:
