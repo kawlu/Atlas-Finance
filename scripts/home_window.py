@@ -16,7 +16,6 @@ class HomeWindow(QMainWindow):
         super().__init__()
         
         uic.loadUi("ui/HomeWindow.ui", self)
-        
         #Variável para verificar se as respectivas telas estão abertas
         self.balanco_window = None
         self.perfil_window = None

@@ -8,31 +8,26 @@ import re
 db = ConsultaSQL()
 
 def tratar_data_para_banco(data_str):
-    """De DD/MM/YYYY para YYYY-MM-DD"""
     return datetime.strptime(data_str, "%d/%m/%Y").strftime("%Y-%m-%d")
 
 def tratar_data_para_exibir(data_str):
-    """De YYYY-MM-DD para DD/MM/YYYY"""
     return datetime.strptime(data_str, "%Y-%m-%d").strftime("%d/%m/%Y")
 
 def tratar_valor_para_banco(valor_str):
-    """De R$ 12.000,00 para 12000.00"""
-    valor_limpo = re.sub(r'[^\d,]', '', valor_str)  # Remove R$ e pontos
+    valor_limpo = re.sub(r'[^\d,]', '', valor_str) 
     valor = valor_limpo.replace('.', '').replace(',', '.')
     return float(valor)
 
 def tratar_valor_para_exibir(valor_float):
-    """De 12000.00 para R$ 12.000,00"""
     return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
 
 class NovoRegistroWindow(QDialog):
     def __init__(self, balanco_window):
         super().__init__()
-        uic.loadUi("ui/NovoRegistroWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/NovoRegistroWindow.ui", self)
         self.balanco_window = balanco_window
 
-        self.btn_Confirmar.clicked.connect(self.adicionar_registro)  # type: ignore
+        self.btn_Confirmar.clicked.connect(self.adicionar_registro)
 
     def adicionar_registro(self):
         nome = self.input_Nome.text()
@@ -62,6 +57,7 @@ class NovoRegistroWindow(QDialog):
 
                 self.balanco_window.atualizar_saldo_total()
 
+                self.limpar_campos()
                 self.close()
 
             except Exception as e:
@@ -69,16 +65,23 @@ class NovoRegistroWindow(QDialog):
         else:
             QtWidgets.QMessageBox.warning(self, "Aviso", "Preencha todos os campos corretamente.")
 
+    def limpar_campos(self):
+        self.input_Nome.clear()
+        self.cbox_Tipo.setCurrentIndex(0)
+        self.cbox_Categoria.setCurrentIndex(0)
+        self.input_Data.setDate(datetime.now())
+        self.input_Valor.clear()
+
 
 class BalancoWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/BalancoWindow.ui", self)  # type: ignore
+        uic.loadUi("ui/BalancoWindow.ui", self)
 
         self.novo_registro_window = None
 
-        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)  # type: ignore
-        self.btn_excluir_registro.clicked.connect(self.excluir_registro)  # type: ignore
+        self.btn_add_registro.clicked.connect(self.abrir_novo_registro)
+        self.btn_excluir_registro.clicked.connect(self.excluir_registro)
 
         self.carregar_registros()
 
@@ -185,7 +188,6 @@ class BalancoWindow(QDialog):
 
         except Exception as e:
             print("Erro ao atualizar saldo total:", e)
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
