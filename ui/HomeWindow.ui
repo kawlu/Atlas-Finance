@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>800</height>
+    <height>877</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -457,13 +457,6 @@ font-weight: bold;</string>
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_7">
                    <item>
-                    <widget class="QLabel" name="lbl_mes">
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Janeiro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QFrame" name="frame_receita">
                      <property name="frameShape">
                       <enum>QFrame::NoFrame</enum>
@@ -487,35 +480,6 @@ font-weight: bold;</string>
                         <property name="styleSheet">
                          <string notr="true">color: rgb(13, 25, 43);</string>
                         </property>
-                        <property name="text">
-                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frame_saldo_previo">
-                     <property name="styleSheet">
-                      <string notr="true">color: rgb(13, 25, 43);</string>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::NoFrame</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QHBoxLayout" name="horizontalLayout_10">
-                      <item alignment="Qt::AlignLeft">
-                       <widget class="QLabel" name="lbl_saldo_previo">
-                        <property name="text">
-                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Saldo Prévio:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="lbl_saldo_previo_value">
                         <property name="text">
                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                         </property>

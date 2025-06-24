@@ -1,63 +1,150 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QMainWindow 
+from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtCore import QTimer
+
 import cliente_window, balanco_window, relatorio_window
 import sys
-import pandas as pd
-
 
 from grafico import Exibir_Grafico
+from database import ConsultaSQL
+from balanco_window import tratar_valor_para_exibir
 
-"""
-Tela HOME (se estiver logado), linka a todas as outras.. por enquanto ao menos
-"""
 
 class HomeWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        
+
         uic.loadUi("ui/HomeWindow.ui", self)
-        #Variável para verificar se as respectivas telas estão abertas
+
+        # Janela secundária
         self.balanco_window = None
         self.perfil_window = None
 
+        # Gráfico
         self.grafico = Exibir_Grafico(self.frame_grafico.layout())
         self.cmb_mes.currentIndexChanged.connect(self.atualizar_grafico_global)
         self.atualizar_grafico_global()
-        
-        #TODO Gerar o PDF contendo um relatório - a decidir estrutura
-        # É UM POPUP de confirmação
+
+        # Botões
         self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)
         self.btn_logoff.clicked.connect(self.btn_desconectar)
         self.btn_editar.clicked.connect(self.btn_balanco)
         self.btn_perfil.clicked.connect(self.btn_cliente)
-        
-    #MÉTODOS DOS BOTÕES   
+
+        # Carrega inicialmente as transações e os totais
+        self.carregar_ultimas_transacoes()
+        self.carregar_totais()
+
+        # Atualização automática das transações e dos totais a cada 1 segundo
+        self.timer_atualizacao = QTimer()
+        self.timer_atualizacao.setInterval(1000)
+        self.timer_atualizacao.timeout.connect(self.carregar_ultimas_transacoes)
+        self.timer_atualizacao.timeout.connect(self.carregar_totais)
+        self.timer_atualizacao.start()
+
+    # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
         popup = relatorio_window.RelatorioWindow()
-        popup.exec() 
-        
+        popup.exec()
+
     def btn_balanco(self):
         if not self.balanco_window:
-            self.balanco_window = balanco_window.BalancoWindow()
+            self.balanco_window = balanco_window.BalancoWindow(self)
         self.balanco_window.show()
-        
+
     def btn_cliente(self):
         if not self.perfil_window:
             self.perfil_window = cliente_window.ClienteWindow()
         self.perfil_window.showMaximized()
 
-    #TODO
     def btn_desconectar(self):
-        ...
-        
+        self.close()
+
     def atualizar_grafico_global(self):
         mes = self.cmb_mes.currentIndex()
         self.grafico.update_grafico(mes)
-    
-if __name__ == "__main__":
-    import sys
-    from PyQt6.QtWidgets import QApplication
 
+    # === ATUALIZAR TRANSACOES ===
+    def carregar_ultimas_transacoes(self):
+        try:
+            db = ConsultaSQL()
+
+            query = """
+                SELECT nome, valor, tipo
+                FROM tb_registro
+                ORDER BY transacao_id DESC
+                LIMIT 3
+            """
+            registros = db.consultar(query)
+
+            labels_nome = [self.lbl_produto1, self.lbl_produto2, self.lbl_produto3]
+            labels_valor = [self.lbl_valor1, self.lbl_valor2, self.lbl_valor3]
+
+            # Limpa os labels
+            for label_nome, label_valor in zip(labels_nome, labels_valor):
+                label_nome.setText("Sem registro")
+                label_valor.setText("-")
+                label_valor.setStyleSheet("color: black;")
+
+            # Preenche os dados
+            for i, (nome, valor, tipo) in enumerate(registros):
+                nome_formatado = str(nome).title()
+
+                if tipo.lower() == 'saída':
+                    valor_formatado = f"- {tratar_valor_para_exibir(float(valor))}"
+                    cor = "#8D0A0A"
+                else:
+                    valor_formatado = tratar_valor_para_exibir(float(valor))
+                    cor = "#147117"
+
+                labels_nome[i].setText(nome_formatado)
+                labels_valor[i].setText(valor_formatado)
+                labels_valor[i].setStyleSheet(f"color: {cor};")
+
+        except Exception as e:
+            print(f"Erro ao carregar últimas transações: {e}")
+
+    # === ATUALIZAR TOTAIS DE RECEITA, DESPESA E SALDO ===
+    def carregar_totais(self):
+        try:
+            db = ConsultaSQL()
+
+            query = "SELECT tipo, valor FROM tb_registro"
+            dados = db.pd_consultar(query)
+
+            if dados.empty:
+                receita = 0
+                despesa = 0
+            else:
+                receita = dados[dados['tipo'] == 'entrada']['valor'].sum()
+                despesa = dados[dados['tipo'] == 'saída']['valor'].sum()
+
+            saldo = receita - despesa
+
+            receita_formatada = tratar_valor_para_exibir(receita)
+            despesa_formatada = tratar_valor_para_exibir(despesa)
+            saldo_formatada = tratar_valor_para_exibir(saldo)
+
+            # Aplica nos labels
+            self.lbl_value_receita.setText(receita_formatada)
+            self.lbl_value_receita.setStyleSheet("color: #147117;")  # Verde
+
+            self.lbl_value_despesa.setText(despesa_formatada)
+            self.lbl_value_despesa.setStyleSheet("color: #8D0A0A;")  # Vermelho
+
+            if saldo >= 0:
+                cor_saldo = "#147117"
+            else:
+                cor_saldo = "#8D0A0A"
+
+            self.lbl_saldo_atual_value.setText(saldo_formatada)
+            self.lbl_saldo_atual_value.setStyleSheet(f"color: {cor_saldo};")
+
+        except Exception as e:
+            print(f"Erro ao carregar totais: {e}")
+
+
+if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = HomeWindow()
     window.showMaximized()
