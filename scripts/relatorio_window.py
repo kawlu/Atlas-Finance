@@ -12,10 +12,10 @@ POPUP que vai confirmar e gerar o pdf
 class RelatorioWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/RelatorioWindow.ui", self)  # type: ignore[attr-defined]
+        uic.loadUi("ui/RelatorioWindow.ui", self)
         
-        self.btn_sim.clicked.connect(self.gerar_pdf_e_popup) # type: ignore[attr-defined]
-        self.btn_nao.clicked.connect(self.close) # type: ignore[attr-defined]
+        self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)
+        self.btn_nao.clicked.connect(self.close)
         
     def gerar_pdf_e_popup(self):
         self.gerar_pdf()
@@ -30,7 +30,7 @@ class RelatorioWindow(QDialog):
     #TODO Adaptar
     def gerar_pdf(self):
         db = ConsultaSQL()
-        dados_lidos = db.consultar_PDF(query="SELECT * FROM tb_registro")
+        dados_lidos = db.pd_consultar(query="SELECT * FROM tb_registro")
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
         pdf = canvas.Canvas("teste.pdf")
@@ -88,7 +88,7 @@ class RelatorioWindow(QDialog):
 class SucessPDFWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/SucessPDFWindow.ui", self)  # type: ignore[attr-defined]
+        uic.loadUi("ui/SucessPDFWindow.ui", self) 
         
-        self.btn_ok.clicked.connect(self.close) # type: ignore[attr-defined]
+        self.btn_ok.clicked.connect(self.close)
         
