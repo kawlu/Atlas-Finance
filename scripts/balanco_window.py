@@ -116,7 +116,6 @@ class BalancoWindow(QDialog):
 
         transacao_id, nome, tipo, categoria, data_realizada, valor = dados
 
-        # ✅ Aplicar formatação:
         nome = str(nome).title()
         tipo = str(tipo).capitalize()
         categoria = str(categoria).capitalize()
