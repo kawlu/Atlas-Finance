@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS tb_registro(
 	transacao_id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    moeda VARCHAR(20) NOT NULL,
     tipo enum('entrada','saída'),
     categoria enum('alimentação','contas','estudo','lazer','saúde','outros','transporte'),
     data_realizada DATE NOT NULL,
