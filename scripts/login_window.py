@@ -2,8 +2,17 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6 import uic
 import sys
 import os
+import atexit
 from database import ConsultaSQL
 from home_window import HomeWindow  # Só importa a classe, não executa nada ainda
+
+# Função para apagar o arquivo ActiveUser.txt ao sair do programa
+def limpar_arquivo_active_user():
+    if os.path.exists("ActiveUser.txt"):
+        os.remove("ActiveUser.txt")
+
+# Registra a função para ser executada ao final
+atexit.register(limpar_arquivo_active_user)
 
 class LoginWindow(QMainWindow):
     def __init__(self):
@@ -17,7 +26,7 @@ class LoginWindow(QMainWindow):
 
     def carregar_lembrete(self):
         if os.path.exists("lembrete_login.txt"):
-            with open("lembrete_login.txt", "r") as f:
+            with open("lembrete_login.txt", "r", encoding="utf-8") as f:
                 dados = f.read().splitlines()
                 if len(dados) >= 2:
                     self.lineEdit.setText(dados[0])
@@ -26,7 +35,7 @@ class LoginWindow(QMainWindow):
 
     def salvar_lembrete(self):
         if self.checkBox.isChecked():
-            with open("lembrete_login.txt", "w") as f:
+            with open("lembrete_login.txt", "w", encoding="utf-8") as f:
                 f.write(f"{self.lineEdit.text()}\n{self.lineEdit_2.text()}")
         else:
             if os.path.exists("lembrete_login.txt"):
@@ -40,18 +49,30 @@ class LoginWindow(QMainWindow):
             QMessageBox.warning(self, "Erro", "Preencha o email e a senha.")
             return
 
-        query = f"""
-            SELECT * FROM tb_usuario
-            WHERE email = '{email}' AND senha = '{senha}'
-        """
-        df = self.sql.pd_consultar(query)
+        # Consulta segura (evitando SQL Injection)
+        query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"
+        df = self.sql.pd_consultar(query, (email, senha))
 
         if not df.empty:
             QMessageBox.information(self, "Login", "Login bem-sucedido!")
 
+            # Salvar o lembrete se necessário
             self.salvar_lembrete()
 
-            # Agora abre a tela Home
+            # Salvar os dados do usuário logado no arquivo ActiveUser.txt
+            usuario = df.iloc[0]  # Pega a primeira linha
+
+            with open("ActiveUser.txt", "w", encoding="utf-8") as f:
+                f.write(f"ID: {usuario['pk_usuario_id']}\n")
+                f.write(f"Nome: {usuario['nome']}\n")
+                f.write(f"Email: {usuario['email']}\n")
+                f.write(f"Senha: {usuario['senha']}\n")
+                f.write(f"Celular: {usuario['celular']}\n")
+                f.write(f"Ocupacao: {usuario['ocupacao']}\n")
+                f.write(f"Salario: {usuario['salario']}\n")
+                f.write(f"Nascimento: {usuario['nascimento']}\n")
+
+            # Abrir a tela Home
             self.hide()
             self.home = HomeWindow()
             self.home.showMaximized()
