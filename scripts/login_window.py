@@ -54,7 +54,7 @@ class LoginWindow(QMainWindow):
             # Agora abre a tela Home
             self.hide()
             self.home = HomeWindow()
-            self.home.show()
+            self.home.showMaximized()
 
         else:
             QMessageBox.critical(self, "Erro", "Email ou senha incorretos!")
@@ -62,5 +62,5 @@ class LoginWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = LoginWindow()
-    window.show()
+    window.showMaximized()
     sys.exit(app.exec())
