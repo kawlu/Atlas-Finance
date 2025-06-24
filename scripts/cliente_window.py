@@ -6,6 +6,7 @@ parent_directory = current_script_path.parent.parent
 sys.path.append(str(parent_directory / 'assets/png'))
 sys.path.append(str(parent_directory))
 from listas.dados_combo import lista_paises
+from database import ConsultaSQL
 import icons_rc
 import re
 import os
@@ -20,10 +21,35 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Atlas Finance - Usuário")
         appIcon = QtGui.QIcon("")
         self.setWindowIcon(appIcon)
+        self.sql = ConsultaSQL()
+        usuario = self.get_usuario()
 
+        nome = ""
         email = ""
         senha = ""
+        ocupacao = ""
         celular = ""
+        pais = ""
+        salario = ""
+
+        with open ("ActiveUser.txt", "r", encoding="utf-8") as f:
+            dados = f.read().splitlines()
+            nome = dados[1]
+            email = dados [2]
+            senha = dados[3]
+            celular = dados[4]
+            ocupacao = dados[5]
+            salario = dados[6][:-3]
+            #TODO: atualizar o sql e o cadastro para incluir o país do usuário
+            #TODO: atualizar o arquivo com os dados novos quando salvar
+
+        self.lbl_nome.setText(nome)
+        self.edit_email.setText(email)
+        self.edit_senha.setText(senha)
+        self.edit_ocupacao.setText(ocupacao)
+        self.edit_celular.setText(celular)
+        index = self.cmbox_salario.findText(salario, QtCore.Qt.MatchFlag.MatchContains)
+        self.cmbox_salario.setCurrentIndex(index)
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email) # type: ignore[attr-defined]
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha) # type: ignore[attr-defined]
@@ -42,19 +68,24 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_celular.setEnabled(not self.edit_celular.isEnabled()) # type: ignore[attr-defined]
         self.edit_celular.setFocus() # type: ignore[attr-defined]
 
-    def getUsuario(self):
-        with open("ActiveUser.txt", "r") as f:
-            id_usuario = f.readline()
+    def get_usuario(self):
+        id_usuario = ""
 
-        query = f"""
-            SELECT * FROM tb_usuario
-            WHERE pk_usuario_id = '{id_usuario}'
-        """
+        with open("ActiveUser.txt", "r", encoding="utf-8") as f:
+            id_usuario = f.readline().strip().replace("ID: ", "")
+
+        query = "SELECT * FROM tb_usuario WHERE pk_usuario_id = %s"
+        df = self.sql.pd_consultar(query, (id_usuario))
+
+        usuario = df.iloc[0]  # Pega a primeira linha
+        return usuario
 
     def salvar(self):
+        #TODO: salvar os dados novos no banco de dados
         #TODO: verificar se nada mudou
         email_temp = self.edit_email.text() # type: ignore[attr-defined]
         senha_temp = self.edit_senha.text() # type: ignore[attr-defined]
+        ocupacao_temp = self.edit_ocupacao.text()
         celular_temp = re.sub(r'\D', '', self.edit_celular.text().strip()) # type: ignore[attr-defined]
 
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"

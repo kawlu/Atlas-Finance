@@ -63,14 +63,14 @@ class LoginWindow(QMainWindow):
             usuario = df.iloc[0]  # Pega a primeira linha
 
             with open("ActiveUser.txt", "w", encoding="utf-8") as f:
-                f.write(f"ID: {usuario['pk_usuario_id']}\n")
-                f.write(f"Nome: {usuario['nome']}\n")
-                f.write(f"Email: {usuario['email']}\n")
-                f.write(f"Senha: {usuario['senha']}\n")
-                f.write(f"Celular: {usuario['celular']}\n")
-                f.write(f"Ocupacao: {usuario['ocupacao']}\n")
-                f.write(f"Salario: {usuario['salario']}\n")
-                f.write(f"Nascimento: {usuario['nascimento']}\n")
+                f.write(f"{usuario['pk_usuario_id']}\n")
+                f.write(f"{usuario['nome']}\n")
+                f.write(f"{usuario['email']}\n")
+                f.write(f"{usuario['senha']}\n")
+                f.write(f"{usuario['celular']}\n")
+                f.write(f"{usuario['ocupacao']}\n")
+                f.write(f"{usuario['salario']}\n")
+                f.write(f"{usuario['nascimento']}\n")
 
             # Abrir a tela Home
             self.hide()
