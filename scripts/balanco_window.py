@@ -116,7 +116,10 @@ class BalancoWindow(QDialog):
 
         transacao_id, nome, tipo, categoria, data_realizada, valor = dados
 
-        # Converter data e valor para exibir
+        # ✅ Aplicar formatação:
+        nome = str(nome).title()
+        tipo = str(tipo).capitalize()
+        categoria = str(categoria).capitalize()
         data_formatada = tratar_data_para_exibir(str(data_realizada))
         valor_formatado = tratar_valor_para_exibir(float(valor))
 
@@ -126,6 +129,7 @@ class BalancoWindow(QDialog):
             self.tabela_Registros.setItem(
                 row_number, column_number, QTableWidgetItem(str(data))
             )
+
 
     def excluir_registro(self):
         linha_selecionada = self.tabela_Registros.currentRow()
