@@ -628,7 +628,7 @@ color: #0D192B;</string>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton">
+                    <widget class="QPushButton" name="btn_editar_ocupacao">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                        <horstretch>0</horstretch>
