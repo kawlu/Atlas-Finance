@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS db_finance;More actions
+CREATE DATABASE IF NOT EXISTS db_finance;
 USE db_finance;
 
 CREATE TABLE IF NOT EXISTS tb_usuario(
@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS tb_usuario(
     celular VARCHAR(20) UNIQUE,
     ocupacao VARCHAR(100) NOT NULL,
     salario DECIMAL(10,2) NOT NULL,
+    pais VARCHAR(100) NOT NULL,
     nascimento DATE NOT NULL
 );
 
@@ -20,16 +21,17 @@ CREATE TABLE IF NOT EXISTS tb_registro(
     categoria enum('alimentação','contas','estudo','lazer','saúde','outros','transporte'),
     data_realizada DATE NOT NULL,
     fk_usuario_id INT NOT NULL,
-    FOREIGN KEY(fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id)
+    FOREIGN KEY(fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id) ON DELETE CASCADE
 );
 
-INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, nascimento) VALUES(
+INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nascimento) VALUES(
 	'Daniel',
     'Daniel@gmail.com',
     'senhasecreta',
-    '219995930',
+    '+55 (21) 21999-5930',
     'Matador de Porco',
     1600.00,
+    'Brasil',
     '2000-01-01'
 );
 
@@ -42,6 +44,12 @@ INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario
     '1'
 );
 
+UPDATE tb_usuario
+SET pais = "Brasil"
+WHERE pk_usuario_id = 1;
+
+DELETE FROM tb_usuario WHERE pk_usuario_id = 1;
+
 SELECT * FROM tb_usuario;
 SELECT * FROM tb_registro;
 
@@ -52,6 +60,6 @@ ORDER BY U.nome;
 
 # Join pra pegar valor total
 SELECT U.nome 'Nome', SUM(R.valor) 'Soma-Total'
-FROM tb_registro AS RMore actions
+FROM tb_registro AS R
 INNER JOIN tb_usuario AS U ON R.fk_usuario_id = U.pk_usuario_id
 GROUP BY U.nome
