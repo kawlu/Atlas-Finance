@@ -1134,9 +1134,9 @@ color: #0D192B;</string>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
-                    <widget class="QComboBox" name="cmbox_salario">
+                    <widget class="QLineEdit" name="edit_salario">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -1147,37 +1147,20 @@ color: #0D192B;</string>
                       </font>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">QComboBox {
-    background-color: rgb(219, 219, 219);
+                      <string notr="true">background-color: rgb(219, 219, 219);
     color: rgb(13, 25, 43);
     padding: 5px 10px;
     border-radius: 5px;
 	border: 2px solid #0D192B;
     min-width: 80px;
-    min-height: 40px;
-}
-
-/* Estilo da lista suspensa (popup de opções) */
-QComboBox QAbstractItemView {
-    background-color: white;
-    color: rgb(13, 25, 43);
-    min-width: 100px;  /* &lt;-- isso evita o corte */
-	padding: 5px;
-    border: 1px solid #999;
-    selection-background-color: rgb(13, 25, 43);
-    color: rgb(13, 25, 43);
-}</string>
+    min-height: 40px;</string>
                      </property>
-                     <item>
-                      <property name="text">
-                       <string>R$ 3000,00</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>R$ 1600,00</string>
-                      </property>
-                     </item>
+                     <property name="inputMethodHints">
+                      <set>Qt::ImhNone</set>
+                     </property>
+                     <property name="text">
+                      <string>R$ 2000.00</string>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1275,41 +1258,6 @@ min-height: 50px;</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btn_voltar">
-               <property name="font">
-                <font>
-                 <pointsize>21</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: #0D192B;
-color: rgb(219, 219, 219);
-border: 2px solid #DBDBDB;</string>
-               </property>
-               <property name="text">
-                <string>Voltar</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_12">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
                  <width>50</width>
                  <height>20</height>
                 </size>
@@ -1341,7 +1289,7 @@ color: #0D192B;</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
+                 <width>50</width>
                  <height>20</height>
                 </size>
                </property>
@@ -1387,9 +1335,7 @@ color: #0D192B;</string>
   <tabstop>edit_celular</tabstop>
   <tabstop>cmbox_pais</tabstop>
   <tabstop>btn_editar_foto</tabstop>
-  <tabstop>cmbox_salario</tabstop>
   <tabstop>btn_desativar_conta</tabstop>
-  <tabstop>btn_voltar</tabstop>
   <tabstop>btn_salvar</tabstop>
  </tabstops>
  <resources>
