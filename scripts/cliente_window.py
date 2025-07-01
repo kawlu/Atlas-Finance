@@ -24,26 +24,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
         appIcon = QtGui.QIcon("")
         self.setWindowIcon(appIcon)
         self.sql = ConsultaSQL()
-        usuario = self.get_usuario()
-
-        nome = usuario["nome"]
-        email = usuario["email"]
-        senha = usuario["senha"]
-        ocupacao = usuario["ocupacao"]
-        celular = usuario["celular"]
-        pais = usuario["pais"]
-        salario = str(usuario["salario"])[:-3]
-
-        self.lbl_nome.setText(nome)
-        self.edit_email.setText(email)
-        self.edit_senha.setText(senha)
-        self.edit_ocupacao.setText(ocupacao)
-        self.edit_celular.setText(celular)
-        self.cmbox_pais.addItems(lista_paises) # type: ignore[attr-defined]
-        index_pais = self.cmbox_pais.findText(pais, QtCore.Qt.MatchFlag.MatchContains)
-        self.cmbox_pais.setCurrentIndex(index_pais)
-        index_salario = self.cmbox_salario.findText(salario, QtCore.Qt.MatchFlag.MatchContains)
-        self.cmbox_salario.setCurrentIndex(index_salario)
+        
+        self.set_labels()
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email) # type: ignore[attr-defined]
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha) # type: ignore[attr-defined]
@@ -66,6 +48,26 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_celular.setEnabled(not self.edit_celular.isEnabled()) # type: ignore[attr-defined]
         self.edit_celular.setFocus() # type: ignore[attr-defined]
     
+    def set_labels(self):
+        usuario = self.get_usuario()
+
+        nome = usuario["nome"]
+        email = usuario["email"]
+        senha = usuario["senha"]
+        ocupacao = usuario["ocupacao"]
+        celular = usuario["celular"]
+        pais = usuario["pais"]
+        salario = str(usuario["salario"])[:-3]
+
+        self.lbl_nome.setText(nome)
+        self.edit_email.setText(email)
+        self.edit_senha.setText(senha)
+        self.edit_ocupacao.setText(ocupacao)
+        self.edit_celular.setText(celular)
+        self.cmbox_pais.addItems(lista_paises) # type: ignore[attr-defined]
+        index_pais = self.cmbox_pais.findText(pais, QtCore.Qt.MatchFlag.MatchContains)
+        self.cmbox_pais.setCurrentIndex(index_pais)
+        self.edit_salario.setText("R$" + salario + ".00")
 
     def get_usuario(self):
         id_usuario = ""
@@ -84,8 +86,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
         senha_temp = self.edit_senha.text() # type: ignore[attr-defined]
         ocupacao_temp = self.edit_ocupacao.text()
         celular_temp = re.sub(r'\D', '', self.edit_celular.text().strip()) # type: ignore[attr-defined]
+        salario_temp = self.edit_salario.text().strip()
 
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
+        regex_salario = r'^(R\$)?\d+(?:[.,]\d{1,2})?$'
         if not re.match(regex_email, email_temp):
             QtWidgets.QMessageBox.warning(self, "Erro", "Email inválido.")
             return
@@ -98,6 +102,9 @@ class ClienteWindow(QtWidgets.QMainWindow):
         if not len(celular_temp) == 13:
             QtWidgets.QMessageBox.warning(self, "Erro", "O número de celular deve conter 13 dígitos numéricos.")
             return
+        if not re.match(regex_salario, salario_temp):
+            QtWidgets.QMessageBox.warning(self, "Erro", "Salário inválido.")
+            return
         ddi = celular_temp[0:2]
         ddd = celular_temp[2:4]
         digitos_1 = celular_temp[4:-4]
@@ -108,7 +115,13 @@ class ClienteWindow(QtWidgets.QMainWindow):
         senha = senha_temp
         ocupacao = ocupacao_temp
         celular = celular_temp
-        salario = self.cmbox_salario.currentText().replace("R$", "").replace(",", ".").strip()
+        salario = self.edit_salario.text().replace("R$", "").replace(",", ".").strip()
+        if '.' not in salario:
+            salario += '.00'
+        else:
+            parte_decimal = salario.split('.')[-1]
+            if len(parte_decimal) == 1:
+                salario += '0'
         pais = self.cmbox_pais.currentText()
 
         try:
