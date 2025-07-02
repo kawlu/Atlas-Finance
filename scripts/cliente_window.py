@@ -15,8 +15,8 @@ import os
 
 class ClienteWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, cliente_id, login_status):
+        super().__init__()
 
         # Carrega tela principal
         uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self)
@@ -25,7 +25,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(appIcon)
         self.sql = ConsultaSQL()
         
-        self.set_labels()
+        self.cliente_id = cliente_id
+        self.login_status = login_status
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email)
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha)
@@ -51,13 +52,15 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def set_labels(self):
         usuario = self.get_usuario()
 
-        nome = usuario["nome"]
-        email = usuario["email"]
-        senha = usuario["senha"]
-        ocupacao = usuario["ocupacao"]
-        celular = usuario["celular"]
-        pais = usuario["pais"]
-        salario = str(usuario["salario"])[:-3]
+        nome = usuario["nome"].iloc[0]
+        email = usuario["email"].iloc[0]
+        senha = usuario["senha"].iloc[0]
+        ocupacao = usuario["ocupacao"].iloc[0]
+        celular = usuario["celular"].iloc[0]
+        pais = usuario["pais"].iloc[0]
+        #TODO: olhar isso daqui ó
+        salario = str(usuario["salario"].iloc[0])[:-3]
+        #salario = str(usuario["salario"].iloc[0]).split(".")[0]
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -70,16 +73,14 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_salario.setText("R$" + salario + ".00")
 
     def get_usuario(self):
-        id_usuario = ""
-
-        with open("ActiveUser.txt", "r", encoding="utf-8") as f:
-            id_usuario = f.readline().strip().replace("ID: ", "")
+        print(f"\n\nCliente ID: {self.cliente_id}\n\n")
 
         query = "SELECT * FROM tb_usuario WHERE pk_usuario_id = %s"
-        df = self.sql.pd_consultar(query, (id_usuario))
+        df = self.sql.pd_consultar(query, (self.cliente_id))
 
-        usuario = df.iloc[0]  # Pega a primeira linha
-        return usuario
+        #print("\n\n", df, "\n\n")
+        #usuario = df.iloc[0]  # Pega a primeira linha
+        return df
 
     def salvar(self):
         email_temp = self.edit_email.text()
