@@ -56,7 +56,7 @@ class HomeWindow(QMainWindow):
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status)
+            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status, self)
         self.perfil_window.set_labels()
         self.perfil_window.showMaximized()
 

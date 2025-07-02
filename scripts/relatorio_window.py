@@ -35,7 +35,7 @@ class RelatorioWindow(QDialog):
         dados_lidos = db.pd_consultar(query, self.cliente_id)
 
         if dados_lidos.empty:
-            QtWidgets.QMessageBox.warning(self, "Erro", "A senha deve ter ao menos 6 caracteres.")
+            QtWidgets.QMessageBox.warning(self, "Erro", "Não há registros disponíveis.")
             return
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
