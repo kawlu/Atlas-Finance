@@ -55,6 +55,7 @@ class HomeWindow(QMainWindow):
     def btn_cliente(self):
         if not self.perfil_window:
             self.perfil_window = cliente_window.ClienteWindow()
+        self.perfil_window.set_labels()
         self.perfil_window.showMaximized()
 
     def btn_desconectar(self):

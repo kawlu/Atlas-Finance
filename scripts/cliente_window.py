@@ -25,7 +25,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.setWindowIcon(appIcon)
         self.sql = ConsultaSQL()
         
-        self.set_labels()
+        #self.set_labels()
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email) # type: ignore[attr-defined]
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha) # type: ignore[attr-defined]
