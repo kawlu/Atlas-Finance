@@ -1,17 +1,16 @@
+import sys
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtCore import QTimer
+from PySide6.QtGui import QFont
+from balanco_window import tratar_valor_para_exibir
+from PyQt6.QtWidgets import QApplication, QMainWindow
 
 import cliente_window, balanco_window, relatorio_window
-import sys
-
-from grafico import Exibir_Grafico
 from database import ConsultaSQL
-from balanco_window import tratar_valor_para_exibir
-
+from grafico import Exibir_Grafico
 
 class HomeWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, cliente_id, login_status):
         super().__init__()
 
         uic.loadUi("ui/HomeWindow.ui", self)
@@ -19,6 +18,9 @@ class HomeWindow(QMainWindow):
         # Janela secundária
         self.balanco_window = None
         self.perfil_window = None
+        
+        self.cliente_id = cliente_id
+        self.login_status = login_status
 
         # Gráfico
         self.grafico = Exibir_Grafico(self.frame_grafico.layout())
@@ -83,8 +85,10 @@ class HomeWindow(QMainWindow):
             # Limpa os labels
             for label_nome, label_valor in zip(labels_nome, labels_valor):
                 label_nome.setText("Sem registro")
-                label_valor.setText("-")
-                label_valor.setStyleSheet("color: black;")
+                label_nome.setStyleSheet("font-size: 12pt; font-weight: bold;")
+                
+                label_valor.setText("")
+                label_valor.setStyleSheet("color: black; font-size: 12pt; font-weight: bold;")
 
             # Preenche os dados
             for i, (nome, valor, tipo) in enumerate(registros):
@@ -96,10 +100,11 @@ class HomeWindow(QMainWindow):
                 else:
                     valor_formatado = tratar_valor_para_exibir(float(valor))
                     cor = "#147117"
-
+                
                 labels_nome[i].setText(nome_formatado)
+                labels_nome[i].setStyleSheet(f"color: {cor}; font-size: 12pt; font-weight: bold;")
                 labels_valor[i].setText(valor_formatado)
-                labels_valor[i].setStyleSheet(f"color: {cor};")
+                labels_valor[i].setStyleSheet(f"color: {cor}; font-size: 12pt; font-weight: bold;")
 
         except Exception as e:
             print(f"Erro ao carregar últimas transações: {e}")
@@ -127,10 +132,10 @@ class HomeWindow(QMainWindow):
 
             # Aplica nos labels
             self.lbl_value_receita.setText(receita_formatada)
-            self.lbl_value_receita.setStyleSheet("color: #147117;")  # Verde
+            self.lbl_value_receita.setStyleSheet("color: #147117; font-size: 12pt; font-weight: bold;")
 
             self.lbl_value_despesa.setText(despesa_formatada)
-            self.lbl_value_despesa.setStyleSheet("color: #8D0A0A;")  # Vermelho
+            self.lbl_value_despesa.setStyleSheet("color: #8D0A0A; font-size: 12pt; font-weight: bold;")  # Vermelho
 
             if saldo >= 0:
                 cor_saldo = "#147117"
@@ -138,14 +143,7 @@ class HomeWindow(QMainWindow):
                 cor_saldo = "#8D0A0A"
 
             self.lbl_saldo_atual_value.setText(saldo_formatada)
-            self.lbl_saldo_atual_value.setStyleSheet(f"color: {cor_saldo};")
+            self.lbl_saldo_atual_value.setStyleSheet(f"color: {cor_saldo}; font-size: 12pt; font-weight: bold;")
 
         except Exception as e:
             print(f"Erro ao carregar totais: {e}")
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = HomeWindow()
-    window.showMaximized()
-    sys.exit(app.exec())
