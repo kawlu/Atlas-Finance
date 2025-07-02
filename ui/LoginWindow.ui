@@ -52,7 +52,7 @@
        <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -73,7 +73,7 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -92,6 +92,9 @@
               <width>550</width>
               <height>150</height>
              </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/icons/Logo_Atlasmini.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -157,7 +160,7 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -165,6 +168,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="label_4">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Seus números, seus gráficos, suas decisões.&lt;/p&gt;&lt;p&gt;Email&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -179,6 +185,9 @@
           </item>
           <item>
            <widget class="QLabel" name="label_5">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
             <property name="text">
              <string>Senha</string>
             </property>
@@ -187,7 +196,7 @@
           <item>
            <widget class="QLineEdit" name="lineEdit_2">
             <property name="text">
-             <string>********</string>
+             <string/>
             </property>
             <property name="echoMode">
              <enum>QLineEdit::Password</enum>
@@ -206,7 +215,7 @@
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -228,6 +237,9 @@
             </property>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
             </property>
             <property name="text">
              <string>Esqueceu sua senha?</string>
@@ -276,7 +288,7 @@ border-radius: 20px;</string>
           </size>
          </property>
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
@@ -339,10 +351,11 @@ border-radius: 20px;</string>
           <item>
            <widget class="QLabel" name="label_7">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(219, 219, 219);</string>
+             <string notr="true">background-color: rgb(219, 219, 219);
+text-color: rgb(0, 0, 0)</string>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sobre o Atlas Finance&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Lorem ipsum dolor sit amet, consectetur adipiscing &lt;br/&gt;elit, sed do eiusmod tempor incididunt ut labore&lt;br/&gt;et dolore magna aliqua. Ut enim ad minim &lt;br/&gt;veniam, quis nostrud exercitation ullamco &lt;br/&gt;laboris nisi ut aliquip ex ea commodo consequat.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sobre o Atlas Finance&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Registre despesas e receitas, acompanhe saldos&lt;br/&gt;e organize seu dinheiro com clareza.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt;&quot;&gt;Ideal para quem quer controlar o &lt;br/&gt;orçamento sem complicação.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -375,8 +388,11 @@ border-radius: 20px;</string>
               <height>250</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">text-color: rgb(0, 0, 0)</string>
+            </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Features&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;• Lorem ipsum dolor sit amet, consectetur &lt;br/&gt;adipiscing elit&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;• sed do eiusmod tempor incididunt ut labore &lt;br/&gt;et dolore magna aliqua.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;• Ut enim ad minim veniam, quis nostrud exercitation &lt;br/&gt;ullamco laboris.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Features&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;• Gera gráficos automatizados para que sejam monitorados seus gastos e ganhos.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;• Pode criar documentos em pdf para que seja possivel se organizar como quiser.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;br/&gt;• Separa os dados de cada usuário distinto.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
