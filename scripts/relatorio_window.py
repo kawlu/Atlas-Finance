@@ -1,4 +1,4 @@
-from PyQt6 import uic
+from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QDialog, QMessageBox
 
 from database import ConsultaSQL
@@ -29,11 +29,14 @@ class RelatorioWindow(QDialog):
         self.close()
 
 
-    #TODO Adaptar
     def gerar_pdf(self):
         db = ConsultaSQL()
         query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
         dados_lidos = db.pd_consultar(query, self.cliente_id)
+
+        if dados_lidos.empty:
+            QtWidgets.QMessageBox.warning(self, "Erro", "Não há registros disponíveis.")
+            return
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
         pdf = canvas.Canvas("teste.pdf")
@@ -51,12 +54,12 @@ class RelatorioWindow(QDialog):
         largura_categoria = medir_largura("categoria")
         largura_data_realizada = medir_largura("data_realizada")
 
-        for linha in dados_lidos:
-            largura_nome = max(largura_nome, medir_largura(str(linha[1])))
-            largura_valor = max(largura_valor, medir_largura(str(linha[2])))
-            largura_tipo = max(largura_tipo, medir_largura(str(linha[3])))
-            largura_categoria = max(largura_categoria, medir_largura(str(linha[4])))
-            largura_data_realizada = max(largura_data_realizada, medir_largura(str(linha[5])))
+        for _, linha in dados_lidos.iterrows():
+            largura_nome = max(largura_nome, medir_largura(str(linha["nome"])))
+            largura_valor = max(largura_valor, medir_largura(str(linha["valor"])))
+            largura_tipo = max(largura_tipo, medir_largura(str(linha["tipo"])))
+            largura_categoria = max(largura_categoria, medir_largura(str(linha["categoria"])))
+            largura_data_realizada = max(largura_data_realizada, medir_largura(str(linha["data_realizada"])))
 
         x_nome = 10
         x_valor = x_nome + largura_nome + 20
@@ -70,15 +73,14 @@ class RelatorioWindow(QDialog):
         pdf.drawString(x_categoria, 750, "categoria")
         pdf.drawString(x_data_realizada, 750, "data_realizada")
 
-        #TODO reajustar os dados conforme o cabeçalho
-        for linha in dados_lidos:
+        for _, linha in dados_lidos.iterrows():
             y = y + 50
             
-            nome = str(linha[1])
-            valor = str(linha[2])
-            tipo = str(linha[3])
-            categoria = str(linha[4])
-            data_realizada = str(linha[5])
+            nome = str(linha["nome"])
+            valor = str(linha["valor"])
+            tipo = str(linha["tipo"])
+            categoria = str(linha["categoria"])
+            data_realizada = str(linha["data_realizada"])
 
             pdf.drawString(x_nome, 750 - y, nome)
             pdf.drawString(x_valor, 750 - y, valor)

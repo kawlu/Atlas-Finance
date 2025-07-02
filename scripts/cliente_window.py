@@ -15,7 +15,7 @@ import os
 
 class ClienteWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, cliente_id, login_status):
+    def __init__(self, cliente_id, login_status, home_window):
         super().__init__()
 
         # Carrega tela principal
@@ -27,12 +27,14 @@ class ClienteWindow(QtWidgets.QMainWindow):
         
         self.cliente_id = cliente_id
         self.login_status = login_status
+        self.home_window = home_window
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email)
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha)
         self.btn_editar_ocupacao.clicked.connect(self.habilitar_edit_ocupacao)
         self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
         self.btn_salvar.clicked.connect(self.salvar)
+        self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
         
 
@@ -73,8 +75,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_salario.setText("R$" + salario + ".00")
 
     def get_usuario(self):
-        print(f"\n\nCliente ID: {self.cliente_id}\n\n")
-
         query = "SELECT * FROM tb_usuario WHERE pk_usuario_id = %s"
         df = self.sql.pd_consultar(query, (self.cliente_id))
 
@@ -145,20 +145,28 @@ class ClienteWindow(QtWidgets.QMainWindow):
         print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
+    def logoff(self):
+        from login_window import LoginWindow #importação tardia pra evitar importação circular
+        self.close()
+        self.home_window.close()
+        self.login_window = LoginWindow()
+        self.login_window.showMaximized()
+    
     def desativar_conta(self):
         try:
             query = "DELETE FROM tb_usuario WHERE pk_usuario_id = %s"
-            df = self.sql.editar(query, (self.get_usuario()["pk_usuario_id"]))
+            df = self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
 
             if os.path.exists("lembrete_login.txt"):
                 os.remove("lembrete_login.txt")
             
             QMessageBox.information(self, "Conta desativada", "Conta desativada com sucesso.")
 
-            #TODO: ir corretamente à tela de login após desativar a conta
-            #self.hide()
-            #self.home = home_window.HomeWindow()
-            #self.home.showMaximized()
+            from login_window import LoginWindow #importação tardia pra evitar importação circular
+            self.close()
+            self.home_window.close()
+            self.login_window = LoginWindow()
+            self.login_window.showMaximized()
         except Exception as e:
             QtWidgets.QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
             print(e)

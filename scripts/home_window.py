@@ -55,7 +55,8 @@ class HomeWindow(QMainWindow):
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = cliente_window.ClienteWindow()
+            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status, self)
+        self.perfil_window.set_labels()
         self.perfil_window.showMaximized()
 
     def btn_desconectar(self):
@@ -76,7 +77,7 @@ class HomeWindow(QMainWindow):
                 ORDER BY transacao_id DESC
                 LIMIT 3
             """
-            registros = db.consultar(query)
+            registros = db.consultar(query, self.cliente_id)
 
             labels_nome = [self.lbl_produto1, self.lbl_produto2, self.lbl_produto3]
             labels_valor = [self.lbl_valor1, self.lbl_valor2, self.lbl_valor3]
