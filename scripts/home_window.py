@@ -1,13 +1,12 @@
 import sys
 from PyQt6 import uic
 from PyQt6.QtCore import QTimer
-from PySide6.QtGui import QFont
 from balanco_window import tratar_valor_para_exibir
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 
 import cliente_window, balanco_window, relatorio_window
 from database import ConsultaSQL
-from grafico import Exibir_Grafico
+from atualizar_dados import Grafico
 
 class HomeWindow(QMainWindow):
     def __init__(self, cliente_id, login_status):
@@ -19,45 +18,44 @@ class HomeWindow(QMainWindow):
         self.balanco_window = None
         self.perfil_window = None
         
-        self.cliente_id = cliente_id.iloc[0]
+        self.cliente_id = cliente_id
         self.login_status = login_status
 
         # Gráfico
-        self.grafico = Exibir_Grafico(self.frame_grafico.layout(), self.cliente_id)
+        self.grafico = Grafico(self.frame_grafico.layout(), self.cliente_id)
         self.cmb_mes.currentIndexChanged.connect(self.atualizar_grafico_global)
-        self.atualizar_grafico_global()
 
+        # Carrega inicialmente
+        self.atualizar_grafico_global()
+        self.carregar_ultimas_transacoes()
+        self.carregar_totais()
+        
         # Botões
         self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)
         self.btn_logoff.clicked.connect(self.btn_desconectar)
         self.btn_editar.clicked.connect(self.btn_balanco)
         self.btn_perfil.clicked.connect(self.btn_cliente)
 
-        # Carrega inicialmente as transações e os totais
-        self.carregar_ultimas_transacoes()
-        self.carregar_totais()
-
-        # Atualização automática das transações e dos totais a cada 1 segundo
-        self.timer_atualizacao = QTimer()
-        self.timer_atualizacao.setInterval(1000)
-        self.timer_atualizacao.timeout.connect(self.carregar_ultimas_transacoes)
-        self.timer_atualizacao.timeout.connect(self.carregar_totais)
-        self.timer_atualizacao.start()
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
         popup = relatorio_window.RelatorioWindow(self.cliente_id)
         popup.exec()
-
+        
     def btn_balanco(self):
         if not self.balanco_window:
             self.balanco_window = balanco_window.BalancoWindow(self.cliente_id)
-        self.balanco_window.show()
+
+            # Conexões com os sinais
+            self.balanco_window.grafico_atualizado.connect(self.atualizar_grafico_global)
+            self.balanco_window.transacoes_atualizadas.connect(self.carregar_ultimas_transacoes)
+            self.balanco_window.totais_atualizados.connect(self.carregar_totais)
+            
+        self.balanco_window.exec()
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status)
-        self.perfil_window.set_labels()
+            self.perfil_window = cliente_window.ClienteWindow()
         self.perfil_window.showMaximized()
 
     def btn_desconectar(self):
@@ -75,13 +73,10 @@ class HomeWindow(QMainWindow):
             query = """
                 SELECT nome, valor, tipo
                 FROM tb_registro
-                WHERE fk_usuario_id = %s
                 ORDER BY transacao_id DESC
                 LIMIT 3
             """
-            registros = db.consultar(query, self.cliente_id)
-            print(registros)
-            print(self.cliente_id)
+            registros = db.consultar(query)
 
             labels_nome = [self.lbl_produto1, self.lbl_produto2, self.lbl_produto3]
             labels_valor = [self.lbl_valor1, self.lbl_valor2, self.lbl_valor3]
@@ -118,8 +113,8 @@ class HomeWindow(QMainWindow):
         try:
             db = ConsultaSQL()
 
-            query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
-            dados = db.pd_consultar(query, self.cliente_id)
+            query = "SELECT tipo, valor FROM tb_registro"
+            dados = db.pd_consultar(query)
 
             if dados.empty:
                 receita = 0
@@ -151,3 +146,10 @@ class HomeWindow(QMainWindow):
 
         except Exception as e:
             print(f"Erro ao carregar totais: {e}")
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = HomeWindow()
+    window.showMaximized()
+    sys.exit(app.exec())

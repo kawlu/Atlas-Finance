@@ -8,11 +8,13 @@ import numpy as np
 import calendar
 import locale
 
+import balanco_window
+
 # Backend que integra matplotlib com interfaces Qt (PyQt5/PyQt6)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 # Classe responsável por exibir gráficos em um layout Qt
-class Exibir_Grafico():
+class Grafico():
     def __init__(self, destino_layout, cliente_id):
         self.destino_layout = destino_layout 
         self.sql = ConsultaSQL()       

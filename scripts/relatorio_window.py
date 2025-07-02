@@ -1,5 +1,5 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog, QMessageBox
 
 from database import ConsultaSQL
 
@@ -91,7 +91,6 @@ class RelatorioWindow(QDialog):
 class SucessPDFWindow(QDialog):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/SucessPDFWindow.ui", self) 
-        
-        self.btn_ok.clicked.connect(self.close)
+       
+        QMessageBox.information(self, "Sucesso", "PDF foi gerado com sucesso!")
         

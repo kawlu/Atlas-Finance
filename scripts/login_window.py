@@ -60,7 +60,7 @@ class LoginWindow(QMainWindow):
         if not df.empty:
             QMessageBox.information(self, "Login", "Login bem-sucedido!")
 
-            self.cliente_id = df['pk_usuario_id']
+            self.cliente_id = df['pk_usuario_id'].iloc[0]
             self.login_status = True
             
             # Salvar o lembrete se necessário

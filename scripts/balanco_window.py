@@ -1,8 +1,9 @@
 from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
-import sys
+from PyQt6.QtCore import pyqtSignal
 from database import ConsultaSQL
 from datetime import datetime
+import sys
 import re
 
 db = ConsultaSQL()
@@ -57,9 +58,13 @@ class NovoRegistroWindow(QDialog):
                 )
 
                 self.balanco_window.atualizar_saldo_total()
+                self.balanco_window.grafico_atualizado.emit()
+                self.balanco_window.transacoes_atualizadas.emit()
+                self.balanco_window.totais_atualizados.emit()
 
                 self.limpar_campos()
                 self.close()
+                
 
             except Exception as e:
                 erro = QtWidgets.QMessageBox(self)
@@ -83,11 +88,16 @@ class NovoRegistroWindow(QDialog):
         self.input_Data.setDate(datetime.now())
         self.input_Valor.clear()
 
-
 class BalancoWindow(QDialog):
+    
+    grafico_atualizado = pyqtSignal()
+    transacoes_atualizadas = pyqtSignal()
+    totais_atualizados = pyqtSignal()
+        
     def __init__(self, cliente_id):
         super().__init__()
         uic.loadUi("ui/BalancoWindow.ui", self)
+        
 
         self.novo_registro_window = None
 
@@ -103,7 +113,7 @@ class BalancoWindow(QDialog):
     def abrir_novo_registro(self):
         if not self.novo_registro_window:
             self.novo_registro_window = NovoRegistroWindow(self, self.cliente_id)
-        self.novo_registro_window.show()
+        self.novo_registro_window.exec()
 
     def carregar_registros(self):
         try:
@@ -154,6 +164,7 @@ class BalancoWindow(QDialog):
             aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
             aviso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
             aviso.exec()
+            
             return
 
         transacao_id = self.tabela_Registros.item(linha_selecionada, 0).text()
@@ -187,8 +198,10 @@ class BalancoWindow(QDialog):
                 db.editar(sql, transacao_id)
 
                 self.tabela_Registros.removeRow(linha_selecionada)
-
                 self.atualizar_saldo_total()
+                self.grafico_atualizado.emit()
+                self.transacoes_atualizadas.emit()
+                self.totais_atualizados.emit()
 
                 sucesso = QtWidgets.QMessageBox(self)
                 sucesso.setWindowTitle("Sucesso")
