@@ -13,9 +13,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 # Classe responsável por exibir gráficos em um layout Qt
 class Exibir_Grafico():
-    def __init__(self, destino_layout):
+    def __init__(self, destino_layout, cliente_id):
         self.destino_layout = destino_layout 
-        self.sql = ConsultaSQL()              
+        self.sql = ConsultaSQL()       
+        self.cliente_id = cliente_id       
 
     # Atualiza o gráfico com base no mês selecionado
     def update_grafico(self, mes_selecionado=0):
@@ -29,16 +30,18 @@ class Exibir_Grafico():
                 locale.setlocale(locale.LC_TIME, 'Portuguese_Brazil')
             
             # Consulta os dados agrupando por ano, mês e tipo (entrada/saída)
-            df = self.sql.pd_consultar("""
+            query = """
                 SELECT 
                     YEAR(data_realizada) AS ano,
                     MONTH(data_realizada) AS mes,
                     tipo,
                     SUM(valor) AS total
                 FROM tb_registro
+                WHERE fk_usuario_id = %s
                 GROUP BY ano, mes, tipo
                 ORDER BY ano, mes, tipo
-            """)
+            """
+            df = self.sql.pd_consultar(query, self.cliente_id)
 
             if df.empty:
                 self._plotar_grafico_vazio("Sem dados disponíveis")
@@ -73,16 +76,17 @@ class Exibir_Grafico():
             )
         else:
             # Caso um mês específico seja selecionado, exibe gráfico comparando diferentes anos
-            df = self.sql.pd_consultar(f"""
+            query = """
                 SELECT 
                     YEAR(data_realizada) AS ano,
                     tipo,
                     SUM(valor) AS total
                 FROM tb_registro
-                WHERE MONTH(data_realizada) = {mes_selecionado}
+                WHERE MONTH(data_realizada) = %s AND fk_usuario_id = %s
                 GROUP BY ano, tipo
                 ORDER BY ano
-            """)
+            """
+            df = self.sql.pd_consultar(query, (mes_selecionado, self.cliente_id))
 
             if df.empty:
                 self._plotar_grafico_vazio("Sem dados disponíveis")

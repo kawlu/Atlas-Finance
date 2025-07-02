@@ -12,6 +12,7 @@ class LoginWindow(QMainWindow):
         self.sql = ConsultaSQL()
         
         self.cliente_id = 0
+        self.login_status = False
 
         self.pushButton_2.clicked.connect(self.login)
         self.checkBox.stateChanged.connect(self.salvar_lembrete)
@@ -59,7 +60,7 @@ class LoginWindow(QMainWindow):
         if not df.empty:
             QMessageBox.information(self, "Login", "Login bem-sucedido!")
 
-            self.cliente_id = df['pk_usuario_id'].iloc[0]
+            self.cliente_id = df['pk_usuario_id']
             self.login_status = True
             
             # Salvar o lembrete se necessário

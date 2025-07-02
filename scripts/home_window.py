@@ -19,11 +19,11 @@ class HomeWindow(QMainWindow):
         self.balanco_window = None
         self.perfil_window = None
         
-        self.cliente_id = cliente_id
+        self.cliente_id = cliente_id.iloc[0]
         self.login_status = login_status
 
         # Gráfico
-        self.grafico = Exibir_Grafico(self.frame_grafico.layout())
+        self.grafico = Exibir_Grafico(self.frame_grafico.layout(), self.cliente_id)
         self.cmb_mes.currentIndexChanged.connect(self.atualizar_grafico_global)
         self.atualizar_grafico_global()
 
@@ -46,17 +46,17 @@ class HomeWindow(QMainWindow):
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
-        popup = relatorio_window.RelatorioWindow()
+        popup = relatorio_window.RelatorioWindow(self.cliente_id)
         popup.exec()
 
     def btn_balanco(self):
         if not self.balanco_window:
-            self.balanco_window = balanco_window.BalancoWindow(self)
+            self.balanco_window = balanco_window.BalancoWindow(self.cliente_id)
         self.balanco_window.show()
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = cliente_window.ClienteWindow()
+            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status)
         self.perfil_window.set_labels()
         self.perfil_window.showMaximized()
 
@@ -75,10 +75,13 @@ class HomeWindow(QMainWindow):
             query = """
                 SELECT nome, valor, tipo
                 FROM tb_registro
+                WHERE fk_usuario_id = %s
                 ORDER BY transacao_id DESC
                 LIMIT 3
             """
-            registros = db.consultar(query)
+            registros = db.consultar(query, self.cliente_id)
+            print(registros)
+            print(self.cliente_id)
 
             labels_nome = [self.lbl_produto1, self.lbl_produto2, self.lbl_produto3]
             labels_valor = [self.lbl_valor1, self.lbl_valor2, self.lbl_valor3]
@@ -115,8 +118,8 @@ class HomeWindow(QMainWindow):
         try:
             db = ConsultaSQL()
 
-            query = "SELECT tipo, valor FROM tb_registro"
-            dados = db.pd_consultar(query)
+            query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
+            dados = db.pd_consultar(query, self.cliente_id)
 
             if dados.empty:
                 receita = 0

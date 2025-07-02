@@ -10,10 +10,12 @@ POPUP que vai confirmar e gerar o pdf
 """
     
 class RelatorioWindow(QDialog):
-    def __init__(self):
+    def __init__(self, cliente_id):
         super().__init__()
         uic.loadUi("ui/RelatorioWindow.ui", self)
         
+        self.cliente_id = cliente_id
+
         self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)
         self.btn_nao.clicked.connect(self.close)
         
@@ -30,7 +32,8 @@ class RelatorioWindow(QDialog):
     #TODO Adaptar
     def gerar_pdf(self):
         db = ConsultaSQL()
-        dados_lidos = db.pd_consultar(query="SELECT * FROM tb_registro")
+        query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
+        dados_lidos = db.pd_consultar(query, self.cliente_id)
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
         pdf = canvas.Canvas("teste.pdf")

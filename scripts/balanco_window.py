@@ -22,11 +22,12 @@ def tratar_valor_para_exibir(valor_float):
     return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 class NovoRegistroWindow(QDialog):
-    def __init__(self, balanco_window):
+    def __init__(self, balanco_window, cliente_id):
         super().__init__()
         uic.loadUi("ui/NovoRegistroWindow.ui", self)
         self.input_Data.setDate(datetime.now())
         self.balanco_window = balanco_window
+        self.cliente_id = cliente_id
         self.btn_Confirmar.clicked.connect(self.adicionar_registro)
 
     def adicionar_registro(self):
@@ -45,7 +46,7 @@ class NovoRegistroWindow(QDialog):
                     INSERT INTO tb_registro (nome, valor, tipo, categoria, data_realizada, fk_usuario_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """
-                valores = (nome, valor_banco, tipo, categoria, data_banco, 1)
+                valores = (nome, valor_banco, tipo, categoria, data_banco, self.cliente_id)
 
                 db.editar(query, valores)
 
@@ -84,7 +85,7 @@ class NovoRegistroWindow(QDialog):
 
 
 class BalancoWindow(QDialog):
-    def __init__(self):
+    def __init__(self, cliente_id):
         super().__init__()
         uic.loadUi("ui/BalancoWindow.ui", self)
 
@@ -93,13 +94,15 @@ class BalancoWindow(QDialog):
         self.btn_add_registro.clicked.connect(self.abrir_novo_registro)
         self.btn_excluir_registro.clicked.connect(self.excluir_registro)
 
+        self.cliente_id = cliente_id
+
         self.carregar_registros()
 
         self.tabela_Registros.setColumnHidden(0, True)
 
     def abrir_novo_registro(self):
         if not self.novo_registro_window:
-            self.novo_registro_window = NovoRegistroWindow(self)
+            self.novo_registro_window = NovoRegistroWindow(self, self.cliente_id)
         self.novo_registro_window.show()
 
     def carregar_registros(self):
@@ -107,8 +110,9 @@ class BalancoWindow(QDialog):
             query = """
                 SELECT transacao_id, nome, tipo, categoria, data_realizada, valor
                 FROM tb_registro
+                WHERE fk_usuario_id = %s
             """
-            registros = db.consultar(query)
+            registros = db.consultar(query, self.cliente_id)
 
             self.tabela_Registros.setRowCount(0)
 
@@ -180,7 +184,7 @@ class BalancoWindow(QDialog):
         if confirm.clickedButton() == btn_sim:
             try:
                 sql = "DELETE FROM tb_registro WHERE transacao_id = %s"
-                db.editar(sql, (transacao_id,))
+                db.editar(sql, transacao_id)
 
                 self.tabela_Registros.removeRow(linha_selecionada)
 
@@ -204,8 +208,8 @@ class BalancoWindow(QDialog):
 
     def atualizar_saldo_total(self):
         try:
-            query = "SELECT tipo, valor FROM tb_registro"
-            df = db.pd_consultar(query)
+            query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
+            df = db.pd_consultar(query, self.cliente_id)
 
             if df.empty:
                 saldo = 0
