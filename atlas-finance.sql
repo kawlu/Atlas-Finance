@@ -48,8 +48,6 @@ UPDATE tb_usuario
 SET pais = "Brasil"
 WHERE pk_usuario_id = 1;
 
-DELETE FROM tb_usuario WHERE pk_usuario_id = 1;
-
 SELECT * FROM tb_usuario;
 SELECT * FROM tb_registro;
 
