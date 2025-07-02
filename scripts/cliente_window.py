@@ -168,6 +168,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
             self.login_window = LoginWindow()
             self.login_window.showMaximized()
         except Exception as e:
-            QtWidgets.QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
+            QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
             print(e)
             return
