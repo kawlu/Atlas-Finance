@@ -200,7 +200,7 @@ font-size: 16px;</string>
     <item>
      <widget class="QFrame" name="frame_lateral_direito">
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -649,38 +649,11 @@ color: #0D192B;</string>
                      </property>
                     </widget>
                    </item>
-                   <item>
-                    <widget class="QPushButton" name="btn_editar_ocupacao">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                      </font>
-                     </property>
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">color: #0D192B;</string>
-                     </property>
-                     <property name="text">
-                      <string>Editar</string>
-                     </property>
-                    </widget>
-                   </item>
                   </layout>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="edit_ocupacao">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
+                 <widget class="QComboBox" name="cmbox_ocupacao">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                     <horstretch>0</horstretch>
@@ -692,18 +665,29 @@ color: #0D192B;</string>
                     <pointsize>16</pointsize>
                    </font>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="mouseTracking">
+                   <bool>false</bool>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">margin-left: 15px;
 margin-bottom: 10px;
 border-radius: 10px;
 border: 2px solid #0D192B;
-padding: 10px;</string>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="placeholderText">
-                   <string>Desenvolvedor de Software</string>
+padding: 10px;
+
+/* Estilo da lista suspensa (popup de opções) */
+QComboBox QAbstractItemView {
+    background-color: white;
+    color: rgb(13, 25, 43);
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    border: 1px solid #999;
+	selection-background-color: rgb(13, 25, 43);
+    color: rgb(13, 25, 43);
+}</string>
                   </property>
                  </widget>
                 </item>
@@ -1177,13 +1161,7 @@ color: #0D192B;</string>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <item>
-                    <widget class="QLineEdit" name="edit_salario">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
+                    <widget class="QComboBox" name="cmbox_salario">
                      <property name="font">
                       <font>
                        <pointsize>16</pointsize>
@@ -1191,22 +1169,44 @@ color: #0D192B;</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgb(219, 219, 219);
+color: rgb(13, 25, 43);
+padding: 5px 10px;
+border-radius: 5px;
+border: 2px solid #0D192B;
+min-width: 80px;
+min-height: 40px;
+
+/* Estilo da lista suspensa (popup de opções) */
+QComboBox QAbstractItemView {
+    background-color: white;
     color: rgb(13, 25, 43);
-    padding: 5px 10px;
-    border-radius: 5px;
-	border: 2px solid #0D192B;
-    min-width: 80px;
-    min-height: 40px;</string>
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    border: 1px solid #999;
+	selection-background-color: rgb(13, 25, 43);
+    color: rgb(13, 25, 43);
+}</string>
                      </property>
-                     <property name="inputMethodHints">
-                      <set>Qt::ImhNone</set>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="placeholderText">
-                      <string>R$ 2000.00</string>
-                     </property>
+                     <item>
+                      <property name="text">
+                       <string>1500-2500</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>2500-3500</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>3500-5000</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>5000+</string>
+                      </property>
+                     </item>
                     </widget>
                    </item>
                    <item>

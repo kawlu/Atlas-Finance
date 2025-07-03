@@ -38,7 +38,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email)
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha)
-        self.btn_editar_ocupacao.clicked.connect(self.habilitar_edit_ocupacao)
         self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
         self.btn_salvar.clicked.connect(self.salvar)
         self.btn_editar_foto.clicked.connect(self.buscar_foto)
@@ -54,9 +53,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def habilitar_edit_senha(self):
         self.edit_senha.setEnabled(not self.edit_senha.isEnabled())
         self.edit_senha.setFocus()
-    def habilitar_edit_ocupacao(self):
-        self.edit_ocupacao.setEnabled(not self.edit_ocupacao.isEnabled())
-        self.edit_ocupacao.setFocus()
     def habilitar_edit_celular(self):
         self.edit_celular.setEnabled(not self.edit_celular.isEnabled())
         self.edit_celular.setFocus()
@@ -89,6 +85,47 @@ class ClienteWindow(QtWidgets.QMainWindow):
             "Togo", "Tonga", "Trindade e Tobago", "Tunísia", "Turcomenistão", "Turquia", "Tuvalu", "Ucrânia",
             "Uganda", "Uruguai", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela", "Vietnã", "Zâmbia", "Zimbábue"
         ]
+        lista_ocupacoes = [
+            "Administração",
+            "Recursos Humanos",
+            "Financeiro",
+            "Contabilidade",
+            "Marketing",
+            "Comercial",
+            "Vendas",
+            "Atendimento ao Cliente",
+            "Logística",
+            "Transporte",
+            "Tecnologia da Informação",
+            "Desenvolvimento de Software",
+            "Suporte Técnico",
+            "Engenharia",
+            "Jurídico",
+            "Compras",
+            "Produção",
+            "Manutenção",
+            "Qualidade",
+            "Pesquisa e Desenvolvimento",
+            "Educação",
+            "Saúde",
+            "Segurança do Trabalho",
+            "Serviços Gerais",
+            "Limpeza",
+            "Almoxarifado",
+            "Operações",
+            "Planejamento",
+            "Design",
+            "Arquitetura",
+            "Construção Civil",
+            "Agropecuária",
+            "Meio Ambiente",
+            "Comunicação",
+            "Eventos",
+            "Moda",
+            "Hotelaria",
+            "Turismo",
+            "Outros"
+        ]
         usuario = self.get_usuario()
 
         nome = usuario["nome"].iloc[0]
@@ -97,20 +134,25 @@ class ClienteWindow(QtWidgets.QMainWindow):
         ocupacao = usuario["ocupacao"].iloc[0]
         celular = usuario["celular"].iloc[0]
         pais = usuario["pais"].iloc[0]
-        #TODO: olhar isso daqui ó
-        salario = str(usuario["salario"].iloc[0])[:-3]
-        #salario = str(usuario["salario"].iloc[0]).split(".")[0]
+        salario = usuario["salario"].iloc[0]
         foto = usuario["foto"].iloc[0]
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
         self.edit_senha.setText(senha)
-        self.edit_ocupacao.setText(ocupacao)
         self.edit_celular.setText(celular)
+
         self.cmbox_pais.addItems(lista_paises)
         index_pais = self.cmbox_pais.findText(pais, QtCore.Qt.MatchFlag.MatchContains)
         self.cmbox_pais.setCurrentIndex(index_pais)
-        self.edit_salario.setText("R$" + salario + ".00")
+
+        self.cmbox_ocupacao.addItems(lista_ocupacoes)
+        index_ocupacao = self.cmbox_ocupacao.findText(ocupacao, QtCore.Qt.MatchFlag.MatchContains)
+        self.cmbox_ocupacao.setCurrentIndex(index_ocupacao)
+
+        index_salario = self.cmbox_salario.findText(salario, QtCore.Qt.MatchFlag.MatchContains)
+        self.cmbox_salario.setCurrentIndex(index_salario)
+
         if foto:
             self.set_foto(foto)
         else:
@@ -165,12 +207,9 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def salvar(self):
         email_temp = self.edit_email.text()
         senha_temp = self.edit_senha.text()
-        ocupacao_temp = self.edit_ocupacao.text()
         celular_temp = re.sub(r'\D', '', self.edit_celular.text().strip())
-        salario_temp = self.edit_salario.text().strip()
 
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
-        regex_salario = r'^(R\$)?\d+(?:[.,]\d{1,2})?$'
         if not re.match(regex_email, email_temp):
             MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
             return
@@ -183,9 +222,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
         if not len(celular_temp) == 13:
             MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
             return
-        if not re.match(regex_salario, salario_temp):
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Salário inválido.")
-            return
         ddi = celular_temp[0:2]
         ddd = celular_temp[2:4]
         digitos_1 = celular_temp[4:-4]
@@ -194,16 +230,11 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
         email = email_temp
         senha = senha_temp
-        ocupacao = ocupacao_temp
         celular = celular_temp
-        salario = self.edit_salario.text().replace("R$", "").replace(",", ".").strip()
-        if '.' not in salario:
-            salario += '.00'
-        else:
-            parte_decimal = salario.split('.')[-1]
-            if len(parte_decimal) == 1:
-                salario += '0'
+        
         pais = self.cmbox_pais.currentText()
+        ocupacao = self.cmbox_ocupacao.currentText()
+        salario = self.cmbox_salario.currentText()
 
         try:
             # Atualiza o banco de dados
