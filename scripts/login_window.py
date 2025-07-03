@@ -9,6 +9,7 @@ from database import ConsultaSQL
 
 from cadastro_window import CadastroWindow
 from home_window import HomeWindow  # Só importa a classe, não executa nada ainda
+from utilitarios import MessageBox
 class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -48,7 +49,7 @@ class LoginWindow(QMainWindow):
         login_status = False
 
         if not email or not senha:
-            self.show_custom_messagebox("Erro", "Preencha o email e a senha.")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Preencha o email e a senha.")
             return
             
         client_id, login_status = self.consulta_login(email, senha)    
@@ -70,7 +71,7 @@ class LoginWindow(QMainWindow):
         df = self.sql.pd_consultar(query, (email, senha))
         
         if not df.empty:
-            self.show_custom_messagebox("Login", "Login bem-sucedido!")
+            MessageBox.show_custom_messagebox(self, "information", "Login", "Login bem-sucedido!")
 
             self.cliente_id = df['pk_usuario_id'].iloc[0]
             self.login_status = True
@@ -79,7 +80,7 @@ class LoginWindow(QMainWindow):
             self.salvar_lembrete()
         
         else:
-            self.show_custom_messagebox("Erro", "Email ou senha incorretos!")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Email ou senha incorretos!")
         
         return self.cliente_id, self.login_status
     
@@ -87,42 +88,6 @@ class LoginWindow(QMainWindow):
         self.hide()
         self.home = HomeWindow(self.cliente_id, self.login_status)
         self.home.showMaximized()
-
-    def show_custom_messagebox(parent, title, message):
-        box = QMessageBox(parent)
-        box.setWindowTitle(title)
-        box.setText(message)
-
-        box.setStyleSheet("""
-            QMessageBox {
-                background-color: #DBDBDB;
-            }
-
-            QLabel {
-                color: #0D192B;
-                font-size: 14px;
-                background-color: transparent;
-            }
-                          
-            QPushButton {
-                background-color: #0D192B;
-                color: #DBDBDB;
-                padding: 6px 14px;
-                border: none;
-                border-radius: 4px;
-                font-weight: bold;
-                qproperty-cursor: PointingHandCursor;
-            }
-
-            QPushButton:hover {
-                background-color: #1A2A46;
-            }
-        """)
-
-        ok_button = box.addButton("OK", QMessageBox.ButtonRole.AcceptRole)
-        ok_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-
-        box.exec()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

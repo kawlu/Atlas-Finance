@@ -10,6 +10,8 @@ import sys
 import re
 import os
 
+from utilitarios import MessageBox
+
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
 sys.path.append(str(parent_directory / 'assets/png'))
@@ -134,7 +136,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
             # Verifica se é imagem válida
             if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
-                QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
                 return
             
             with open(file_path, 'rb') as f:
@@ -170,19 +172,19 @@ class ClienteWindow(QtWidgets.QMainWindow):
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         regex_salario = r'^(R\$)?\d+(?:[.,]\d{1,2})?$'
         if not re.match(regex_email, email_temp):
-            QtWidgets.QMessageBox.warning(self, "Erro", "Email inválido.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
             return
         if len(senha_temp) < 6:
-            QtWidgets.QMessageBox.warning(self, "Erro", "A senha deve ter ao menos 6 caracteres.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha deve ter ao menos 6 caracteres.")
             return
         elif ' ' in senha_temp:
-            QtWidgets.QMessageBox.warning(self, "Erro", "A senha não pode conter espaços.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha não pode conter espaços.")
             return
         if not len(celular_temp) == 13:
-            QtWidgets.QMessageBox.warning(self, "Erro", "O número de celular deve conter 13 dígitos numéricos.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
             return
         if not re.match(regex_salario, salario_temp):
-            QtWidgets.QMessageBox.warning(self, "Erro", "Salário inválido.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Salário inválido.")
             return
         ddi = celular_temp[0:2]
         ddd = celular_temp[2:4]
@@ -214,7 +216,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
             #print(params)
             df = self.sql.editar(query, params)
         except Exception as e:
-            QtWidgets.QMessageBox.warning(self, "Erro", "Não foi possível alterar os dados de usuário.")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
             print(e)
             return
         # Atualiza o lembrete_login.txt
@@ -222,7 +224,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
             with open("lembrete_login.txt", "w", encoding="utf-8") as f:
                 f.write(f"{email}\n{senha}")
 
-        QMessageBox.information(self, "Alterar dados", "Dados de perfil atualizados com sucesso.")
+        MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
 
         print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
@@ -246,7 +248,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
             if os.path.exists("lembrete_login.txt"):
                 os.remove("lembrete_login.txt")
             
-            QMessageBox.information(self, "Conta desativada", "Conta desativada com sucesso.")
+            MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
             from login_window import LoginWindow #importação tardia pra evitar importação circular
             self.close()
@@ -254,6 +256,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
             self.login_window = LoginWindow()
             self.login_window.showMaximized()
         except Exception as e:
-            QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível desativar a conta.")
             print(e)
             return
