@@ -1,7 +1,7 @@
+from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtWidgets import QMessageBox
 from database import ConsultaSQL
-from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from pathlib import Path
 import icons_rc
@@ -35,7 +35,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_editar_ocupacao.clicked.connect(self.habilitar_edit_ocupacao)
         self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
         self.btn_salvar.clicked.connect(self.salvar)
-        self.btn_editar_foto.clicked.connect(self.set_foto)
+        self.btn_editar_foto.clicked.connect(self.buscar_foto)
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
         
@@ -92,7 +92,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
-        self.set_foto()
+        #self.set_foto()
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -112,7 +112,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #usuario = df.iloc[0]  # Pega a primeira linha
         return df
 
-    def set_foto(self):
+    def buscar_foto(self):
         # Abre janela para selecionar arquivo de imagem
         file_dialog = QtWidgets.QFileDialog(self)
         file_dialog.setNameFilters(["Imagens (*.png *.jpg *.jpeg)", "Todos os arquivos (*)"])
@@ -126,16 +126,29 @@ class ClienteWindow(QtWidgets.QMainWindow):
             if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
                 QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
                 return
+            
+            self.set_foto(file_path)
 
-            # Atualiza label da foto
-            pixmap = QPixmap(file_path)
-            largura = self.lbl_foto.width()
-            altura = self.lbl_foto.height()
-            pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-            self.lbl_foto.setPixmap(pixmap)
+    def set_foto(self, file_path):
+        # Atualiza label da foto
+        pixmap = QPixmap(file_path)
+        pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+        
+        pixmap_redondo = QPixmap(375, 375)
+        pixmap_redondo.fill(Qt.GlobalColor.transparent)
 
-            # (Opcional) Salvar caminho para uso posterior (ex: salvar no banco)
-            self.foto_path = file_path
+        painter = QPainter(pixmap_redondo)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = QtGui.QPainterPath()
+        path.addEllipse(0, 0, 375, 375)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.end()
+
+        self.lbl_foto.setPixmap(pixmap_redondo)
+
+        # (Opcional) Salvar caminho para uso posterior (ex: salvar no banco)
+        self.foto_path = file_path
 
     def salvar(self):
         email_temp = self.edit_email.text()
