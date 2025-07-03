@@ -73,7 +73,7 @@ class HomeWindow(QMainWindow):
 
             query = """
                 SELECT nome, valor, tipo
-                FROM tb_registro
+                FROM tb_registro WHERE fk_usuario_id = %s
                 ORDER BY transacao_id DESC
                 LIMIT 3
             """
@@ -114,8 +114,8 @@ class HomeWindow(QMainWindow):
         try:
             db = ConsultaSQL()
 
-            query = "SELECT tipo, valor FROM tb_registro"
-            dados = db.pd_consultar(query)
+            query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
+            dados = db.pd_consultar(query, self.cliente_id)
 
             if dados.empty:
                 receita = 0

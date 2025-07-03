@@ -20,15 +20,11 @@ class RelatorioWindow(QDialog):
         self.btn_nao.clicked.connect(self.close)
         
     def gerar_pdf_e_popup(self):
-        self.gerar_pdf()
-        self.abrir_popup_sucesso()
+        pdf_sucesso = self.gerar_pdf()
+        if pdf_sucesso:
+            QMessageBox.information(self, "Sucesso", "PDF foi gerado com sucesso!")
+            self.close()
         
-    def abrir_popup_sucesso(self):
-        popup = SucessPDFWindow()
-        popup.exec()
-        self.close()
-
-
     def gerar_pdf(self):
         db = ConsultaSQL()
         query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
@@ -36,7 +32,7 @@ class RelatorioWindow(QDialog):
 
         if dados_lidos.empty:
             QtWidgets.QMessageBox.warning(self, "Erro", "Não há registros disponíveis.")
-            return
+            return False
         
         y = 0 # variavel  é a coordenada y para escrever no pdf
         pdf = canvas.Canvas("teste.pdf")
@@ -89,10 +85,4 @@ class RelatorioWindow(QDialog):
             pdf.drawString(x_data_realizada, 750 - y, data_realizada)
 
         pdf.save()
-        
-class SucessPDFWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-       
-        QMessageBox.information(self, "Sucesso", "PDF foi gerado com sucesso!")
-        
+        return True
