@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>600</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1080</width>
-    <height>600</height>
+    <height>650</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1080</width>
-    <height>618</height>
+    <height>650</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,7 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item>
+          <item alignment="Qt::AlignTop">
            <widget class="QLabel" name="lbl_atlas">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -108,7 +108,7 @@
              <item>
               <widget class="QFrame" name="frame_inputs">
                <property name="styleSheet">
-                <string notr="true"/>
+                <string notr="true">color: rgb(219, 219, 219);</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -523,14 +523,23 @@ margin-left: 20px;</string>
                </property>
               </widget>
              </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Maximum</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>80</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
             </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lbl_copyright">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#dbdbdb;&quot;&gt;© 2025 NeoDev&lt;br/&gt;Todos os direitos reservados&lt;br/&gt;Versão 0.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
            </widget>
           </item>
          </layout>
@@ -560,9 +569,7 @@ margin-left: 20px;</string>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-
-</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -582,7 +589,7 @@ margin-left: 20px;</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>70</height>
+           <height>120</height>
           </size>
          </property>
         </spacer>
@@ -596,15 +603,18 @@ margin-left: 20px;</string>
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frame_foto">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(219, 219, 219);
 
 border-radius: 25px;
 
-color: rgb(13, 25, 43)
-</string>
+color: rgb(13, 25, 43);
+
+min-height: 270px;
+
+min-width: 300px;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -613,13 +623,16 @@ color: rgb(13, 25, 43)
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
+             <item alignment="Qt::AlignHCenter">
               <widget class="QLabel" name="lbl_foto">
+               <property name="styleSheet">
+                <string notr="true">color: #0D192B;</string>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="text">
-                <string>FOTO AQUI</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/icons/user_mini.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -653,7 +666,6 @@ color: rgb(13, 25, 43)
                 <string notr="true">background-color: none;
 color: rgb(219, 219, 219);
 
-margin-bottom: 10px;
 border-radius: 2px;
 padding: 5px 10px;
 
@@ -697,9 +709,25 @@ text-decoration: underline;
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Maximum</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
               <widget class="QPushButton" name="btn_login">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -718,11 +746,12 @@ padding: 5px 10px;
 
 border-radius: 5px;
 min-width:100px;
-min-height: 20px;
+min-height: 25px;
 
 font-size: 15px;
 
 font-weight: bold;
+
 </string>
                </property>
                <property name="text">
@@ -732,6 +761,12 @@ font-weight: bold;
              </item>
              <item>
               <widget class="QPushButton" name="btn_cadastro">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
@@ -746,18 +781,43 @@ padding: 5px 10px;
 
 border-radius: 5px;
 min-width:100px;
-min-height: 20px;
+min-height: 25px;
 
 font-size: 15px;
 
-font-weight: bold;</string>
+font-weight: bold;
+
+</string>
                </property>
                <property name="text">
                 <string>Crie sua conta</string>
                </property>
               </widget>
              </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Maximum</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
             </layout>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight|Qt::AlignBottom">
+           <widget class="QLabel" name="lbl_copyright">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#dbdbdb;&quot;&gt;© 2025 NeoDev&lt;br/&gt;Todos os direitos reservados&lt;br/&gt;Versão 0.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
            </widget>
           </item>
          </layout>
