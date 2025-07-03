@@ -1,5 +1,7 @@
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
 from pathlib import Path
 import sys
 current_script_path = Path(__file__).resolve()
@@ -34,6 +36,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_editar_ocupacao.clicked.connect(self.habilitar_edit_ocupacao)
         self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
         self.btn_salvar.clicked.connect(self.salvar)
+        self.btn_editar_foto.clicked.connect(self.set_foto)
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
         
@@ -81,6 +84,13 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #print("\n\n", df, "\n\n")
         #usuario = df.iloc[0]  # Pega a primeira linha
         return df
+
+    def set_foto(self):
+        pixmap = QPixmap(str(parent_directory / 'assets/png/star.png'))
+        largura = self.lbl_foto.width()
+        altura = self.lbl_foto.height()
+        pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+        self.lbl_foto.setPixmap(pixmap)
 
     def salvar(self):
         email_temp = self.edit_email.text()
