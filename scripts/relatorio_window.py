@@ -1,5 +1,5 @@
 from PyQt6 import uic, QtWidgets
-from PyQt6.QtWidgets import QDialog, QMessageBox
+from PyQt6.QtWidgets import QDialog
 
 from database import ConsultaSQL
 
@@ -9,6 +9,8 @@ from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from datetime import datetime
+
+from utilitarios import MessageBox
 
 class RelatorioWindow(QDialog):
     def __init__(self, cliente_id):
@@ -23,8 +25,7 @@ class RelatorioWindow(QDialog):
     def gerar_pdf_e_popup(self):
         pdf_sucesso = self.gerar_pdf()
         if pdf_sucesso:
-            from login_window import LoginWindow
-            LoginWindow.show_custom_messagebox(self, "Sucesso", "PDF foi gerado com sucesso!")
+            MessageBox.show_custom_messagebox(self, "information", "Sucesso", "PDF foi gerado com sucesso!")
             self.close()
 
     def gerar_pdf(self):
@@ -33,7 +34,8 @@ class RelatorioWindow(QDialog):
         dados_lidos = db.pd_consultar(query, self.cliente_id)
 
         if dados_lidos.empty:
-            QtWidgets.QMessageBox.warning(self, "Erro", "Não há registros disponíveis.")
+            from login_window import LoginWindow
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não há registros disponíveis.")
             return False
 
         # Layout

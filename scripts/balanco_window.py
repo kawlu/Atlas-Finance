@@ -6,6 +6,8 @@ from datetime import datetime
 import sys
 import re
 
+from utilitarios import MessageBox
+
 db = ConsultaSQL()
 
 def tratar_data_para_banco(data_str):
@@ -67,19 +69,9 @@ class NovoRegistroWindow(QDialog):
                 
 
             except Exception as e:
-                erro = QtWidgets.QMessageBox(self)
-                erro.setWindowTitle("Erro")
-                erro.setText(f"Erro ao inserir registro:\n{e}")
-                erro.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-                erro.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-                erro.exec()
+                MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro ao inserir registro:\n{e}")
         else:
-              aviso = QtWidgets.QMessageBox(self)
-              aviso.setWindowTitle("Aviso")
-              aviso.setText("Preencha todos os campos corretamente.")
-              aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
-              aviso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-              aviso.exec()
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Preencha todos os campos corretamente.")
 
     def limpar_campos(self):
         self.input_Nome.clear()
@@ -158,13 +150,7 @@ class BalancoWindow(QDialog):
         linha_selecionada = self.tabela_Registros.currentRow()
 
         if linha_selecionada < 0:
-            aviso = QtWidgets.QMessageBox(self)
-            aviso.setWindowTitle("Aviso")
-            aviso.setText("Selecione um registro para excluir.")
-            aviso.setIcon(QtWidgets.QMessageBox.Icon.Warning)
-            aviso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-            aviso.exec()
-            
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Selecione um registro para excluir")
             return
 
         transacao_id = self.tabela_Registros.item(linha_selecionada, 0).text()
@@ -173,26 +159,12 @@ class BalancoWindow(QDialog):
         try:
             transacao_id = int(transacao_id)
         except ValueError:
-            erro = QtWidgets.QMessageBox(self)
-            erro.setWindowTitle("Erro")
-            erro.setText("ID inválido para exclusão.")
-            erro.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-            erro.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-            erro.exec()
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "ID inválido para exclusão.")
             return
 
-        confirm = QtWidgets.QMessageBox(self)
-        confirm.setWindowTitle("Confirmação")
-        confirm.setText(f"Tem certeza que deseja excluir o registro \"{nome_registro}\"?")
-        confirm.setIcon(QtWidgets.QMessageBox.Icon.Question)
+        confirmado = MessageBox.ask_confirmation(self, "Confirmação", f"Tem certeza que deseja excluir o registro \"{nome_registro}\"?")
 
-        btn_sim = confirm.addButton("SIM", QtWidgets.QMessageBox.ButtonRole.YesRole)
-        btn_nao = confirm.addButton("NÃO", QtWidgets.QMessageBox.ButtonRole.NoRole)
-
-        confirm.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-        confirm.exec()
-
-        if confirm.clickedButton() == btn_sim:
+        if confirmado:
             try:
                 sql = "DELETE FROM tb_registro WHERE transacao_id = %s"
                 db.editar(sql, transacao_id)
@@ -203,20 +175,10 @@ class BalancoWindow(QDialog):
                 self.transacoes_atualizadas.emit()
                 self.totais_atualizados.emit()
 
-                sucesso = QtWidgets.QMessageBox(self)
-                sucesso.setWindowTitle("Sucesso")
-                sucesso.setText(f"Registro \"{nome_registro}\" excluído com sucesso.")
-                sucesso.setIcon(QtWidgets.QMessageBox.Icon.Information)
-                sucesso.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-                sucesso.exec()
+                MessageBox.show_custom_messagebox(self, "information", "Sucesso", f"Registro \"{nome_registro}\" excluído com sucesso.")
 
             except Exception as erro:
-                erro_msg = QtWidgets.QMessageBox(self)
-                erro_msg.setWindowTitle("Erro")
-                erro_msg.setText(f"Erro ao excluir registro:\n{erro}")
-                erro_msg.setIcon(QtWidgets.QMessageBox.Icon.Critical)
-                erro_msg.setStyleSheet("QLabel{color: #0D192B;} QPushButton{color: #0D192B;}")
-                erro_msg.exec()
+                MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro ao excluir registro:\n{erro}")
 
 
     def atualizar_saldo_total(self):
