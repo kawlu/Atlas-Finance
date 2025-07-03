@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1100</width>
-    <height>700</height>
+    <width>1151</width>
+    <height>664</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,7 +77,7 @@
             <string notr="true">color: rgb(13, 25, 43);</string>
            </property>
            <property name="text">
-            <string/>
+            <string>R$ 00,00</string>
            </property>
           </widget>
          </item>

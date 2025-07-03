@@ -2,7 +2,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtWidgets import QMessageBox
 from database import ConsultaSQL
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from pathlib import Path
 from shutil import copy2
 import icons_rc
@@ -10,26 +10,31 @@ import sys
 import re
 import os
 
+from utilitarios import MessageBox
+
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
 sys.path.append(str(parent_directory / 'assets/png'))
 sys.path.append(str(parent_directory))
 
 class ClienteWindow(QtWidgets.QMainWindow):
+    btn_home_pressed = pyqtSignal()
     
     def __init__(self, cliente_id, login_status, home_window):
         super().__init__()
 
         # Carrega tela principal
         uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self)
-        appIcon = QtGui.QIcon("")
-        self.setWindowIcon(appIcon)
+        
+        #appIcon = QtGui.QIcon("")
+        #self.setWindowIcon(appIcon)
         
         self.sql = ConsultaSQL()
         
         self.cliente_id = cliente_id
         self.login_status = login_status
         self.home_window = home_window
+        self.foto_bytes = None
 
         self.btn_editar_email.clicked.connect(self.habilitar_edit_email)
         self.btn_editar_senha.clicked.connect(self.habilitar_edit_senha)
@@ -39,6 +44,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_editar_foto.clicked.connect(self.buscar_foto)
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
+        self.btn_home.clicked.connect(self.reopen_home)
+
         
 
     def habilitar_edit_email(self):
@@ -93,7 +100,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
-        self.set_foto()
+        foto = usuario["foto"].iloc[0]
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -104,13 +111,17 @@ class ClienteWindow(QtWidgets.QMainWindow):
         index_pais = self.cmbox_pais.findText(pais, QtCore.Qt.MatchFlag.MatchContains)
         self.cmbox_pais.setCurrentIndex(index_pais)
         self.edit_salario.setText("R$" + salario + ".00")
+        if foto:
+            self.set_foto(foto)
+        else:
+            with open(str(parent_directory / 'assets/png/user.png'), 'rb') as f:
+                self.foto_bytes = f.read()
+            self.set_foto(self.foto_bytes)
 
     def get_usuario(self):
         query = "SELECT * FROM tb_usuario WHERE pk_usuario_id = %s"
         df = self.sql.pd_consultar(query, (self.cliente_id))
 
-        #print("\n\n", df, "\n\n")
-        #usuario = df.iloc[0]  # Pega a primeira linha
         return df
 
     def buscar_foto(self):
@@ -125,34 +136,31 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
             # Verifica se é imagem válida
             if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
-                QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
                 return
             
-            destino = parent_directory / f"assets/png/user_profile.png"
-            copy2(file_path, destino)
-            
-            self.set_foto()
+            with open(file_path, 'rb') as f:
+                self.foto_bytes = f.read()
+            self.set_foto(self.foto_bytes)
 
-    def set_foto(self):
-        foto_path = parent_directory / f"assets/png/user_profile.png"
+    def set_foto(self, foto_bytes):
+        # Atualiza label da foto
+        pixmap = QPixmap()
+        pixmap.loadFromData(foto_bytes)
+        pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+        
+        pixmap_redondo = QPixmap(375, 375)
+        pixmap_redondo.fill(Qt.GlobalColor.transparent)
 
-        if foto_path.exists():
-            # Atualiza label da foto
-            pixmap = QPixmap(str(foto_path))
-            pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-            
-            pixmap_redondo = QPixmap(375, 375)
-            pixmap_redondo.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(pixmap_redondo)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = QtGui.QPainterPath()
+        path.addEllipse(0, 0, 375, 375)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.end()
 
-            painter = QPainter(pixmap_redondo)
-            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-            path = QtGui.QPainterPath()
-            path.addEllipse(0, 0, 375, 375)
-            painter.setClipPath(path)
-            painter.drawPixmap(0, 0, pixmap)
-            painter.end()
-
-            self.lbl_foto.setPixmap(pixmap_redondo)
+        self.lbl_foto.setPixmap(pixmap_redondo)
 
     def salvar(self):
         email_temp = self.edit_email.text()
@@ -164,19 +172,19 @@ class ClienteWindow(QtWidgets.QMainWindow):
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         regex_salario = r'^(R\$)?\d+(?:[.,]\d{1,2})?$'
         if not re.match(regex_email, email_temp):
-            QtWidgets.QMessageBox.warning(self, "Erro", "Email inválido.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
             return
         if len(senha_temp) < 6:
-            QtWidgets.QMessageBox.warning(self, "Erro", "A senha deve ter ao menos 6 caracteres.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha deve ter ao menos 6 caracteres.")
             return
         elif ' ' in senha_temp:
-            QtWidgets.QMessageBox.warning(self, "Erro", "A senha não pode conter espaços.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha não pode conter espaços.")
             return
         if not len(celular_temp) == 13:
-            QtWidgets.QMessageBox.warning(self, "Erro", "O número de celular deve conter 13 dígitos numéricos.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
             return
         if not re.match(regex_salario, salario_temp):
-            QtWidgets.QMessageBox.warning(self, "Erro", "Salário inválido.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Salário inválido.")
             return
         ddi = celular_temp[0:2]
         ddd = celular_temp[2:4]
@@ -199,12 +207,16 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
         try:
             # Atualiza o banco de dados
-            query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s WHERE pk_usuario_id = %s"
-            params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
-            print(params)
+            if self.foto_bytes:
+                query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s, foto = %s WHERE pk_usuario_id = %s"
+                params = (email, senha, ocupacao, celular, salario, pais, self.foto_bytes, self.get_usuario()["pk_usuario_id"].iloc[0])
+            else:
+                query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %sWHERE pk_usuario_id = %s"
+                params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
+            #print(params)
             df = self.sql.editar(query, params)
         except Exception as e:
-            QtWidgets.QMessageBox.warning(self, "Erro", "Não foi possível alterar os dados de usuário.")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
             print(e)
             return
         # Atualiza o lembrete_login.txt
@@ -212,7 +224,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
             with open("lembrete_login.txt", "w", encoding="utf-8") as f:
                 f.write(f"{email}\n{senha}")
 
-        QMessageBox.information(self, "Alterar dados", "Dados de perfil atualizados com sucesso.")
+        MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
 
         print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
@@ -222,24 +234,30 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.close()
         self.home_window.close()
         self.login_window = LoginWindow()
-        self.login_window.showMaximized()
+        self.login_window.show()
+        
+    def reopen_home(self):
+        self.btn_home_pressed.emit()
+        self.hide()
     
     def desativar_conta(self):
-        try:
-            query = "DELETE FROM tb_usuario WHERE pk_usuario_id = %s"
-            df = self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
+        confirmado = MessageBox.ask_confirmation(self, "Confirmação", "Tem certeza que deseja desativar a conta?")
+        if confirmado:
+            try:
+                query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
+                self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
 
-            if os.path.exists("lembrete_login.txt"):
-                os.remove("lembrete_login.txt")
-            
-            QMessageBox.information(self, "Conta desativada", "Conta desativada com sucesso.")
+                if os.path.exists("lembrete_login.txt"):
+                    os.remove("lembrete_login.txt")
+                
+                MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
-            from login_window import LoginWindow #importação tardia pra evitar importação circular
-            self.close()
-            self.home_window.close()
-            self.login_window = LoginWindow()
-            self.login_window.showMaximized()
-        except Exception as e:
-            QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
-            print(e)
-            return
+                from login_window import LoginWindow #importação tardia pra evitar importação circular
+                self.close()
+                self.home_window.close()
+                self.login_window = LoginWindow()
+                self.login_window.show()
+            except Exception as e:
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível desativar a conta.")
+                print(e)
+                return

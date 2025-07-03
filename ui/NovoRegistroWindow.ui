@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../assets/png/globe.png</normaloff>../assets/png/globe.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(219, 219, 219);</string>
   </property>
@@ -151,14 +155,14 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="font">
@@ -246,14 +250,14 @@ max-height: 40px;</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>92</height>
                </size>
               </property>
               <property name="font">
@@ -351,14 +355,14 @@ max-height: 90px;</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>302</height>
                </size>
               </property>
               <property name="font">
@@ -478,14 +482,14 @@ max-height: 300px;</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>602</width>
+                <height>702</height>
                </size>
               </property>
               <property name="font">
@@ -573,14 +577,14 @@ max-height: 700px;</string>
              <widget class="QLineEdit" name="input_Valor">
               <property name="minimumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>250</width>
-                <height>50</height>
+                <width>402</width>
+                <height>42</height>
                </size>
               </property>
               <property name="font">
