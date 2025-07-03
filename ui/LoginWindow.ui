@@ -145,7 +145,6 @@
                </property>
                <property name="styleSheet">
                 <string notr="true">margin-left: 25px;
-margin-right: 25px;
 
 color: rgb(219, 219, 219);</string>
                </property>
@@ -262,8 +261,7 @@ padding: 10px;
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">margin-left: 25px;
-margin-right: 25px;</string>
+                <string notr="true">margin-left: 25px;</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -296,6 +294,19 @@ font-weight: bold;</string>
                   </property>
                   <property name="text">
                    <string>Crie sua conta</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(219, 219, 219);</string>
+                  </property>
+                  <property name="text">
+                   <string>Lembrar-me</string>
                   </property>
                  </widget>
                 </item>
@@ -333,19 +344,6 @@ font-weight: bold;
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="checkBox">
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(219, 219, 219);</string>
-                  </property>
-                  <property name="text">
-                   <string>Lembrar-me</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -361,6 +359,22 @@ font-weight: bold;
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Maximum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>100</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
