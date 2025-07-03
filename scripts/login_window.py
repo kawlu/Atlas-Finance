@@ -4,6 +4,8 @@ import sys
 import os
 import atexit
 from database import ConsultaSQL
+
+from cadastro_window import CadastroWindow
 from home_window import HomeWindow  # Só importa a classe, não executa nada ainda
 class LoginWindow(QMainWindow):
     def __init__(self):
@@ -14,7 +16,9 @@ class LoginWindow(QMainWindow):
         self.cliente_id = 0
         self.login_status = False
 
-        self.pushButton_2.clicked.connect(self.login)
+        self.btn_login.clicked.connect(self.login)
+        self.btn_cadastro.clicked.connect(self.cadastro)
+        
         self.checkBox.stateChanged.connect(self.salvar_lembrete)
         self.carregar_lembrete()
 
@@ -52,6 +56,12 @@ class LoginWindow(QMainWindow):
             
         return client_id
             
+    def cadastro(self):
+        self.hide()
+        self.home = CadastroWindow()
+        self.home.show()
+    
+    
     def consulta_login(self, email, senha):
         # Consulta segura (evitando SQL Injection)
         query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"

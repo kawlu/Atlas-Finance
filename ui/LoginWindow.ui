@@ -255,7 +255,7 @@ padding: 10px;
                </property>
                <layout class="QGridLayout" name="gridLayout">
                 <item row="1" column="1">
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="btn_login">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -302,7 +302,7 @@ font-weight: bold;
                  </widget>
                 </item>
                 <item row="1" column="3">
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="btn_cadastro">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
@@ -329,7 +329,7 @@ font-weight: bold;</string>
                  </widget>
                 </item>
                 <item row="1" column="2">
-                 <spacer name="horizontalSpacer_3">
+                 <spacer name="spacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
