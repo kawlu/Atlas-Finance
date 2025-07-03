@@ -66,6 +66,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
+        self.set_foto()
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
