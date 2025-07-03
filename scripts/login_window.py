@@ -71,7 +71,7 @@ class LoginWindow(QMainWindow):
         
         if not df.empty:
             if df['situacao'].iloc[0] != 'ativa':
-                self.show_custom_messagebox("Erro", "Conta desativada!")
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Conta desativada!")
                 return 0, False
             MessageBox.show_custom_messagebox(self, "information", "Login", "Login bem-sucedido!")
 

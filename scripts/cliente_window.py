@@ -241,21 +241,23 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.hide()
     
     def desativar_conta(self):
-        try:
-            query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
-            self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
+        confirmado = MessageBox.ask_confirmation(self, "Confirmação", "Tem certeza que deseja desativar a conta?")
+        if confirmado:
+            try:
+                query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
+                self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
 
-            if os.path.exists("lembrete_login.txt"):
-                os.remove("lembrete_login.txt")
-            
-            MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
+                if os.path.exists("lembrete_login.txt"):
+                    os.remove("lembrete_login.txt")
+                
+                MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
-            from login_window import LoginWindow #importação tardia pra evitar importação circular
-            self.close()
-            self.home_window.close()
-            self.login_window = LoginWindow()
-            self.login_window.show()
-        except Exception as e:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível desativar a conta.")
-            print(e)
-            return
+                from login_window import LoginWindow #importação tardia pra evitar importação circular
+                self.close()
+                self.home_window.close()
+                self.login_window = LoginWindow()
+                self.login_window.show()
+            except Exception as e:
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível desativar a conta.")
+                print(e)
+                return
