@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="icons">
     <file>Logo Atlas.png</file>
+    <file>user_mini.png</file>
     <file>globe_branco.png</file>
     <file>star.png</file>
     <file>globe_branco_maior.png</file>
