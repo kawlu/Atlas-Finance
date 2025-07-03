@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Atlas Finance</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../assets/png/globe.png</normaloff>../assets/png/globe.png</iconset>
+  </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>

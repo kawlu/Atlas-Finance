@@ -24,7 +24,7 @@ class ConsultaSQL:
             dados = cursor.fetchall()
             return pd.DataFrame(dados, columns=colunas)
         
-    def consultar(self, query, params=None):
+    def consultar(self, query, params=None) -> tuple:
         """Executa SELECT e retorna lista de tuplas"""
         if not self.banco:
             raise ConnectionError("Banco de dados não conectado.")
@@ -32,7 +32,7 @@ class ConsultaSQL:
             cursor.execute(query, params)
             return cursor.fetchall()
 
-    def editar(self, query, params=None):
+    def editar(self, query, params=None) -> None:
         """Executa INSERT, UPDATE ou DELETE"""
         if not self.banco:
             raise ConnectionError("Banco de dados não conectado.")
