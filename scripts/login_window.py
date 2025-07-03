@@ -65,11 +65,15 @@ class LoginWindow(QMainWindow):
     
     
     def consulta_login(self, email, senha):
-        # Consulta segura (evitando SQL Injection)
         query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"
         df = self.sql.pd_consultar(query, (email, senha))
         
         if not df.empty:
+            
+            if df['situacao'].iloc[0] != 'ativa':
+                self.show_custom_messagebox("Erro", "Conta desativada!")
+                return 0, False
+            
             self.show_custom_messagebox("Login", "Login bem-sucedido!")
 
             self.cliente_id = df['pk_usuario_id'].iloc[0]

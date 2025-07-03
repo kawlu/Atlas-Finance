@@ -240,8 +240,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
     
     def desativar_conta(self):
         try:
-            query = "DELETE FROM tb_usuario WHERE pk_usuario_id = %s"
-            df = self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
+            query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
+            self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
 
             if os.path.exists("lembrete_login.txt"):
                 os.remove("lembrete_login.txt")
@@ -252,7 +252,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
             self.close()
             self.home_window.close()
             self.login_window = LoginWindow()
-            self.login_window.showMaximized()
+            self.login_window.show()
         except Exception as e:
             QMessageBox.warning(self, "Erro", "Não foi possível desativar a conta.")
             print(e)
