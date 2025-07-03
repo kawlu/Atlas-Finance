@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QMessageBox
 from database import ConsultaSQL
 from PyQt6.QtCore import Qt
 from pathlib import Path
+from shutil import copy2
 import icons_rc
 import sys
 import re
@@ -92,7 +93,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
-        #self.set_foto()
+        self.set_foto()
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -127,28 +128,31 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
                 return
             
-            self.set_foto(file_path)
+            destino = parent_directory / f"assets/png/user_profile.png"
+            copy2(file_path, destino)
+            
+            self.set_foto()
 
-    def set_foto(self, file_path):
-        # Atualiza label da foto
-        pixmap = QPixmap(file_path)
-        pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-        
-        pixmap_redondo = QPixmap(375, 375)
-        pixmap_redondo.fill(Qt.GlobalColor.transparent)
+    def set_foto(self):
+        foto_path = parent_directory / f"assets/png/user_profile.png"
 
-        painter = QPainter(pixmap_redondo)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        path = QtGui.QPainterPath()
-        path.addEllipse(0, 0, 375, 375)
-        painter.setClipPath(path)
-        painter.drawPixmap(0, 0, pixmap)
-        painter.end()
+        if foto_path.exists():
+            # Atualiza label da foto
+            pixmap = QPixmap(str(foto_path))
+            pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+            
+            pixmap_redondo = QPixmap(375, 375)
+            pixmap_redondo.fill(Qt.GlobalColor.transparent)
 
-        self.lbl_foto.setPixmap(pixmap_redondo)
+            painter = QPainter(pixmap_redondo)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            path = QtGui.QPainterPath()
+            path.addEllipse(0, 0, 375, 375)
+            painter.setClipPath(path)
+            painter.drawPixmap(0, 0, pixmap)
+            painter.end()
 
-        # (Opcional) Salvar caminho para uso posterior (ex: salvar no banco)
-        self.foto_path = file_path
+            self.lbl_foto.setPixmap(pixmap_redondo)
 
     def salvar(self):
         email_temp = self.edit_email.text()
@@ -196,7 +200,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         try:
             # Atualiza o banco de dados
             query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s WHERE pk_usuario_id = %s"
-            params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"])
+            params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
             print(params)
             df = self.sql.editar(query, params)
         except Exception as e:
