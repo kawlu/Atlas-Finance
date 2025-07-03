@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS tb_usuario(
     salario DECIMAL(10,2) NOT NULL,
     pais VARCHAR(100) NOT NULL,
     nascimento DATE NOT NULL,
-    path_foto VARCHAR(255),
+    foto LONGBLOB,
     situacao ENUM('ativa', 'desativada') NOT NULL
 );
 
