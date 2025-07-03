@@ -10,7 +10,6 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from datetime import datetime
 
-
 class RelatorioWindow(QDialog):
     def __init__(self, cliente_id):
         super().__init__()
@@ -24,7 +23,8 @@ class RelatorioWindow(QDialog):
     def gerar_pdf_e_popup(self):
         pdf_sucesso = self.gerar_pdf()
         if pdf_sucesso:
-            QMessageBox.information(self, "Sucesso", "PDF foi gerado com sucesso!")
+            from login_window import LoginWindow
+            LoginWindow.show_custom_messagebox(self, "Sucesso", "PDF foi gerado com sucesso!")
             self.close()
 
     def gerar_pdf(self):

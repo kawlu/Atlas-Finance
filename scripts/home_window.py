@@ -2,7 +2,7 @@ import sys
 from PyQt6 import uic
 from PyQt6.QtCore import QTimer
 from balanco_window import tratar_valor_para_exibir
-from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow
 
 import cliente_window, balanco_window, relatorio_window
 from database import ConsultaSQL
