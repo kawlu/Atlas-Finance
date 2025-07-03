@@ -461,6 +461,9 @@ border: 2px solid #0D192B;
 padding: 10px;</string>
                   </property>
                   <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
                    <string>fulano.f.s@gmail.com</string>
                   </property>
                  </widget>
@@ -568,6 +571,9 @@ border: 2px solid #0D192B;
 padding: 10px;</string>
                   </property>
                   <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
                    <string>********************</string>
                   </property>
                  </widget>
@@ -675,6 +681,9 @@ border: 2px solid #0D192B;
 padding: 10px;</string>
                   </property>
                   <property name="text">
+                   <string/>
+                  </property>
+                  <property name="placeholderText">
                    <string>Desenvolvedor de Software</string>
                   </property>
                  </widget>
@@ -884,10 +893,13 @@ min-width: 200px;
 padding: 10px;</string>
                         </property>
                         <property name="text">
-                         <string>+00 (00) 00000-0000</string>
+                         <string/>
                         </property>
                         <property name="maxLength">
                          <number>19</number>
+                        </property>
+                        <property name="placeholderText">
+                         <string>+00 (00) 00000-0000</string>
                         </property>
                        </widget>
                       </item>
@@ -1159,6 +1171,9 @@ color: #0D192B;</string>
                       <set>Qt::ImhNone</set>
                      </property>
                      <property name="text">
+                      <string/>
+                     </property>
+                     <property name="placeholderText">
                       <string>R$ 2000.00</string>
                      </property>
                     </widget>
