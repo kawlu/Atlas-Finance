@@ -2,7 +2,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtWidgets import QMessageBox
 from database import ConsultaSQL
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from pathlib import Path
 from shutil import copy2
 import icons_rc
@@ -16,14 +16,16 @@ sys.path.append(str(parent_directory / 'assets/png'))
 sys.path.append(str(parent_directory))
 
 class ClienteWindow(QtWidgets.QMainWindow):
+    btn_home_pressed = pyqtSignal()
     
     def __init__(self, cliente_id, login_status, home_window):
         super().__init__()
 
         # Carrega tela principal
         uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self)
-        appIcon = QtGui.QIcon("")
-        self.setWindowIcon(appIcon)
+        
+        #appIcon = QtGui.QIcon("")
+        #self.setWindowIcon(appIcon)
         
         self.sql = ConsultaSQL()
         
@@ -39,6 +41,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_editar_foto.clicked.connect(self.buscar_foto)
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
+        self.btn_home.clicked.connect(self.reopen_home)
+
         
 
     def habilitar_edit_email(self):
@@ -223,6 +227,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.home_window.close()
         self.login_window = LoginWindow()
         self.login_window.show()
+        
+    def reopen_home(self):
+        self.btn_home_pressed.emit()
+        self.hide()
     
     def desativar_conta(self):
         try:

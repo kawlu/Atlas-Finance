@@ -57,9 +57,13 @@ class HomeWindow(QMainWindow):
         if not self.perfil_window:
             self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status, self)
         self.perfil_window.set_labels()
-        self.hide()
+        
+        
         self.perfil_window.showMaximized()
-        #self.unhide()
+        self.hide()
+        
+        self.perfil_window.btn_home_pressed.connect(self.showMaximized)
+ 
 
     def logoff(self):
         from login_window import LoginWindow #importação tardia pra evitar importação circular
