@@ -455,22 +455,22 @@ padding: 10px;</string>
                      </item>
                      <item>
                       <property name="text">
-                       <string>1500-2500</string>
+                       <string>R$ 1500,00 até R$ 2500,00</string>
                       </property>
                      </item>
                      <item>
                       <property name="text">
-                       <string>2500-3500</string>
+                       <string>R$ 2500,00 até R$ 3500,00</string>
                       </property>
                      </item>
                      <item>
                       <property name="text">
-                       <string>3500-5000</string>
+                       <string>R$ 3500,00 até R$ 5000,00</string>
                       </property>
                      </item>
                      <item>
                       <property name="text">
-                       <string>5000+</string>
+                       <string>R$ 5000,00 ou maior</string>
                       </property>
                      </item>
                     </widget>
@@ -661,6 +661,9 @@ min-width: 300px;</string>
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="styleSheet">
                 <string notr="true">background-color: none;
