@@ -1,5 +1,7 @@
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt
 from pathlib import Path
 import sys
 current_script_path = Path(__file__).resolve()
@@ -34,6 +36,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_editar_ocupacao.clicked.connect(self.habilitar_edit_ocupacao)
         self.btn_editar_celular.clicked.connect(self.habilitar_edit_celular)
         self.btn_salvar.clicked.connect(self.salvar)
+        self.btn_editar_foto.clicked.connect(self.set_foto)
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
         
@@ -63,6 +66,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
+        self.set_foto()
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -81,6 +85,31 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #print("\n\n", df, "\n\n")
         #usuario = df.iloc[0]  # Pega a primeira linha
         return df
+
+    def set_foto(self):
+        # Abre janela para selecionar arquivo de imagem
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilters(["Imagens (*.png *.jpg *.jpeg)", "Todos os arquivos (*)"])
+        file_dialog.selectNameFilter("Imagens (*.png *.jpg *.jpeg)")
+        file_dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFile)
+
+        if file_dialog.exec():
+            file_path = file_dialog.selectedFiles()[0]
+
+            # Verifica se é imagem válida
+            if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                return
+
+            # Atualiza label da foto
+            pixmap = QPixmap(file_path)
+            largura = self.lbl_foto.width()
+            altura = self.lbl_foto.height()
+            pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+            self.lbl_foto.setPixmap(pixmap)
+
+            # (Opcional) Salvar caminho para uso posterior (ex: salvar no banco)
+            self.foto_path = file_path
 
     def salvar(self):
         email_temp = self.edit_email.text()
