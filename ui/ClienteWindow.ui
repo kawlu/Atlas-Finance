@@ -132,6 +132,9 @@ border: none;</string>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btn_home">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 border-radius: 2px;
@@ -173,6 +176,9 @@ font-size: 16px;</string>
           </item>
           <item>
            <widget class="QPushButton" name="btn_logoff">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 border-radius: 2px;
@@ -430,6 +436,9 @@ color: #0D192B;</string>
                        <pointsize>12</pointsize>
                       </font>
                      </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">color: #0D192B;</string>
                      </property>
@@ -540,6 +549,9 @@ color: #0D192B;</string>
                        <pointsize>12</pointsize>
                       </font>
                      </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">color: #0D192B;</string>
                      </property>
@@ -649,6 +661,9 @@ color: #0D192B;</string>
                       <font>
                        <pointsize>12</pointsize>
                       </font>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">color: #0D192B;</string>
@@ -806,6 +821,9 @@ padding: 10px;</string>
                           <pointsize>12</pointsize>
                          </font>
                         </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
                         <property name="styleSheet">
                          <string notr="true">color: #0D192B;</string>
                         </property>
@@ -935,6 +953,9 @@ padding: 10px;</string>
                          <font>
                           <pointsize>16</pointsize>
                          </font>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
                         </property>
                         <property name="styleSheet">
                          <string notr="true">QComboBox {
@@ -1071,10 +1092,10 @@ max-height: 375px;
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item alignment="Qt::AlignHCenter">
                  <widget class="QPushButton" name="btn_editar_foto">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -1084,6 +1105,9 @@ max-height: 375px;
                     <pointsize>12</pointsize>
                     <underline>true</underline>
                    </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">color: #0D192B;</string>
@@ -1214,6 +1238,9 @@ color: #0D192B;</string>
                        <pointsize>16</pointsize>
                       </font>
                      </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: #8D0A0A;
 color: #DBDBDB;
@@ -1294,6 +1321,9 @@ min-height: 50px;</string>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="styleSheet">
                 <string notr="true">background-color: #DBDBDB;

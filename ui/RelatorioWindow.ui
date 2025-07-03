@@ -6,21 +6,28 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>940</width>
-    <height>440</height>
+    <width>218</width>
+    <height>127</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Atlas Finance</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../assets/png/globe.png</normaloff>../assets/png/globe.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #DBDBDB;</string>
+   <string notr="true">background-color: rgb(13, 25, 43);</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QFrame" name="frame_2">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(219, 219, 219);</string>
+     </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -42,10 +49,10 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: #000000;</string>
+         <string notr="true">color: rgb(219, 219, 219);</string>
         </property>
         <property name="text">
-         <string>Deseja emitir o relatório?</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Deseja emitir o relatório?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -57,8 +64,11 @@
    </item>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">font-size: 15px;</string>
+     </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -74,13 +84,19 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>21</pointsize>
+          <pointsize>-1</pointsize>
          </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: #147117;
 color: #DBDBDB;
-border-radius: 10px;
+border-radius: 5px;
 padding: 5px 10px;
 max-height: 80px;
 max-width: 300px;</string>
@@ -100,16 +116,23 @@ max-width: 300px;</string>
         </property>
         <property name="font">
          <font>
-          <pointsize>21</pointsize>
+          <pointsize>-1</pointsize>
          </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: #8D0A0A;
 color: #DBDBDB;
-border-radius: 10px;
+border-radius: 5px;
 padding: 5px 10px;
 max-height: 80px;
-max-width: 300px;</string>
+max-width: 300px;
+</string>
         </property>
         <property name="text">
          <string>Não</string>

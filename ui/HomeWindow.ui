@@ -126,7 +126,7 @@ border: none;
           <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btn_home">
             <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+             <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;

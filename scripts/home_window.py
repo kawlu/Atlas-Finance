@@ -32,7 +32,7 @@ class HomeWindow(QMainWindow):
         
         # Botões
         self.btn_relatorio.clicked.connect(self.btn_gerar_relatorio)
-        self.btn_logoff.clicked.connect(self.btn_desconectar)
+        self.btn_logoff.clicked.connect(self.logoff)
         self.btn_editar.clicked.connect(self.btn_balanco)
         self.btn_perfil.clicked.connect(self.btn_cliente)
 
@@ -57,10 +57,15 @@ class HomeWindow(QMainWindow):
         if not self.perfil_window:
             self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status, self)
         self.perfil_window.set_labels()
+        self.hide()
         self.perfil_window.showMaximized()
+        #self.unhide()
 
-    def btn_desconectar(self):
+    def logoff(self):
+        from login_window import LoginWindow #importação tardia pra evitar importação circular
         self.close()
+        self.login_window = LoginWindow()
+        self.login_window.show()
 
     def atualizar_grafico_global(self):
         mes = self.cmb_mes.currentIndex()

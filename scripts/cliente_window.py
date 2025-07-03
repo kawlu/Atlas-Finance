@@ -218,7 +218,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.close()
         self.home_window.close()
         self.login_window = LoginWindow()
-        self.login_window.showMaximized()
+        self.login_window.show()
     
     def desativar_conta(self):
         try:
