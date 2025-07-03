@@ -205,8 +205,12 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
         try:
             # Atualiza o banco de dados
-            query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s, foto = %s WHERE pk_usuario_id = %s"
-            params = (email, senha, ocupacao, celular, salario, pais, self.foto_bytes, self.get_usuario()["pk_usuario_id"].iloc[0])
+            if self.foto_bytes:
+                query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s, foto = %s WHERE pk_usuario_id = %s"
+                params = (email, senha, ocupacao, celular, salario, pais, self.foto_bytes, self.get_usuario()["pk_usuario_id"].iloc[0])
+            else:
+                query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %sWHERE pk_usuario_id = %s"
+                params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
             #print(params)
             df = self.sql.editar(query, params)
         except Exception as e:
