@@ -66,6 +66,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #TODO: olhar isso daqui ó
         salario = str(usuario["salario"].iloc[0])[:-3]
         #salario = str(usuario["salario"].iloc[0]).split(".")[0]
+        self.set_foto()
 
         self.lbl_nome.setText(nome)
         self.edit_email.setText(email)
@@ -86,11 +87,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
         return df
 
     def set_foto(self):
-        pixmap = QPixmap(str(parent_directory / 'assets/png/star.png'))
-        largura = self.lbl_foto.width()
-        altura = self.lbl_foto.height()
-        pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-        self.lbl_foto.setPixmap(pixmap)
+        pixmap = QPixmap(str(parent_directory / 'assets/png/user.png'))
+        if not pixmap.isNull():
+            pixmap = pixmap.scaled(375, 375, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+            self.lbl_foto.setPixmap(pixmap)
 
     def salvar(self):
         email_temp = self.edit_email.text()

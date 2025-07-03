@@ -1,6 +1,2 @@
-<<<<<<< HEAD
 Daniel@gmail.com
-=======
-daniel@gmail.com
->>>>>>> 736badaa79139b63d7732c8cede399b31f04e0ef
 senhasecreta

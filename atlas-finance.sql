@@ -10,7 +10,9 @@ CREATE TABLE IF NOT EXISTS tb_usuario(
     ocupacao VARCHAR(100) NOT NULL,
     salario DECIMAL(10,2) NOT NULL,
     pais VARCHAR(100) NOT NULL,
-    nascimento DATE NOT NULL
+    nascimento DATE NOT NULL,
+    path_foto VARCHAR(255),
+    situacao ENUM('ativa', 'desativada') NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tb_registro(
@@ -24,7 +26,7 @@ CREATE TABLE IF NOT EXISTS tb_registro(
     FOREIGN KEY(fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id) ON DELETE CASCADE
 );
 
-INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nascimento) VALUES(
+INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nascimento, situacao) VALUES(
 	'Daniel',
     'Daniel@gmail.com',
     'senhasecreta',
@@ -32,7 +34,8 @@ INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nas
     'Matador de Porco',
     1600.00,
     'Brasil',
-    '2000-01-01'
+    '2000-01-01',
+    'ativa'
 );
 
 INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
@@ -43,10 +46,6 @@ INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario
     CURRENT_DATE(),
     '1'
 );
-
-UPDATE tb_usuario
-SET pais = "Brasil"
-WHERE pk_usuario_id = 1;
 
 SELECT * FROM tb_usuario;
 SELECT * FROM tb_registro;
