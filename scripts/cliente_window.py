@@ -86,11 +86,29 @@ class ClienteWindow(QtWidgets.QMainWindow):
         return df
 
     def set_foto(self):
-        pixmap = QPixmap(str(parent_directory / 'assets/png/star.png'))
-        largura = self.lbl_foto.width()
-        altura = self.lbl_foto.height()
-        pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-        self.lbl_foto.setPixmap(pixmap)
+        # Abre janela para selecionar arquivo de imagem
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilters(["Imagens (*.png *.jpg *.jpeg)", "Todos os arquivos (*)"])
+        file_dialog.selectNameFilter("Imagens (*.png *.jpg *.jpeg)")
+        file_dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFile)
+
+        if file_dialog.exec():
+            file_path = file_dialog.selectedFiles()[0]
+
+            # Verifica se é imagem válida
+            if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                QMessageBox.warning(self, "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                return
+
+            # Atualiza label da foto
+            pixmap = QPixmap(file_path)
+            largura = self.lbl_foto.width()
+            altura = self.lbl_foto.height()
+            pixmap = pixmap.scaled(largura, altura, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+            self.lbl_foto.setPixmap(pixmap)
+
+            # (Opcional) Salvar caminho para uso posterior (ex: salvar no banco)
+            self.foto_path = file_path
 
     def salvar(self):
         email_temp = self.edit_email.text()
