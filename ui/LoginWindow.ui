@@ -210,24 +210,6 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_6">
-               <property name="font">
-                <font>
-                 <underline>true</underline>
-                </font>
-               </property>
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="text">
-                <string>Esqueceu sua senha?</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QPushButton" name="pushButton_2">
                <property name="cursor">
@@ -354,7 +336,7 @@ border-radius: 20px;</string>
             </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(219, 219, 219);
-text-color: rgb(0, 0, 0)</string>
+</string>
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;Sobre o Atlas Finance&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Registre despesas e receitas, acompanhe &lt;br/&gt;saldos e organize seu dinheiro com clareza.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ideal para quem quer controlar o orçamento &lt;br/&gt;sem complicação.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -391,7 +373,7 @@ text-color: rgb(0, 0, 0)</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">text-color: rgb(0, 0, 0)</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;Features&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;• Gera gráficos automatizados para que &lt;br/&gt;sejam monitorados seus gastos e ganhos.&lt;br/&gt;&lt;br/&gt;• Pode criar documentos em pdf para &lt;br/&gt;que seja possivel se organizar como quiser.&lt;br/&gt;&lt;br/&gt;• Separa os dados de cada usuário distinto.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
