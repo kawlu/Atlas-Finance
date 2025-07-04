@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>697</width>
     <height>600</height>
    </rect>
   </property>
@@ -24,13 +24,14 @@
     <normaloff>../assets/png/globe.png</normaloff>../assets/png/globe.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(219, 219, 219);</string>
+   <string notr="true">background-color: #0D192B;</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QFrame" name="frame">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(219, 219, 219);</string>
+      <string notr="true">background-color: #0D192B;
+</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -41,6 +42,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QFrame" name="frame_4">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -80,7 +84,7 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: white;</string>
               </property>
               <property name="text">
                <string>Adicionando um novo registro</string>
@@ -105,6 +109,11 @@
          </item>
          <item>
           <widget class="QFrame" name="frame_9">
+           <property name="styleSheet">
+            <string notr="true">
+
+</string>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -138,7 +147,8 @@
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: rgb(13, 25, 43);
+color: white;</string>
               </property>
               <property name="text">
                <string>Nome:</string>
@@ -172,7 +182,7 @@
               </property>
               <property name="styleSheet">
                <string notr="true">min-width: 400px;
-color: rgb(13, 25, 43);
+color: white;
 min-height: 40px;
 max-width: 400px;
 max-height: 40px;</string>
@@ -233,7 +243,7 @@ max-height: 40px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: white;</string>
               </property>
               <property name="text">
                <string>Tipo:</string>
@@ -250,14 +260,14 @@ max-height: 40px;</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>402</width>
-                <height>42</height>
+                <width>414</width>
+                <height>54</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>402</width>
-                <height>92</height>
+                <width>414</width>
+                <height>104</height>
                </size>
               </property>
               <property name="font">
@@ -266,11 +276,27 @@ max-height: 40px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">min-width: 400px;
-color: rgb(13, 25, 43);
-min-height: 40px;
-max-width: 400px;
-max-height: 90px;</string>
+               <string notr="true">QComboBox {
+    background-color: #0D192B;
+    color: white;
+    border: 1px solid white;
+    border-radius: 6px;
+    padding: 6px;
+    min-width: 400px;
+    min-height: 40px;
+    max-width: 400px;
+    max-height: 90px;
+}
+
+
+
+QComboBox QAbstractItemView {
+    background-color: #0D192B;       /* Fundo da lista */
+    color: white;                    /* Cor do texto das opções */
+    selection-background-color: #2E3B55; /* Cor de fundo quando selecionado */
+    selection-color: white;          /* Cor do texto selecionado */
+    border: 1px solid #2E3B55;
+}</string>
               </property>
               <item>
                <property name="text">
@@ -338,7 +364,7 @@ max-height: 90px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: white;</string>
               </property>
               <property name="text">
                <string>Categoria:</string>
@@ -355,14 +381,14 @@ max-height: 90px;</string>
               </property>
               <property name="minimumSize">
                <size>
-                <width>402</width>
-                <height>42</height>
+                <width>414</width>
+                <height>54</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>402</width>
-                <height>302</height>
+                <width>414</width>
+                <height>104</height>
                </size>
               </property>
               <property name="font">
@@ -371,11 +397,25 @@ max-height: 90px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">min-width: 400px;
-color: rgb(13, 25, 43);
-min-height: 40px;
-max-width: 400px;
-max-height: 300px;</string>
+               <string notr="true">QComboBox {
+    background-color: #0D192B;
+    color: white;
+    border: 1px solid white;
+    border-radius: 6px;
+    padding: 6px;
+    min-width: 400px;
+    min-height: 40px;
+    max-width: 400px;
+    max-height: 90px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #0D192B;       /* Fundo da lista */
+    color: white;                    /* Cor do texto das opções */
+    selection-background-color: #2E3B55; /* Cor de fundo quando selecionado */
+    selection-color: white;          /* Cor do texto selecionado */
+    border: 1px solid #2E3B55;
+}</string>
               </property>
               <item>
                <property name="text">
@@ -468,7 +508,7 @@ max-height: 300px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: white;</string>
               </property>
               <property name="text">
                <string>Data:</string>
@@ -499,7 +539,7 @@ max-height: 300px;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">min-width: 400px;
-color: rgb(13, 25, 43);
+color: white;
 min-height: 40px;
 max-width: 600px;
 max-height: 700px;</string>
@@ -566,7 +606,7 @@ max-height: 700px;</string>
                </font>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: rgb(13, 25, 43);</string>
+               <string notr="true">color: white;</string>
               </property>
               <property name="text">
                <string>Valor:</string>
@@ -594,7 +634,7 @@ max-height: 700px;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">min-width: 400px;
-color: rgb(13, 25, 43);
+color: white;
 min-height: 40px;
 max-width: 400px;
 max-height: 40px;</string>
@@ -661,7 +701,9 @@ color: rgb(255, 255, 255);
 padding: 10px 20px;
 border-radius: 12px;
 min-width: 150px;
-min-height: 30px;</string>
+min-height: 30px;
+font-weight: bold;
+</string>
               </property>
               <property name="text">
                <string>Confirmar</string>
