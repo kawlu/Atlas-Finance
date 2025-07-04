@@ -139,7 +139,7 @@ class CadastroWindow(QMainWindow):
             """
             valores = (
                 nome, email, senha, celular, ocupacao,
-                self.faixa, pais, nascimento, self.foto_bytes
+                faixa, pais, nascimento, self.foto_bytes
             )
 
             self.sql.editar(insert_query, valores)
