@@ -1,134 +1,162 @@
-from PyQt6 import QtWidgets, uic
+from PyQt6 import uic, QtWidgets, QtGui
+from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6.QtWidgets import QMessageBox, QMainWindow
-import sys
+from PyQt6.QtCore import Qt
 import pymysql
 
 from database import ConsultaSQL
+from utilitarios import MessageBox
 
 class CadastroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        
         uic.loadUi("ui/CadastroWindow.ui", self)
+
         self.sql = ConsultaSQL()
-        
-        #TODO colocar na função que vai usar
-        ocupacao = [
-            "Administração",
-            "Recursos Humanos",
-            "Financeiro",
-            "Contabilidade",
-            "Marketing",
-            "Comercial",
-            "Vendas",
-            "Atendimento ao Cliente",
-            "Logística",
-            "Transporte",
-            "Tecnologia da Informação",
-            "Desenvolvimento de Software",
-            "Suporte Técnico",
-            "Engenharia",
-            "Jurídico",
-            "Compras",
-            "Produção",
-            "Manutenção",
-            "Qualidade",
-            "Pesquisa e Desenvolvimento",
-            "Educação",
-            "Saúde",
-            "Segurança do Trabalho",
-            "Serviços Gerais",
-            "Limpeza",
-            "Almoxarifado",
-            "Operações",
-            "Planejamento",
-            "Design",
-            "Arquitetura",
-            "Construção Civil",
-            "Agropecuária",
-            "Meio Ambiente",
-            "Comunicação",
-            "Eventos",
-            "Moda",
-            "Hotelaria",
-            "Turismo",
-            "Outros"
+        self.foto_bytes = None
+
+        # Preenche os comboboxes
+        self.cmb_ocupacao.addItems(self.get_ocupacoes())
+        self.cmb_pais.addItems(self.get_paises())
+
+        # Conectar botões
+        self.btn_cadastro.clicked.connect(self.cadastrar_usuario)
+        self.btn_login.clicked.connect(self.voltar_login)  # <- botão que retorna para a tela de login
+        self.edit_foto.clicked.connect(self.buscar_foto)
+
+    def voltar_login(self):
+        from login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
+        self.login_window = LoginWindow()
+        self.login_window.show()
+        self.close()
+
+    def get_ocupacoes(self):
+        return [
+            "Administração", "Recursos Humanos", "Financeiro", "Contabilidade",
+            "Marketing", "Comercial", "Vendas", "Atendimento ao Cliente",
+            "Logística", "Transporte", "Tecnologia da Informação", "Desenvolvimento de Software",
+            "Suporte Técnico", "Engenharia", "Jurídico", "Compras", "Produção", "Manutenção",
+            "Qualidade", "Pesquisa e Desenvolvimento", "Educação", "Saúde", "Segurança do Trabalho",
+            "Serviços Gerais", "Limpeza", "Almoxarifado", "Operações", "Planejamento",
+            "Design", "Arquitetura", "Construção Civil", "Agropecuária", "Meio Ambiente",
+            "Comunicação", "Eventos", "Moda", "Hotelaria", "Turismo", "Outros"
         ]
-        #TODO mesmo que o acima
-        lista_paises = [
-            "Afeganistão", "África do Sul", "Albânia", "Alemanha", "Andorra", "Angola", "Antígua e Barbuda",
-            "Arábia Saudita", "Argélia", "Argentina", "Armênia", "Austrália", "Áustria", "Azerbaijão",
-            "Bahamas", "Bangladesh", "Barbados", "Bareine", "Bélgica", "Belize", "Benin", "Bielorrússia",
-            "Bolívia", "Bósnia e Herzegovina", "Botsuana", "Brasil", "Brunei", "Bulgária", "Burquina Faso",
-            "Burundi", "Butão", "Cabo Verde", "Camarões", "Camboja", "Canadá", "Catar", "Cazaquistão",
-            "Chade", "Chile", "China", "Chipre", "Colômbia", "Comores", "Congo-Brazzaville", "Congo-Kinshasa",
-            "Coreia do Norte", "Coreia do Sul", "Costa do Marfim", "Costa Rica", "Croácia", "Cuba", "Dinamarca",
-            "Dominica", "Egito", "El Salvador", "Emirados Árabes Unidos", "Equador", "Eritreia", "Eslováquia",
-            "Eslovênia", "Espanha", "Estados Unidos", "Estônia", "Eswatini", "Etiópia", "Fiji", "Filipinas",
-            "Finlândia", "França", "Gabão", "Gâmbia", "Gana", "Geórgia", "Granada", "Grécia", "Guatemala",
-            "Guiana", "Guiné", "Guiné-Bissau", "Guiné Equatorial", "Haiti", "Holanda", "Honduras", "Hungria",
-            "Iémen", "Ilhas Marshall", "Ilhas Salomão", "Índia", "Indonésia", "Irã", "Iraque", "Irlanda",
-            "Islândia", "Israel", "Itália", "Jamaica", "Japão", "Jordânia", "Kosovo", "Kuwait", "Laos",
-            "Lesoto", "Letônia", "Líbano", "Libéria", "Líbia", "Liechtenstein", "Lituânia", "Luxemburgo",
-            "Macedônia do Norte", "Madagáscar", "Malásia", "Malaui", "Maldivas", "Mali", "Malta", "Marrocos",
-            "Maurício", "Mauritânia", "México", "Mianmar", "Micronésia", "Moçambique", "Moldávia", "Mônaco",
-            "Mongólia", "Montenegro", "Namíbia", "Nauru", "Nepal", "Nicarágua", "Níger", "Nigéria", "Noruega",
-            "Nova Zelândia", "Omã", "Palau", "Palestina", "Panamá", "Papua-Nova Guiné", "Paquistão", "Paraguai", "Peru",
-            "Polônia", "Portugal", "Quênia", "Quirguistão", "Reino Unido", "República Centro-Africana",
-            "República Dominicana", "República Tcheca", "Romênia", "Ruanda", "Rússia", "São Cristóvão e Névis",
-            "São Marino", "São Tomé e Príncipe", "São Vicente e Granadinas", "Seicheles", "Senegal", "Serra Leoa",
-            "Sérvia", "Singapura", "Síria", "Somália", "Sri Lanka", "Suazilândia", "Sudão", "Sudão do Sul",
-            "Suécia", "Suíça", "Suriname", "Tailândia", "Taiwan", "Tajiquistão", "Tanzânia", "Timor-Leste",
-            "Togo", "Tonga", "Trindade e Tobago", "Tunísia", "Turcomenistão", "Turquia", "Tuvalu", "Ucrânia",
-            "Uganda", "Uruguai", "Uzbequistão", "Vanuatu", "Vaticano", "Venezuela", "Vietnã", "Zâmbia", "Zimbábue"
+
+    def get_paises(self):
+        return [
+            "Brasil", "Argentina", "Estados Unidos", "Canadá", "França", "Alemanha",
+            "Itália", "Portugal", "Reino Unido", "Japão", "China", "Índia", "Outros"
         ]
+
+    def faixa_para_salario(self, faixa_str):
+        faixa_dict = {
+            "1500-2500": 2000.00,
+            "2500-3500": 3000.00,
+            "3500-5000": 4250.00,
+            "5000+": 5500.00
+        }
+        return faixa_dict.get(faixa_str, 0.0)
+
+    def limpar_campos(self):
+        self.input_nome.clear()
+        self.input_email.clear()
+        self.input_senha.clear()
+        self.input_confirmar_senha.clear()
+        self.input_celular.clear()
+        self.cmb_ocupacao.setCurrentIndex(0)
+        self.cmb_objetivo.setCurrentIndex(0)
+        self.cmb_faixa.setCurrentIndex(0)
+        self.cmb_pais.setCurrentIndex(0)
+        self.date_nascimento.setDate(self.date_nascimento.minimumDate())
+        self.checkBox.setChecked(False)
+
+    def buscar_foto(self):
+        # Abre janela para selecionar arquivo de imagem
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilters(["Imagens (*.png *.jpg *.jpeg)", "Todos os arquivos (*)"])
+        file_dialog.selectNameFilter("Imagens (*.png *.jpg *.jpeg)")
+        file_dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFile)
+
+        if file_dialog.exec():
+            file_path = file_dialog.selectedFiles()[0]
+
+            # Verifica se é imagem válida
+            if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                return
+            
+            with open(file_path, 'rb') as f:
+                self.foto_bytes = f.read()
+            self.set_foto(self.foto_bytes)
+
+    def set_foto(self, foto_bytes):
+        # Atualiza label da foto
+        pixmap = QPixmap()
+        pixmap.loadFromData(foto_bytes)
+        pixmap = pixmap.scaled(215, 215, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
         
-    # def limpar_campos(self):
-    #     for campo in ["lineEdit", "lineEdit_2", "lineEdit_3", "lineEdit_4", "lineEdit_5", "lineEdit_6", "lineEdit_7", "lineEdit_9", "lineEdit_10"]:
-    #         janela_principal.findChild(QtWidgets.QLineEdit, campo).clear()
-    #     janela_principal.findChild(QtWidgets.QCheckBox, "checkBox").setChecked(False)
-        
-    # def cadastrar_usuario(self):
-    #     nome = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit").text()
-    #     senha = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_2").text()
-    #     celular = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_3").text()
-    #     ocupacao = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_4").text()
-    #     objetivo = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_5").text()
-    #     email = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_6").text()
-    #     senha_confirma = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_7").text()
-    #     nascimento = janela_principal.findChild(QtWidgets.QDateEdit, "dateEdit").date().toString("yyyy-MM-dd")
-    #     salario = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_9").text()
-    #     pais = janela_principal.findChild(QtWidgets.QLineEdit, "lineEdit_10").text()
-    #     termos = janela_principal.findChild(QtWidgets.QCheckBox, "checkBox").isChecked()
+        pixmap_redondo = QPixmap(215, 215)
+        pixmap_redondo.fill(Qt.GlobalColor.transparent)
 
-    #     if not termos:
-    #         QMessageBox.warning(janela_principal, "Erro", "Você precisa aceitar os termos.")
-    #         return
+        painter = QPainter(pixmap_redondo)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = QtGui.QPainterPath()
+        path.addEllipse(0, 0, 215, 215)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.end()
 
-    #     if senha != senha_confirma:
-    #         QMessageBox.warning(janela_principal, "Erro", "As senhas não coincidem.")
-    #         return
+        self.lbl_foto.setPixmap(pixmap_redondo)
 
-    #     if not all([nome, senha, celular, ocupacao, email, nascimento, salario, pais]):
-    #         QMessageBox.warning(janela_principal, "Erro", "Preencha todos os campos.")
-    #         return
+    def cadastrar_usuario(self):
+        nome = self.input_nome.text()
+        email = self.input_email.text()
+        senha = self.input_senha.text()
+        confirmar = self.input_confirmar_senha.text()
+        celular = self.input_celular.text()
+        ocupacao = self.cmb_ocupacao.currentText()
+        objetivo = self.cmb_objetivo.currentText()
+        faixa = self.cmb_faixa.currentText()
+        pais = self.cmb_pais.currentText()
+        nascimento = self.date_nascimento.date().toString("yyyy-MM-dd")
+        termos = self.checkBox.isChecked()
 
-    #     try:
-    #         conn = pymysql.connect(
-    #             host="localhost",
-    #             user="root",
-    #             password="root",
-    #             database="db_finance"
-    #         )
-    #         cursor = conn.cursor()
-    #         cursor.execute("""
-    #             INSERT INTO tb_usuario (nome, email, senha, celular, ocupacao, salario, pais, nascimento)
-    #             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    #         """, (nome, email, senha, celular, ocupacao, float(salario), pais, nascimento))
-    #         conn.commit()
-    #         conn.close()
+        if not termos:
+            QMessageBox.warning(self, "Erro", "Você precisa aceitar os termos.")
+            return
 
-    #         QMessageBox.information(janela_principal, "Sucesso", "Cadastro realizado com sucesso!")
-    #         self.limpar_campos()
-    #     except pymysql.MySQLError as e:
-    #         QMessageBox.critical(janela_principal, "Erro de banco", str(e))
+        if senha != confirmar:
+            QMessageBox.warning(self, "Erro", "As senhas não coincidem.")
+            return
+
+        if not all([nome, email, senha, celular]) or ocupacao.startswith("Selecione") or objetivo.startswith("Selecione") or faixa.startswith("Selecione") or pais.startswith("Selecione"):
+            QMessageBox.warning(self, "Erro", "Todos os campos devem ser preenchidos corretamente.")
+            return
+
+        try:
+            salario = self.faixa_para_salario(faixa)
+
+            conn = pymysql.connect(
+                host="localhost",
+                user="root",
+                password="root",
+                database="db_finance"
+            )
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO tb_usuario (
+                    nome, email, senha, celular, ocupacao, salario, pais, nascimento, foto situacao
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """, (
+                nome, email, senha, celular, ocupacao, salario, pais, nascimento, self.foto_bytes, 'ativa'
+            ))
+            conn.commit()
+            conn.close()
+
+            QMessageBox.information(self, "Sucesso", "Cadastro realizado com sucesso!")
+            self.limpar_campos()
+
+        except pymysql.err.IntegrityError as e:
+            QMessageBox.critical(self, "Erro", f"Erro de integridade: {e}")
+        except pymysql.MySQLError as e:
+            QMessageBox.critical(self, "Erro de banco", str(e))

@@ -8,166 +8,176 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
+from utilitarios import MessageBox
+
 from datetime import datetime
 
-from utilitarios import MessageBox
+import os
 
 class RelatorioWindow(QDialog):
     def __init__(self, cliente_id):
         super().__init__()
         uic.loadUi("ui/RelatorioWindow.ui", self)
-
         self.cliente_id = cliente_id
-
         self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)
         self.btn_nao.clicked.connect(self.close)
 
     def gerar_pdf_e_popup(self):
-        pdf_sucesso = self.gerar_pdf()
+        
+        pdf_sucesso = GerarPDF(self.cliente_id).gerar()
         if pdf_sucesso:
             MessageBox.show_custom_messagebox(self, "information", "Sucesso", "PDF foi gerado com sucesso!")
             self.close()
+        elif pdf_sucesso == None:
+            self.close()
+        else:
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não há registros disponíveis.")
+            self.close()
 
-    def gerar_pdf(self):
+class GerarPDF:
+    def __init__(self, cliente_id):
+        self.cliente_id = cliente_id
+        self.largura_pagina, self.altura_pagina = A4
+        self.margem_esquerda = 50
+        self.margem_topo = self.altura_pagina - 50
+        self.linha_altura = 25
+        self.fonte_titulo = "Helvetica-Bold"
+        self.fonte_texto = "Helvetica"
+        self.tamanho_titulo = 26
+        self.tamanho_cabecalho = 14
+        self.tamanho_texto = 12
+
+        self.colunas = ["Nome", "Valor", "Tipo", "Categoria", "Data"]
+        self.col_x = [self.margem_esquerda, 180, 260, 350, 460]
+        self.col_widths = [
+            self.col_x[i+1] - self.col_x[i] if i+1 < len(self.col_x) else 100
+            for i in range(len(self.col_x))
+        ]
+
+    def quebrar_texto(self, texto, largura_max, fonte, tamanho):
+        palavras = texto.split()
+        linhas = []
+        linha_atual = ""
+        for palavra in palavras:
+            tentativa = linha_atual + " " + palavra if linha_atual else palavra
+            if stringWidth(tentativa, fonte, tamanho) <= largura_max:
+                linha_atual = tentativa
+            else:
+                linhas.append(linha_atual)
+                linha_atual = palavra
+        if linha_atual:
+            linhas.append(linha_atual)
+        return linhas
+
+    def draw_centered_text(self, pdf, text, x_left, x_right, y, font, size, cor=colors.black):
+        largura_texto = stringWidth(text, font, size)
+        x_centro = x_left + (x_right - x_left) / 2
+        x_texto = x_centro - largura_texto / 2
+        pdf.setFont(font, size)
+        pdf.setFillColor(cor)
+        pdf.drawString(x_texto, y, text)
+
+    def gerar(self, nome_arquivo="relatorio_atlas_finance.pdf"):
         db = ConsultaSQL()
         query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
         dados_lidos = db.pd_consultar(query, self.cliente_id)
 
         if dados_lidos.empty:
-            from login_window import LoginWindow
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não há registros disponíveis.")
             return False
+        
+        caminho_inicial = os.environ.get('USERPROFILE', os.getcwd())
+        
+        caminho_arquivo, _ = QtWidgets.QFileDialog.getSaveFileName(
+            None,
+            "Salvar Relatório em PDF",
+            os.path.join(caminho_inicial, nome_arquivo),
+            "PDF Files (*.pdf);"
+        )
 
-        # Layout
-        largura_pagina, altura_pagina = A4
-        margem_esquerda = 50
-        margem_topo = altura_pagina - 50
-        linha_altura = 25
-        fonte_titulo = "Helvetica-Bold"
-        fonte_texto = "Helvetica"
-        tamanho_titulo = 26
-        tamanho_cabecalho = 14
-        tamanho_texto = 12
+        if not caminho_arquivo:
+            return None  # Usuário cancelou
 
-        # Colunas
-        colunas = ["Nome", "Valor", "Tipo", "Categoria", "Data"]
-        col_x = [margem_esquerda, 180, 260, 350, 460]
-        col_widths = [col_x[i+1] - col_x[i] if i+1 < len(col_x) else 100 for i in range(len(col_x))]
-
-        def quebrar_texto(texto, largura_max, fonte, tamanho):
-            palavras = texto.split()
-            linhas = []
-            linha_atual = ""
-            for palavra in palavras:
-                tentativa = linha_atual + " " + palavra if linha_atual else palavra
-                if stringWidth(tentativa, fonte, tamanho) <= largura_max:
-                    linha_atual = tentativa
-                else:
-                    linhas.append(linha_atual)
-                    linha_atual = palavra
-            if linha_atual:
-                linhas.append(linha_atual)
-            return linhas
-
-        def draw_centered_text(pdf, text, x_left, x_right, y, font, size, cor=colors.black):
-            largura_texto = stringWidth(text, font, size)
-            x_centro = x_left + (x_right - x_left) / 2
-            x_texto = x_centro - largura_texto / 2
-            pdf.setFont(font, size)
-            pdf.setFillColor(cor)
-            pdf.drawString(x_texto, y, text)
-
-        pdf = canvas.Canvas("relatorio_atlas_finance.pdf", pagesize=A4)
+        pdf = canvas.Canvas(caminho_arquivo, pagesize=A4)
+        numero_pagina = 1
 
         def desenhar_cabecalho():
             pdf.setFillColor(colors.HexColor("#0D192B"))
-            pdf.setFont(fonte_titulo, tamanho_titulo)
-            pdf.drawString(margem_esquerda, margem_topo, "Atlas Finance")
-
+            pdf.setFont(self.fonte_titulo, self.tamanho_titulo)
+            pdf.drawString(self.margem_esquerda, self.margem_topo, "Atlas Finance")
             pdf.setStrokeColor(colors.black)
             pdf.setLineWidth(1)
-            pdf.line(margem_esquerda, margem_topo - 10, largura_pagina - margem_esquerda, margem_topo - 10)
-
-            pdf.setFont(fonte_texto, 16)
+            pdf.line(self.margem_esquerda, self.margem_topo - 10, self.largura_pagina - self.margem_esquerda, self.margem_topo - 10)
+            pdf.setFont(self.fonte_texto, 16)
             pdf.setFillColor(colors.black)
-            pdf.drawString(margem_esquerda, margem_topo - 40, "Relatório de Transações Registradas")
+            pdf.drawString(self.margem_esquerda, self.margem_topo - 40, "Relatório de Transações Registradas")
 
         def desenhar_titulos_tabela(y_inicio):
-            pdf.setFont(fonte_titulo, tamanho_cabecalho)
+            pdf.setFont(self.fonte_titulo, self.tamanho_cabecalho)
             pdf.setStrokeColor(colors.black)
             pdf.setLineWidth(1)
+            for i, titulo in enumerate(self.colunas):
+                largura_coluna = self.col_widths[i]
+                pdf.setFillColor(colors.HexColor("#0D192B"))
+                pdf.rect(self.col_x[i], y_inicio, largura_coluna, self.linha_altura, fill=1, stroke=1)
+                pdf.setFillColor(colors.white)
+                pdf.drawString(self.col_x[i] + 5, y_inicio + 7, titulo)
 
-            for i, titulo in enumerate(colunas):
-                largura_coluna = col_widths[i]
-                pdf.setFillColor(colors.HexColor("#0D192B"))  # fundo azul
-                pdf.rect(col_x[i], y_inicio, largura_coluna, linha_altura, fill=1, stroke=1)
-                pdf.setFillColor(colors.white)  # texto branco
-                pdf.drawString(col_x[i] + 5, y_inicio + 7, titulo)
-
-        def desenhar_rodape(numero_pagina):
+        def desenhar_rodape():
             pdf.setFont("Helvetica", 9)
             pdf.setFillColor(colors.black)
             data_hora = datetime.now().strftime("Gerado em %d/%m/%Y às %H:%M:%S")
             texto_pagina = f"Página {numero_pagina}"
-            pdf.drawString(margem_esquerda, 30, data_hora)
-            pdf.drawRightString(largura_pagina - margem_esquerda, 30, texto_pagina)
+            pdf.drawString(self.margem_esquerda, 30, data_hora)
+            pdf.drawRightString(self.largura_pagina - self.margem_esquerda, 30, texto_pagina)
 
-        # Início da geração
-        numero_pagina = 1
         desenhar_cabecalho()
-        y_inicio = margem_topo - 80
+        y_inicio = self.margem_topo - 80
         desenhar_titulos_tabela(y_inicio)
-        y = y_inicio - linha_altura
-        pdf.setFont(fonte_texto, tamanho_texto)
-        desenhar_rodape(numero_pagina)
+        y = y_inicio - self.linha_altura
+        pdf.setFont(self.fonte_texto, self.tamanho_texto)
+        desenhar_rodape()
 
         for _, linha in dados_lidos.iterrows():
-            # Capitalização dos dados
             nome = str(linha["nome"]).title()
             valor = f'R$ {linha["valor"]:.2f}'.replace('.', ',')
             tipo = str(linha["tipo"]).capitalize()
             categoria = str(linha["categoria"]).capitalize()
             data = str(linha["data_realizada"])
 
-            largura_nome_coluna = col_widths[0] - 10
-            linhas_nome = quebrar_texto(nome, largura_nome_coluna, fonte_texto, tamanho_texto)
-            altura_nome = linha_altura * len(linhas_nome)
+            largura_nome_coluna = self.col_widths[0] - 10
+            linhas_nome = self.quebrar_texto(nome, largura_nome_coluna, self.fonte_texto, self.tamanho_texto)
+            altura_nome = self.linha_altura * len(linhas_nome)
 
             if y - altura_nome < 100:
                 numero_pagina += 1
                 pdf.showPage()
                 desenhar_cabecalho()
-                desenhar_titulos_tabela(margem_topo - 80)
-                y = margem_topo - 80 - linha_altura
-                pdf.setFont(fonte_texto, tamanho_texto)
-                desenhar_rodape(numero_pagina)
+                desenhar_titulos_tabela(self.margem_topo - 80)
+                y = self.margem_topo - 80 - self.linha_altura
+                pdf.setFont(self.fonte_texto, self.tamanho_texto)
+                desenhar_rodape()
 
-            # Células com fundo branco e borda preta
-            pdf.setStrokeColor(colors.black)
-            pdf.setLineWidth(1)
-            for i in range(len(colunas)):
-                largura_coluna = col_widths[i]
+            for i in range(len(self.colunas)):
+                largura_coluna = self.col_widths[i]
                 pdf.setFillColor(colors.white)
-                pdf.rect(col_x[i], y, largura_coluna, altura_nome, fill=1, stroke=1)
+                pdf.rect(self.col_x[i], y, largura_coluna, altura_nome, fill=1, stroke=1)
 
-            # Nome (esquerdo, com múltiplas linhas)
             pdf.setFillColor(colors.black)
             text_obj = pdf.beginText()
-            text_obj.setTextOrigin(col_x[0] + 5, y + (len(linhas_nome) - 1) * 12 + 5)
-            text_obj.setFont(fonte_texto, tamanho_texto)
+            text_obj.setTextOrigin(self.col_x[0] + 5, y + (len(linhas_nome) - 1) * 12 + 5)
+            text_obj.setFont(self.fonte_texto, self.tamanho_texto)
             for linha_nome in linhas_nome:
                 text_obj.textLine(linha_nome)
             pdf.drawText(text_obj)
 
-            # Outras colunas (centralizado)
             alinhamento_y = y + (len(linhas_nome) - 1) * 12 + 5
-            draw_centered_text(pdf, valor, col_x[1], col_x[2], alinhamento_y, fonte_texto, tamanho_texto)
-            draw_centered_text(pdf, tipo, col_x[2], col_x[3], alinhamento_y, fonte_texto, tamanho_texto)
-            draw_centered_text(pdf, categoria, col_x[3], col_x[4], alinhamento_y, fonte_texto, tamanho_texto)
-            draw_centered_text(pdf, data, col_x[4], col_x[4] + 100, alinhamento_y, fonte_texto, tamanho_texto)
+            self.draw_centered_text(pdf, valor, self.col_x[1], self.col_x[2], alinhamento_y, self.fonte_texto, self.tamanho_texto)
+            self.draw_centered_text(pdf, tipo, self.col_x[2], self.col_x[3], alinhamento_y, self.fonte_texto, self.tamanho_texto)
+            self.draw_centered_text(pdf, categoria, self.col_x[3], self.col_x[4], alinhamento_y, self.fonte_texto, self.tamanho_texto)
+            self.draw_centered_text(pdf, data, self.col_x[4], self.col_x[4] + 100, alinhamento_y, self.fonte_texto, self.tamanho_texto)
 
             y -= altura_nome
 
-        desenhar_rodape(numero_pagina)
+        desenhar_rodape()
         pdf.save()
         return True

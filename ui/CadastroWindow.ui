@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>650</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>1080</width>
-    <height>650</height>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1080</width>
-    <height>650</height>
+    <height>618</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,7 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
-          <item alignment="Qt::AlignTop">
+          <item>
            <widget class="QLabel" name="lbl_atlas">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -108,7 +108,7 @@
              <item>
               <widget class="QFrame" name="frame_inputs">
                <property name="styleSheet">
-                <string notr="true">color: rgb(219, 219, 219);</string>
+                <string notr="true"/>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -523,23 +523,14 @@ margin-left: 20px;</string>
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="verticalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>80</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbl_copyright">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#dbdbdb;&quot;&gt;© 2025 NeoDev&lt;br/&gt;Todos os direitos reservados&lt;br/&gt;Versão 0.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -589,7 +580,7 @@ margin-left: 20px;</string>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>120</height>
+           <height>60</height>
           </size>
          </property>
         </spacer>
@@ -623,16 +614,27 @@ min-width: 300px;</string>
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item alignment="Qt::AlignHCenter">
+             <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
               <widget class="QLabel" name="lbl_foto">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="styleSheet">
-                <string notr="true">color: #0D192B;</string>
+                <string notr="true">color: #0D192B;
+max-width: 215px;
+max-height: 215px;</string>
                </property>
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
                </property>
                <property name="text">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;img src=&quot;:/icons/user_mini.png&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -655,7 +657,7 @@ min-width: 300px;</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="edit_foto">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
@@ -709,25 +711,9 @@ text-decoration: underline;
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
               <widget class="QPushButton" name="btn_login">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -751,22 +737,15 @@ min-height: 25px;
 font-size: 15px;
 
 font-weight: bold;
-
 </string>
                </property>
                <property name="text">
-                <string>Login</string>
+                <string>Voltar</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="btn_cadastro">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
@@ -785,39 +764,14 @@ min-height: 25px;
 
 font-size: 15px;
 
-font-weight: bold;
-
-</string>
+font-weight: bold;</string>
                </property>
                <property name="text">
                 <string>Crie sua conta</string>
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Maximum</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
             </layout>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight|Qt::AlignBottom">
-           <widget class="QLabel" name="lbl_copyright">
-            <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#dbdbdb;&quot;&gt;© 2025 NeoDev&lt;br/&gt;Todos os direitos reservados&lt;br/&gt;Versão 0.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
            </widget>
           </item>
          </layout>
