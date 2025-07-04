@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS tb_registro(
 );
 
 INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nascimento, situacao) VALUES(
-	'Daniel',
-    'Daniel@gmail.com',
+	'Manel',
+    'manel@gmail.com',
     'senhasecreta',
     '+55 (21) 21999-5930',
     'Desenvolvimento de Software',
@@ -39,9 +39,18 @@ INSERT INTO tb_usuario(nome, email, senha, celular, ocupacao, salario, pais, nas
 );
 
 INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
-	'Propina',
-    '630.00',
+	'Salário',
+    '2000.00',
     'entrada',
+    'outros',
+    CURRENT_DATE(),
+    '1'
+);
+
+INSERT INTO tb_registro(nome, valor, tipo, categoria, data_realizada, fk_usuario_id) VALUES(
+	'Aluguel',
+    '600.00',
+    'saida',
     'outros',
     CURRENT_DATE(),
     '1'

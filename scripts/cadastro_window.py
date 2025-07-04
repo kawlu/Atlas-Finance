@@ -3,10 +3,12 @@ from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6.QtWidgets import QMessageBox, QMainWindow
 from PyQt6.QtCore import Qt
 import pymysql
+import re
 
 from database import ConsultaSQL
 from utilitarios import MessageBox
 
+import lista
 class CadastroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -15,9 +17,12 @@ class CadastroWindow(QMainWindow):
         self.sql = ConsultaSQL()
         self.foto_bytes = None
 
+        
+        lista_ocupacoes = lista.lista_ocupacoes
+        lista_paises = lista.lista_paises
         # Preenche os comboboxes
-        self.cmb_ocupacao.addItems(self.get_ocupacoes())
-        self.cmb_pais.addItems(self.get_paises())
+        self.cmb_ocupacao.addItems(lista_ocupacoes)
+        self.cmb_pais.addItems(lista_paises)
 
         # Conectar botões
         self.btn_cadastro.clicked.connect(self.cadastrar_usuario)
@@ -29,24 +34,6 @@ class CadastroWindow(QMainWindow):
         self.login_window = LoginWindow()
         self.login_window.show()
         self.close()
-
-    def get_ocupacoes(self):
-        return [
-            "Administração", "Recursos Humanos", "Financeiro", "Contabilidade",
-            "Marketing", "Comercial", "Vendas", "Atendimento ao Cliente",
-            "Logística", "Transporte", "Tecnologia da Informação", "Desenvolvimento de Software",
-            "Suporte Técnico", "Engenharia", "Jurídico", "Compras", "Produção", "Manutenção",
-            "Qualidade", "Pesquisa e Desenvolvimento", "Educação", "Saúde", "Segurança do Trabalho",
-            "Serviços Gerais", "Limpeza", "Almoxarifado", "Operações", "Planejamento",
-            "Design", "Arquitetura", "Construção Civil", "Agropecuária", "Meio Ambiente",
-            "Comunicação", "Eventos", "Moda", "Hotelaria", "Turismo", "Outros"
-        ]
-
-    def get_paises(self):
-        return [
-            "Brasil", "Argentina", "Estados Unidos", "Canadá", "França", "Alemanha",
-            "Itália", "Portugal", "Reino Unido", "Japão", "China", "Índia", "Outros"
-        ]
 
     def faixa_para_salario(self, faixa_str):
         faixa_dict = {
@@ -112,7 +99,7 @@ class CadastroWindow(QMainWindow):
         nome = self.input_nome.text()
         email = self.input_email.text()
         senha = self.input_senha.text()
-        confirmar = self.input_confirmar_senha.text()
+        confirmar_senha = self.input_confirmar_senha.text()
         celular = self.input_celular.text()
         ocupacao = self.cmb_ocupacao.currentText()
         objetivo = self.cmb_objetivo.currentText()
@@ -125,13 +112,7 @@ class CadastroWindow(QMainWindow):
             QMessageBox.warning(self, "Erro", "Você precisa aceitar os termos.")
             return
 
-        if senha != confirmar:
-            QMessageBox.warning(self, "Erro", "As senhas não coincidem.")
-            return
-
-        if not all([nome, email, senha, celular]) or ocupacao.startswith("Selecione") or objetivo.startswith("Selecione") or faixa.startswith("Selecione") or pais.startswith("Selecione"):
-            QMessageBox.warning(self, "Erro", "Todos os campos devem ser preenchidos corretamente.")
-            return
+        self.checar_campos(nome=nome, email=email, senha=senha, confirmar_senha=confirmar_senha, celular=celular,ocupacao=ocupacao,objetivo=objetivo,pais=pais, nascimento=nascimento)
 
         try:
             salario = self.faixa_para_salario(faixa)
@@ -160,3 +141,58 @@ class CadastroWindow(QMainWindow):
             QMessageBox.critical(self, "Erro", f"Erro de integridade: {e}")
         except pymysql.MySQLError as e:
             QMessageBox.critical(self, "Erro de banco", str(e))
+
+    def checar_campos(self, nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
+        
+        combobox_false = ocupacao.startswith("Selecione") or objetivo.startswith("Selecione") or faixa.startswith("Selecione") or pais.startswith("Selecione") or nascimento.startswith("Selecione")
+        
+        if not all([nome, email, senha, confirmar_senha, celular]) or combobox_false:
+            QMessageBox.warning(self, "Erro", "Todos os campos devem ser preenchidos.")
+            return 
+        
+        if not self.checar_nome(nome):
+            return False
+        if not self.checar_senha(senha):
+            return False
+        if not self.checar_confirmar_senha(senha, confirmar_senha):
+            return False
+        if not self.checar_email(email):
+            return False
+        if not self.checar_nascimento(nascimento):
+            return False
+        
+    def checar_nome(self, nome):
+        if not nome.isalpha() or len(nome) < 4:
+            QMessageBox.warning(self, "Erro", "Nome inválido.")
+            return False
+        return True
+    def checar_senha(self, senha):
+        if ' ' in senha or len(senha) < 6:
+            QMessageBox.warning(self, "Erro", "Senha inválida, evite espaços e insira pelo menos 6 carácteres.")
+            return False
+        return True
+    def checar_confirmar_senha(self, senha, confirmar_senha):
+        if senha != confirmar_senha:
+            QMessageBox.warning(self, "Erro", "As senhas não coincidem.")
+            return False
+        return True
+        
+    def checar_email(self, email):
+        regex_email = r"^[^@]+@[^@]+.[^@]+$"
+        if not re.match(regex_email, email):
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
+            return
+        pass
+    
+    def checar_nascimento(self, nascimento):
+        from datetime import datetime
+        try:
+            data_nascimento = datetime.strptime(nascimento, "%d/%m/%Y")
+            idade = (datetime.today() - data_nascimento).days // 365
+            if idade < 8:
+                QMessageBox.warning(self, "Erro", "Idade mínima é de 8 anos.")
+                return False
+        except ValueError:
+            QMessageBox.warning(self, "Erro", "Data de nascimento inválida.")
+            return False
+        return True
