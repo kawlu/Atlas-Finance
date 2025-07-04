@@ -1,8 +1,11 @@
-from PyQt6 import uic
+from PyQt6 import uic, QtWidgets, QtGui
+from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6.QtWidgets import QMessageBox, QMainWindow
+from PyQt6.QtCore import Qt
 import pymysql
 
 from database import ConsultaSQL
+from utilitarios import MessageBox
 
 class CadastroWindow(QMainWindow):
     def __init__(self):
@@ -10,6 +13,7 @@ class CadastroWindow(QMainWindow):
         uic.loadUi("ui/CadastroWindow.ui", self)
 
         self.sql = ConsultaSQL()
+        self.foto_bytes = None
 
         # Preenche os comboboxes
         self.cmb_ocupacao.addItems(self.get_ocupacoes())
@@ -18,6 +22,7 @@ class CadastroWindow(QMainWindow):
         # Conectar botões
         self.btn_cadastro.clicked.connect(self.cadastrar_usuario)
         self.btn_login.clicked.connect(self.voltar_login)  # <- botão que retorna para a tela de login
+        self.edit_foto.clicked.connect(self.buscar_foto)
 
     def voltar_login(self):
         from login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
@@ -65,6 +70,44 @@ class CadastroWindow(QMainWindow):
         self.date_nascimento.setDate(self.date_nascimento.minimumDate())
         self.checkBox.setChecked(False)
 
+    def buscar_foto(self):
+        # Abre janela para selecionar arquivo de imagem
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setNameFilters(["Imagens (*.png *.jpg *.jpeg)", "Todos os arquivos (*)"])
+        file_dialog.selectNameFilter("Imagens (*.png *.jpg *.jpeg)")
+        file_dialog.setFileMode(QtWidgets.QFileDialog.FileMode.ExistingFile)
+
+        if file_dialog.exec():
+            file_path = file_dialog.selectedFiles()[0]
+
+            # Verifica se é imagem válida
+            if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                return
+            
+            with open(file_path, 'rb') as f:
+                self.foto_bytes = f.read()
+            self.set_foto(self.foto_bytes)
+
+    def set_foto(self, foto_bytes):
+        # Atualiza label da foto
+        pixmap = QPixmap()
+        pixmap.loadFromData(foto_bytes)
+        pixmap = pixmap.scaled(215, 215, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+        
+        pixmap_redondo = QPixmap(215, 215)
+        pixmap_redondo.fill(Qt.GlobalColor.transparent)
+
+        painter = QPainter(pixmap_redondo)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        path = QtGui.QPainterPath()
+        path.addEllipse(0, 0, 215, 215)
+        painter.setClipPath(path)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.end()
+
+        self.lbl_foto.setPixmap(pixmap_redondo)
+
     def cadastrar_usuario(self):
         nome = self.input_nome.text()
         email = self.input_email.text()
@@ -102,10 +145,10 @@ class CadastroWindow(QMainWindow):
             cursor = conn.cursor()
             cursor.execute("""
                 INSERT INTO tb_usuario (
-                    nome, email, senha, celular, ocupacao, salario, pais, nascimento, situacao
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    nome, email, senha, celular, ocupacao, salario, pais, nascimento, foto situacao
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
-                nome, email, senha, celular, ocupacao, salario, pais, nascimento, 'ativa'
+                nome, email, senha, celular, ocupacao, salario, pais, nascimento, self.foto_bytes, 'ativa'
             ))
             conn.commit()
             conn.close()
