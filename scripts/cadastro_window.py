@@ -112,7 +112,8 @@ class CadastroWindow(QMainWindow):
             QMessageBox.warning(self, "Erro", "Você precisa aceitar os termos.")
             return
 
-        self.checar_campos(nome=nome, email=email, senha=senha, confirmar_senha=confirmar_senha, celular=celular,ocupacao=ocupacao,objetivo=objetivo,pais=pais, nascimento=nascimento)
+        self.checar_campos(nome=nome, email=email, senha=senha, confirmar_senha=confirmar_senha, celular=celular, ocupacao=ocupacao, 
+                           objetivo=objetivo, faixa=faixa, pais=pais, nascimento=nascimento)
 
         try:
             salario = self.faixa_para_salario(faixa)
