@@ -6,9 +6,10 @@ import sys
 import os
 import atexit
 from database import ConsultaSQL
+from crypto import criptografar, descriptografar
 
 from cadastro_window import CadastroWindow
-from home_window import HomeWindow  # Só importa a classe, não executa nada ainda
+from home_window import HomeWindow
 from utilitarios import MessageBox
 class LoginWindow(QMainWindow):
     def __init__(self):
@@ -26,21 +27,29 @@ class LoginWindow(QMainWindow):
         self.carregar_lembrete()
 
     def carregar_lembrete(self):
-        if os.path.exists("lembrete_login.txt"):
-            with open("lembrete_login.txt", "r", encoding="utf-8") as f:
-                dados = f.read().splitlines()
+        if os.path.exists("lembrete_login.bin"):
+            try:
+                with open("lembrete_login.bin", "rb") as f:
+                    dados_criptografados = f.read()
+                    dados = descriptografar(dados_criptografados).splitlines()
                 if len(dados) >= 2:
                     self.lineEdit.setText(dados[0])
                     self.lineEdit_2.setText(dados[1])
                     self.checkBox.setChecked(True)
+            except Exception as e:
+                print(f"Erro ao abrir lembrete criptografado: {e}")
 
     def salvar_lembrete(self):
         if self.checkBox.isChecked():
-            with open("lembrete_login.txt", "w", encoding="utf-8") as f:
-                f.write(f"{self.lineEdit.text()}\n{self.lineEdit_2.text()}")
+            dados = f"{self.lineEdit.text()}\n{self.lineEdit_2.text()}"
+            try:
+                with open("lembrete_login.bin", "wb") as f:
+                    f.write(criptografar(dados))
+            except Exception as e:
+                print(f"Erro ao salvar lembrete criptografado: {e}")
         else:
-            if os.path.exists("lembrete_login.txt"):
-                os.remove("lembrete_login.txt")
+            if os.path.exists("lembrete_login.bin"):
+                os.remove("lembrete_login.bin")
 
     def login(self):
         email = self.lineEdit.text()
@@ -64,7 +73,6 @@ class LoginWindow(QMainWindow):
         self.home = CadastroWindow()
         self.home.show()
     
-    
     def consulta_login(self, email, senha):
         query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"
         df = self.sql.pd_consultar(query, (email, senha))
@@ -78,7 +86,6 @@ class LoginWindow(QMainWindow):
             self.cliente_id = df['pk_usuario_id'].iloc[0]
             self.login_status = True
             
-            # Salvar o lembrete se necessário
             self.salvar_lembrete()
         
         else:

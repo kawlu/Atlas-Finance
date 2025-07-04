@@ -4,13 +4,13 @@ from PyQt6.QtWidgets import QMessageBox
 from database import ConsultaSQL
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from pathlib import Path
-from shutil import copy2
 import icons_rc
 import sys
 import re
 import os
 
 from utilitarios import MessageBox
+from crypto import criptografar, descriptografar
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -250,10 +250,12 @@ class ClienteWindow(QtWidgets.QMainWindow):
             MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
             print(e)
             return
-        # Atualiza o lembrete_login.txt
-        if os.path.exists("lembrete_login.txt"):
-            with open("lembrete_login.txt", "w", encoding="utf-8") as f:
-                f.write(f"{email}\n{senha}")
+        
+        # Atualiza o lembrete_login.bin
+        if os.path.exists("lembrete_login.bin"):
+            dados = f"{email}\n{senha}"
+            with open("lembrete_login.bin", "wb") as f:
+                f.write(criptografar(dados))
 
         MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
 
@@ -278,8 +280,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
                 self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
 
-                if os.path.exists("lembrete_login.txt"):
-                    os.remove("lembrete_login.txt")
+                if os.path.exists("lembrete_login.bin"):
+                    os.remove("lembrete_login.bin")
                 
                 MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
