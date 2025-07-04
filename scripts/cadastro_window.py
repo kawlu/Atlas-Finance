@@ -91,7 +91,7 @@ class CadastroWindow(QMainWindow):
         email = self.input_email.text()
         senha = self.input_senha.text()
         confirmar_senha = self.input_confirmar_senha.text()
-        celular = self.input_celular.text()
+        celular = re.sub(r'\D', '', self.input_celular.text().strip())
         ocupacao = self.cmb_ocupacao.currentText()
         objetivo = self.cmb_objetivo.currentText()
         faixa = self.cmb_faixa.currentText()
@@ -107,6 +107,10 @@ class CadastroWindow(QMainWindow):
         # Validação de campos obrigatórios
         if not self.checar_campos(nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
             return
+        
+        if not len(celular) == 13:
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
+            return
 
         # Verifica duplicidade de e-mail
         email_query = "SELECT 1 FROM tb_usuario WHERE email = %s LIMIT 1"
@@ -119,6 +123,12 @@ class CadastroWindow(QMainWindow):
         if not self.sql.pd_consultar(celular_query, (celular,)).empty:
             MessageBox.show_custom_messagebox(self, "error", "Erro", "Celular já cadastrado.")
             return
+        
+        ddi = celular[0:2]
+        ddd = celular[2:4]
+        digitos_1 = celular[4:-4]
+        digitos_2 = celular[-4:]
+        celular = f"+{ddi} ({ddd}) {digitos_1}-{digitos_2}"
 
         try:
             insert_query = """
