@@ -14,15 +14,15 @@ class CadastroWindow(QMainWindow):
         super().__init__()
         uic.loadUi("ui/CadastroWindow.ui", self)
 
-        self.sql = ConsultaSQL()
         self.foto_bytes = None
-
+        self.sql = ConsultaSQL()
         
         lista_ocupacoes = lista.lista_ocupacoes
         lista_paises = lista.lista_paises
         # Preenche os comboboxes
         self.cmb_ocupacao.addItems(lista_ocupacoes)
         self.cmb_pais.addItems(lista_paises)
+        self.faixa = self.cmb_faixa.currentText()
 
         # Conectar botões
         self.btn_cadastro.clicked.connect(self.cadastrar_usuario)
@@ -34,15 +34,6 @@ class CadastroWindow(QMainWindow):
         self.login_window = LoginWindow()
         self.login_window.show()
         self.close()
-
-    def faixa_para_salario(self, faixa_str):
-        faixa_dict = {
-            "1500-2500": 2000.00,
-            "2500-3500": 3000.00,
-            "3500-5000": 4250.00,
-            "5000+": 5500.00
-        }
-        return faixa_dict.get(faixa_str, 0.0)
 
     def limpar_campos(self):
         self.input_nome.clear()
@@ -105,51 +96,68 @@ class CadastroWindow(QMainWindow):
         objetivo = self.cmb_objetivo.currentText()
         faixa = self.cmb_faixa.currentText()
         pais = self.cmb_pais.currentText()
-        nascimento = self.date_nascimento.date().toString("yyyy-MM-dd")
+        nascimento_qdate = self.date_nascimento.date()
+        nascimento = nascimento_qdate.toString("yyyy-MM-dd")
         termos = self.checkBox.isChecked()
 
         if not termos:
-            QMessageBox.warning(self, "Erro", "Você precisa aceitar os termos.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Você precisa aceitar os termos.")
             return
 
-        self.checar_campos(nome=nome, email=email, senha=senha, confirmar_senha=confirmar_senha, celular=celular,ocupacao=ocupacao,objetivo=objetivo,pais=pais, nascimento=nascimento)
+        # Validação de campos obrigatórios
+        if not self.checar_campos(nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
+            return
+
+        # Verifica duplicidade de e-mail
+        email_query = "SELECT 1 FROM tb_usuario WHERE email = %s LIMIT 1"
+        if not self.sql.pd_consultar(email_query, (email,)).empty:
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "E-mail já cadastrado.")
+            return
+
+        # Verifica duplicidade de celular
+        celular_query = "SELECT 1 FROM tb_usuario WHERE celular = %s LIMIT 1"
+        if not self.sql.pd_consultar(celular_query, (celular,)).empty:
+            MessageBox.show_custom_messagebox(self, "error", "Erro", "Celular já cadastrado.")
+            return
 
         try:
-            salario = self.faixa_para_salario(faixa)
-
-            conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="root",
-                database="db_finance"
-            )
-            cursor = conn.cursor()
-            cursor.execute("""
+            insert_query = """
                 INSERT INTO tb_usuario (
-                    nome, email, senha, celular, ocupacao, salario, pais, nascimento, foto situacao
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (
-                nome, email, senha, celular, ocupacao, salario, pais, nascimento, self.foto_bytes, 'ativa'
-            ))
-            conn.commit()
-            conn.close()
+                    nome, email, senha, celular, ocupacao, salario, pais, nascimento, foto, situacao
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 'ativa')
+            """
+            valores = (
+                nome, email, senha, celular, ocupacao,
+                self.faixa, pais, nascimento, self.foto_bytes
+            )
+
+            self.sql.editar(insert_query, valores)
 
             QMessageBox.information(self, "Sucesso", "Cadastro realizado com sucesso!")
             self.limpar_campos()
+            
+            self.voltar_login()
 
         except pymysql.err.IntegrityError as e:
-            QMessageBox.critical(self, "Erro", f"Erro de integridade: {e}")
+            MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro de integridade: {e}")
         except pymysql.MySQLError as e:
-            QMessageBox.critical(self, "Erro de banco", str(e))
+            MessageBox.show_custom_messagebox(self, "error", "Erro no banco de dados", str(e))
+
+
 
     def checar_campos(self, nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
-        
-        combobox_false = ocupacao.startswith("Selecione") or objetivo.startswith("Selecione") or faixa.startswith("Selecione") or pais.startswith("Selecione") or nascimento.startswith("Selecione")
-        
+        combobox_false = (
+            ocupacao.startswith("Selecione") or
+            objetivo.startswith("Selecione") or
+            faixa.startswith("Selecione") or
+            pais.startswith("Selecione")
+        )
+
         if not all([nome, email, senha, confirmar_senha, celular]) or combobox_false:
-            QMessageBox.warning(self, "Erro", "Todos os campos devem ser preenchidos.")
-            return 
-        
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Todos os campos devem ser preenchidos.")
+            return False
+
         if not self.checar_nome(nome):
             return False
         if not self.checar_senha(senha):
@@ -160,39 +168,44 @@ class CadastroWindow(QMainWindow):
             return False
         if not self.checar_nascimento(nascimento):
             return False
-        
+
+        return True
+
+
     def checar_nome(self, nome):
         if not nome.isalpha() or len(nome) < 4:
-            QMessageBox.warning(self, "Erro", "Nome inválido.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Nome inválido.")
             return False
         return True
+
     def checar_senha(self, senha):
         if ' ' in senha or len(senha) < 6:
-            QMessageBox.warning(self, "Erro", "Senha inválida, evite espaços e insira pelo menos 6 carácteres.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Senha inválida, evite espaços e insira pelo menos 6 caracteres.")
             return False
         return True
+
     def checar_confirmar_senha(self, senha, confirmar_senha):
         if senha != confirmar_senha:
-            QMessageBox.warning(self, "Erro", "As senhas não coincidem.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "As senhas não coincidem.")
             return False
         return True
-        
+
     def checar_email(self, email):
-        regex_email = r"^[^@]+@[^@]+.[^@]+$"
+        regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         if not re.match(regex_email, email):
             MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
-            return
-        pass
-    
+            return False
+        return True
+
     def checar_nascimento(self, nascimento):
         from datetime import datetime
         try:
-            data_nascimento = datetime.strptime(nascimento, "%d/%m/%Y")
+            data_nascimento = datetime.strptime(nascimento, "%Y-%m-%d")
             idade = (datetime.today() - data_nascimento).days // 365
             if idade < 8:
-                QMessageBox.warning(self, "Erro", "Idade mínima é de 8 anos.")
+                MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Idade mínima é de 8 anos.")
                 return False
         except ValueError:
-            QMessageBox.warning(self, "Erro", "Data de nascimento inválida.")
+            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Data de nascimento inválida.")
             return False
         return True
