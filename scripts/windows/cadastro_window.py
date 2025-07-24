@@ -1,14 +1,14 @@
 from PyQt6 import uic, QtWidgets, QtGui
-from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
+from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtWidgets import QMessageBox, QMainWindow
 from PyQt6.QtCore import Qt
 import pymysql
 import re
 
-from database import ConsultaSQL
-from utilitarios import MessageBox
+from util.database import ConsultaSQL
+from util.qt_util import MessageBox
+from util import lista
 
-import lista
 class CadastroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -30,7 +30,7 @@ class CadastroWindow(QMainWindow):
         self.edit_foto.clicked.connect(self.buscar_foto)
 
     def voltar_login(self):
-        from login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
+        from scripts.windows.login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
         self.login_window = LoginWindow()
         self.login_window.show()
         self.close()

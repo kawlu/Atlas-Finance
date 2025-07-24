@@ -1,17 +1,16 @@
 from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QDialog
 
-from database import ConsultaSQL
+from scripts.util.database import ConsultaSQL
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
-from utilitarios import MessageBox
+from scripts.util.qt_util import MessageBox
 
-from datetime import datetime
-
+import datetime
 import os
 
 class RelatorioWindow(QDialog):

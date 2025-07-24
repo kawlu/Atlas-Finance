@@ -1,16 +1,16 @@
 from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
-from PyQt6.QtWidgets import QMessageBox
-from database import ConsultaSQL
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from pathlib import Path
-import icons_rc
+#import icons_rc
 import sys
 import re
 import os
+from scripts.util import lista
+from scripts.util.database import ConsultaSQL
 
-from utilitarios import MessageBox
-from crypto import criptografar, descriptografar
+from scripts.util.qt_util import MessageBox
+from scripts.util.crypto import criptografar, descriptografar
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -58,7 +58,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_celular.setFocus()
     
     def set_labels(self):
-        import lista
         lista_paises = lista.lista_paises
         lista_ocupacoes = lista.lista_ocupacoes
 
@@ -199,7 +198,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
     def logoff(self):
-        from login_window import LoginWindow #importação tardia pra evitar importação circular
+        from scripts.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
         self.close()
         self.home_window.close()
         self.login_window = LoginWindow()
@@ -221,7 +220,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 
                 MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
-                from login_window import LoginWindow #importação tardia pra evitar importação circular
+                from scripts.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
                 self.close()
                 self.home_window.close()
                 self.login_window = LoginWindow()

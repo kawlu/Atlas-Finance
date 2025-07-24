@@ -1,12 +1,13 @@
-from PyQt6 import uic, QtWidgets
+from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
 from PyQt6.QtCore import pyqtSignal
-from database import ConsultaSQL
+
 from datetime import datetime
 import sys
 import re
 
-from utilitarios import MessageBox
+from scripts.util.qt_util import MessageBox
+from scripts.util.database import ConsultaSQL
 
 db = ConsultaSQL()
 
