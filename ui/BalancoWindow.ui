@@ -168,7 +168,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>-1</pointsize>
+                <pointsize>0</pointsize>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
@@ -214,7 +214,7 @@ font-weight: bold;
               </property>
               <property name="font">
                <font>
-                <pointsize>-1</pointsize>
+                <pointsize>0</pointsize>
                 <weight>75</weight>
                 <bold>true</bold>
                </font>
@@ -296,7 +296,7 @@ font-weight: bold;
         </property>
         <property name="font">
          <font>
-          <pointsize>-1</pointsize>
+          <pointsize>0</pointsize>
          </font>
         </property>
         <property name="cursor" stdset="0">

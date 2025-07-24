@@ -2,15 +2,17 @@ from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from pathlib import Path
-#import icons_rc
+
 import sys
 import re
 import os
-from scripts.util import lista
-from scripts.util.database import ConsultaSQL
 
-from scripts.util.qt_util import MessageBox
-from scripts.util.crypto import criptografar, descriptografar
+from src.util import icons_rc
+from src.util import lista
+from src.util.database import ConsultaSQL
+
+from src.util.qt_util import MessageBox
+from src.util.crypto import criptografar
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -23,12 +25,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def __init__(self, cliente_id, login_status, home_window):
         super().__init__()
 
-        # Carrega tela principal
-        uic.loadUi(parent_directory / 'ui/ClienteWindow.ui', self)
-        
-        #appIcon = QtGui.QIcon("")
-        #self.setWindowIcon(appIcon)
-        
+        uic.loadUi('ui/ClienteWindow.ui', self)
+
         self.sql = ConsultaSQL()
         
         self.cliente_id = cliente_id
@@ -44,8 +42,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_desativar_conta.clicked.connect(self.desativar_conta)
         self.btn_home.clicked.connect(self.reopen_home)
-
-        
 
     def habilitar_edit_email(self):
         self.edit_email.setEnabled(not self.edit_email.isEnabled())
@@ -198,7 +194,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
     def logoff(self):
-        from scripts.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
         self.close()
         self.home_window.close()
         self.login_window = LoginWindow()
@@ -220,7 +216,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 
                 MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
-                from scripts.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+                from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
                 self.close()
                 self.home_window.close()
                 self.login_window = LoginWindow()

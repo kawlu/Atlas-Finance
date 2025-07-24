@@ -6,8 +6,9 @@ from datetime import datetime
 import sys
 import re
 
-from scripts.util.qt_util import MessageBox
-from scripts.util.database import ConsultaSQL
+from src.util.qt_util import MessageBox
+from src.util.database import ConsultaSQL
+from src.util import icons_rc
 
 db = ConsultaSQL()
 
@@ -91,7 +92,6 @@ class BalancoWindow(QDialog):
         super().__init__()
         uic.loadUi("ui/BalancoWindow.ui", self)
         
-
         self.novo_registro_window = None
 
         self.btn_add_registro.clicked.connect(self.abrir_novo_registro)

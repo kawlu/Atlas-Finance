@@ -1,4 +1,4 @@
-from database import ConsultaSQL
+from src.util.database import ConsultaSQL
 
 # Bibliotecas para plotagem e manipulação de arrays numéricos
 import matplotlib.pyplot as plt

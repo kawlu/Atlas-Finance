@@ -1,12 +1,13 @@
 import sys
 from PyQt6 import uic
-from balanco_window import tratar_valor_para_exibir
 from PyQt6.QtWidgets import QApplication, QMainWindow
 
-import cliente_window, balanco_window, relatorio_window
+from src.windows import cliente_window, balanco_window, relatorio_window
+from src.windows.balanco_window import tratar_valor_para_exibir
 
-from scripts.util.database import ConsultaSQL
-from scripts.util.atualizar_dados import Grafico
+from src.util.database import ConsultaSQL
+from src.util.atualizar_dados import Grafico
+from src.util import icons_rc
 
 class HomeWindow(QMainWindow):
     def __init__(self, cliente_id, login_status):
@@ -66,7 +67,7 @@ class HomeWindow(QMainWindow):
  
 
     def logoff(self):
-        from scripts.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
         self.close()
         self.login_window = LoginWindow()
         self.login_window.show()

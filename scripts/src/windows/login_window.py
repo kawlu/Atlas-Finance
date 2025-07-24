@@ -1,14 +1,16 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import uic
-import sys
+
+
 import os
 
-from scripts.util.database import ConsultaSQL
-from scripts.util.crypto import criptografar, descriptografar
+from src.util.database import ConsultaSQL
+from src.util.crypto import criptografar, descriptografar
+from src.util import icons_rc
 
-from cadastro_window import CadastroWindow
-from scripts.windows.home_window import HomeWindow
-from scripts.util import MessageBox
+from src.windows.cadastro_window import CadastroWindow
+from src.windows.home_window import HomeWindow
+from src.util.qt_util import MessageBox
 
 class LoginWindow(QMainWindow):
     def __init__(self):

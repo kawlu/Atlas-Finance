@@ -5,9 +5,10 @@ from PyQt6.QtCore import Qt
 import pymysql
 import re
 
-from util.database import ConsultaSQL
-from util.qt_util import MessageBox
-from util import lista
+from src.util.database import ConsultaSQL
+from src.util.qt_util import MessageBox
+from src.util import icons_rc
+from src.util import lista
 
 class CadastroWindow(QMainWindow):
     def __init__(self):
@@ -30,7 +31,7 @@ class CadastroWindow(QMainWindow):
         self.edit_foto.clicked.connect(self.buscar_foto)
 
     def voltar_login(self):
-        from scripts.windows.login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
+        from src.windows.login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
         self.login_window = LoginWindow()
         self.login_window.show()
         self.close()

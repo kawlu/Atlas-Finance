@@ -1,14 +1,15 @@
 from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QDialog
 
-from scripts.util.database import ConsultaSQL
+from src.util.database import ConsultaSQL
+from src.util import icons_rc
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.pdfbase.pdfmetrics import stringWidth
 
-from scripts.util.qt_util import MessageBox
+from src.util.qt_util import MessageBox
 
 import datetime
 import os
