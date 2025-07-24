@@ -96,9 +96,3 @@ class LoginWindow(QMainWindow):
         self.hide()
         self.home = HomeWindow(self.cliente_id, self.login_status)
         self.home.showMaximized()
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = LoginWindow()
-    window.show()
-    sys.exit(app.exec())
