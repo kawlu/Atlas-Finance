@@ -4,6 +4,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import QMainWindow
 
 from src.windows import profile_view, transactions_view, report_view
+from src.util.formatter import Formatter
 
 from src.util.db_manager import ConsultaSQL
 from src.util.dashboard_manager import Grafico
@@ -107,10 +108,10 @@ class HomeWindow(QMainWindow):
                 nome_formatado = str(nome).title()
 
                 if tipo.lower() == 'saída':
-                    valor_formatado = f"- {transactions_view.tratar_valor_para_exibir(float(valor))}"
+                    valor_formatado = f"- {Formatter.format_value_to_display(float(valor))}"
                     cor = "#8D0A0A"
                 else:
-                    valor_formatado = transactions_view.tratar_valor_para_exibir(float(valor))
+                    valor_formatado = Formatter.format_value_to_display(float(valor))
                     cor = "#147117"
                 
                 labels_nome[i].setText(nome_formatado)
@@ -138,9 +139,9 @@ class HomeWindow(QMainWindow):
 
             saldo = receita - despesa
 
-            receita_formatada = transactions_view.tratar_valor_para_exibir(receita)
-            despesa_formatada = transactions_view.tratar_valor_para_exibir(despesa)
-            saldo_formatada = transactions_view.tratar_valor_para_exibir(saldo)
+            receita_formatada = Formatter.format_value_to_display(receita)
+            despesa_formatada = Formatter.format_value_to_display(despesa)
+            saldo_formatada = Formatter.format_value_to_display(saldo)
 
             # Aplica nos labels
             self.lbl_value_receita.setText(receita_formatada)

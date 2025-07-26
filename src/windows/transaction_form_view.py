@@ -10,21 +10,12 @@ import re
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
 from src.util import icons_rc
+from src.util.formatter import Formatter
 
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "new_transaction.ui"
 
 db = ConsultaSQL()
 
-def tratar_data_para_banco(data_str):
-    return datetime.strptime(data_str, "%d/%m/%Y").strftime("%Y-%m-%d")
-
-def tratar_data_para_exibir(data_str):
-    return datetime.strptime(data_str, "%Y-%m-%d").strftime("%d/%m/%Y")
-
-def tratar_valor_para_banco(valor_str):
-    valor_limpo = re.sub(r'[^\d,]', '', valor_str) 
-    valor = valor_limpo.replace('.', '').replace(',', '.')
-    return float(valor)
 class NewTransactionWindow(QDialog):
     def __init__(self, balanco_window, cliente_id):
         super().__init__()
@@ -43,8 +34,8 @@ class NewTransactionWindow(QDialog):
 
         if nome and tipo and categoria and data_realizada and valor:
             try:
-                data_banco = tratar_data_para_banco(data_realizada)
-                valor_banco = tratar_valor_para_banco(valor)
+                data_banco = Formatter.format_date_to_db(data_realizada)
+                valor_banco = Formatter.format_value_to_db(valor)
 
                 query = """
                     INSERT INTO tb_registro (nome, valor, tipo, categoria, data_realizada, fk_usuario_id)

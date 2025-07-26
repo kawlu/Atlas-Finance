@@ -9,6 +9,7 @@ import re
 
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
+from src.util.formatter import Formatter
 from src.util import icons_rc
 
 from src.windows.transaction_form_view import NewTransactionWindow
@@ -17,22 +18,7 @@ UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "transactions.u
 
 db = ConsultaSQL()
 
-def tratar_data_para_banco(data_str):
-    return datetime.strptime(data_str, "%d/%m/%Y").strftime("%Y-%m-%d")
-
-def tratar_data_para_exibir(data_str):
-    return datetime.strptime(data_str, "%Y-%m-%d").strftime("%d/%m/%Y")
-
-def tratar_valor_para_banco(valor_str):
-    valor_limpo = re.sub(r'[^\d,]', '', valor_str) 
-    valor = valor_limpo.replace('.', '').replace(',', '.')
-    return float(valor)
-
-def tratar_valor_para_exibir(valor_float):
-    return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
 class TransactionsWindow(QDialog):
-    
     grafico_atualizado = pyqtSignal()
     transacoes_atualizadas = pyqtSignal()
     totais_atualizados = pyqtSignal()
@@ -85,8 +71,8 @@ class TransactionsWindow(QDialog):
         nome = str(nome).title()
         tipo = str(tipo).capitalize()
         categoria = str(categoria).capitalize()
-        data_formatada = tratar_data_para_exibir(str(data_realizada))
-        valor_formatado = tratar_valor_para_exibir(float(valor))
+        data_formatada = Formatter.format_date_to_display(str(data_realizada))
+        valor_formatado = Formatter.format_value_to_display(float(valor))
 
         itens = [transacao_id, nome, tipo, categoria, data_formatada, valor_formatado]
 
@@ -142,7 +128,7 @@ class TransactionsWindow(QDialog):
                 saidas = df[df['tipo'] == 'saída']['valor'].sum()
                 saldo = entradas - saidas
 
-            saldo_formatado = tratar_valor_para_exibir(saldo)
+            saldo_formatado = Formatter.format_value_to_display(saldo)
 
             self.lbl_valor_total.setText(saldo_formatado)
 
