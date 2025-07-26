@@ -90,7 +90,7 @@ class HomeWindow(QMainWindow):
                 ORDER BY transacao_id DESC
                 LIMIT 3
             """
-            registros = db.consultar(query, self.cliente_id)
+            registros = db.consultar(query, int(self.cliente_id))
 
             labels_nome = [self.lbl_produto1, self.lbl_produto2, self.lbl_produto3]
             labels_valor = [self.lbl_valor1, self.lbl_valor2, self.lbl_valor3]
@@ -128,7 +128,7 @@ class HomeWindow(QMainWindow):
             db = ConsultaSQL()
 
             query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
-            dados = db.pd_consultar(query, self.cliente_id)
+            dados = db.pd_consultar(query, int(self.cliente_id))
 
             if dados.empty:
                 receita = 0

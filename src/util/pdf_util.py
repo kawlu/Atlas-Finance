@@ -60,10 +60,10 @@ class PDFGenerator:
             query = """
                 SELECT nome, valor, tipo, categoria, data_realizada
                 FROM tb_registro
-                WHERE MONTH(data_realizada) = %s AND fk_usuario_id = %s
+                WHERE EXTRACT(MONTH FROM data_realizada) = %s AND fk_usuario_id = %s
                 ORDER BY data_realizada DESC
             """
-            dados = db.pd_consultar(query, (self.mes_selecionado, self.cliente_id))
+            dados = db.pd_consultar(query, (self.mes_selecionado, int(self.cliente_id)))
         else:
             query = """
                 SELECT nome, valor, tipo, categoria, data_realizada
@@ -71,7 +71,7 @@ class PDFGenerator:
                 WHERE fk_usuario_id = %s
                 ORDER BY data_realizada DESC
             """
-            dados = db.pd_consultar(query, self.cliente_id)
+            dados = db.pd_consultar(query, int(self.cliente_id))
         return dados, nome_mes
 
     def _montar_nome_arquivo(self, nome_mes):

@@ -35,17 +35,17 @@ class Grafico():
             
             # Consulta os dados agrupando por ano, mês e tipo (entrada/saída)
             query = """
-                SELECT 
-                    YEAR(data_realizada) AS ano,
-                    MONTH(data_realizada) AS mes,
-                    tipo,
-                    SUM(valor) AS total
-                FROM tb_registro
-                WHERE fk_usuario_id = %s
-                GROUP BY ano, mes, tipo
-                ORDER BY ano, mes, tipo
+            SELECT
+                EXTRACT(YEAR FROM data_realizada) AS ano,
+                EXTRACT(MONTH FROM data_realizada) AS mes,
+                tipo,
+                SUM(valor) AS total
+            FROM tb_registro
+            WHERE fk_usuario_id = %s
+            GROUP BY ano, mes, tipo
+            ORDER BY ano, mes, tipo;
             """
-            df = self.sql.pd_consultar(query, self.cliente_id)
+            df = self.sql.pd_consultar(query, int(self.cliente_id))
 
             if df.empty:
                 self._plotar_grafico_vazio("Sem dados disponíveis")
@@ -53,7 +53,8 @@ class Grafico():
             
             # Cria coluna com rótulo "Mês/Ano" para o eixo X do gráfico
             df["mes_ano"] = df.apply(
-                lambda row: f"{calendar.month_abbr[row['mes']].capitalize()}/{int(row['ano'])}", axis=1
+                lambda row: f"{calendar.month_abbr[int(row['mes'])].capitalize()}/{int(row['ano'])}",
+                axis=1
             )
 
             # Separa os dados em dois DataFrames: entradas e saídas
@@ -82,15 +83,15 @@ class Grafico():
             # Caso um mês específico seja selecionado, exibe gráfico comparando diferentes anos
             query = """
                 SELECT 
-                    YEAR(data_realizada) AS ano,
+                    EXTRACT(YEAR FROM data_realizada) AS ano,
                     tipo,
                     SUM(valor) AS total
                 FROM tb_registro
-                WHERE MONTH(data_realizada) = %s AND fk_usuario_id = %s
+                WHERE EXTRACT(MONTH FROM data_realizada) = %s AND fk_usuario_id = %s
                 GROUP BY ano, tipo
                 ORDER BY ano
             """
-            df = self.sql.pd_consultar(query, (mes_selecionado, self.cliente_id))
+            df = self.sql.pd_consultar(query, (mes_selecionado, int(self.cliente_id)))
 
             if df.empty:
                 self._plotar_grafico_vazio("Sem dados disponíveis")

@@ -40,12 +40,10 @@ class NewTransactionWindow(QDialog):
                 query = """
                     INSERT INTO tb_registro (nome, valor, tipo, categoria, data_realizada, fk_usuario_id)
                     VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING transacao_id
                 """
-                valores = (nome, valor_banco, tipo, categoria, data_banco, self.cliente_id)
-
-                db.editar(query, valores)
-
-                transacao_id = db.consultar("SELECT LAST_INSERT_ID()")[0][0]
+                valores = (nome, valor_banco, tipo, categoria.lower(), data_banco, int(self.cliente_id))
+                transacao_id = db.executar_retorno(query, valores)[0]
 
                 self.balanco_window.adicionar_na_tabela(
                     (transacao_id, nome, tipo, categoria, data_banco, valor_banco)

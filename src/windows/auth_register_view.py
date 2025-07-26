@@ -42,8 +42,8 @@ class SignUp(QMainWindow):
         self.edit_foto.clicked.connect(self.buscar_foto)
 
     def voltar_login(self):
-        from src.windows.auth_login_view import LoginWindow  # <- Importa aqui para evitar importações circulares
-        self.login_window = LoginWindow()
+        from src.windows.auth_login_view import Login  # <- Importa aqui para evitar importações circulares
+        self.login_window = Login()
         self.login_window.show()
         self.close()
 

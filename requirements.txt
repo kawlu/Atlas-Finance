@@ -6,4 +6,4 @@ PyMySQL==1.1.1
 PyQt6==6.9.1
 PySide6==6.9.1
 reportlab==4.4.2
-pymupdf==1.26.3
+psycopg==2-2.9.10

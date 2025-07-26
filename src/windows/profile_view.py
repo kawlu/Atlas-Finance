@@ -103,7 +103,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
     def get_usuario(self):
         query = "SELECT * FROM tb_usuario WHERE pk_usuario_id = %s"
-        df = self.sql.pd_consultar(query, (self.cliente_id))
+        df = self.sql.pd_consultar(query, int(self.cliente_id))
 
         return df
 
@@ -181,10 +181,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
             # Atualiza o banco de dados
             if self.foto_bytes:
                 query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %s, foto = %s WHERE pk_usuario_id = %s"
-                params = (email, senha, ocupacao, celular, salario, pais, self.foto_bytes, self.get_usuario()["pk_usuario_id"].iloc[0])
+                params = (email, senha, ocupacao, celular, salario, pais, self.foto_bytes, int(self.get_usuario()["pk_usuario_id"].iloc[0]))
             else:
                 query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %sWHERE pk_usuario_id = %s"
-                params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
+                params = (email, senha, ocupacao, celular, salario, pais, int(self.get_usuario()["pk_usuario_id"].iloc[0]))
             df = self.sql.editar(query, params)
         except Exception as e:
             MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
@@ -219,7 +219,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         if confirmado:
             try:
                 query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
-                self.sql.editar(query, (self.get_usuario()["pk_usuario_id"].iloc[0]))
+                self.sql.editar(query, int(self.get_usuario()["pk_usuario_id"].iloc[0]))
 
                 if os.path.exists("lembrete_login.bin"):
                     os.remove("lembrete_login.bin")

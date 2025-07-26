@@ -50,7 +50,7 @@ class TransactionsWindow(QDialog):
                 FROM tb_registro
                 WHERE fk_usuario_id = %s
             """
-            registros = db.consultar(query, self.cliente_id)
+            registros = db.consultar(query, int(self.cliente_id))
 
             self.tabela_Registros.setRowCount(0)
 
@@ -119,7 +119,7 @@ class TransactionsWindow(QDialog):
     def atualizar_saldo_total(self):
         try:
             query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
-            df = db.pd_consultar(query, self.cliente_id)
+            df = db.pd_consultar(query, int(self.cliente_id))
 
             if df.empty:
                 saldo = 0

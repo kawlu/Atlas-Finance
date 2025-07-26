@@ -1,8 +1,5 @@
-CREATE DATABASE IF NOT EXISTS db_finance;
-USE db_finance;
-
-CREATE TABLE IF NOT EXISTS tb_usuario(
-	pk_usuario_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS tb_usuario (
+    pk_usuario_id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE,
     senha VARCHAR(100) NOT NULL,
@@ -11,17 +8,17 @@ CREATE TABLE IF NOT EXISTS tb_usuario(
     salario VARCHAR(50) NOT NULL,
     pais VARCHAR(100) NOT NULL,
     nascimento DATE NOT NULL,
-    foto LONGBLOB,
-    situacao ENUM('ativa', 'desativada') NOT NULL
+    foto BYTEA,
+    situacao VARCHAR(20) NOT NULL CHECK (situacao IN ('ativa', 'desativada'))
 );
 
-CREATE TABLE IF NOT EXISTS tb_registro(
-	transacao_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS tb_registro (
+    transacao_id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    tipo enum('entrada','saída'),
-    categoria enum('alimentação','contas','estudo','lazer','saúde','outros','transporte'),
+    tipo VARCHAR(10) CHECK (tipo IN ('entrada','saída')),
+    categoria VARCHAR(20) CHECK (categoria IN ('alimentação','contas','estudo','lazer','saúde','outros','transporte')),
     data_realizada DATE NOT NULL,
     fk_usuario_id INT NOT NULL,
-    FOREIGN KEY(fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id) ON DELETE CASCADE
+    FOREIGN KEY (fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id) ON DELETE CASCADE
 );
