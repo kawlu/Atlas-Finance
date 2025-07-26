@@ -48,7 +48,7 @@ class LoginWindow(QMainWindow):
         if self.checkBox.isChecked():
             dados = f"{self.lineEdit.text()}\n{self.lineEdit_2.text()}"
             try:
-                with open("lembrete_login.bin", "wb") as f:
+                with open(DATA_PATH, "wb") as f:
                     f.write(criptografar(dados))
             except Exception as e:
                 print(f"Erro ao salvar lembrete criptografado: {e}")
