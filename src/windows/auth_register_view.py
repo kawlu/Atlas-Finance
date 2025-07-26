@@ -17,7 +17,7 @@ UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "signup.ui"
 
 #TODO quando cadastrar, logar direto e ir pra dashboard_view
 
-class CadastroWindow(QMainWindow):
+class SignUp(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi(UI_PATH, self)
