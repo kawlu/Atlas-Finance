@@ -43,7 +43,7 @@ class HomeWindow(QMainWindow):
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
-        popup = report_view.RelatorioWindow(self.cliente_id)
+        popup = report_view.RelatorioWindow(self.cliente_id, self.cmb_mes.currentIndex())
         popup.exec()
         
     def btn_balanco(self):

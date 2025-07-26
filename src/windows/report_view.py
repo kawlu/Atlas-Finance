@@ -18,16 +18,17 @@ import os
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "report.ui"
 
 class RelatorioWindow(QDialog):
-    def __init__(self, cliente_id):
+    def __init__(self, cliente_id, mes_selecionado):
         super().__init__()
         uic.loadUi(UI_PATH, self)
         self.cliente_id = cliente_id
         self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)
         self.btn_nao.clicked.connect(self.close)
+        self.mes_selecionado = mes_selecionado
 
     def gerar_pdf_e_popup(self):
         
-        pdf_sucesso = GerarPDF(self.cliente_id).gerar()
+        pdf_sucesso = GerarPDF(self.cliente_id, self.mes_selecionado).gerar()
         if pdf_sucesso:
             MessageBox.show_custom_messagebox(self, "information", "Sucesso", "PDF foi gerado com sucesso!")
             self.close()
@@ -38,8 +39,9 @@ class RelatorioWindow(QDialog):
             self.close()
 
 class GerarPDF:
-    def __init__(self, cliente_id):
+    def __init__(self, cliente_id, mes_selecionado):
         self.cliente_id = cliente_id
+        self.mes_selecionado = mes_selecionado
         self.largura_pagina, self.altura_pagina = A4
         self.margem_esquerda = 50
         self.margem_topo = self.altura_pagina - 50
@@ -82,8 +84,34 @@ class GerarPDF:
 
     def gerar(self, nome_arquivo="relatorio_atlas_finance.pdf"):
         db = ConsultaSQL()
-        query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
-        dados_lidos = db.pd_consultar(query, self.cliente_id)
+        if self.mes_selecionado:
+            query = """
+                SELECT 
+                    nome,
+                    valor,
+                    tipo,
+                    categoria,
+                    data_realizada
+                FROM tb_registro
+                WHERE MONTH(data_realizada) = %s AND fk_usuario_id = %s
+                ORDER BY data_realizada DESC
+            """
+            params = self.mes_selecionado, self.cliente_id
+            dados_lidos = db.pd_consultar(query, params)
+        else:
+            query = """
+                SELECT
+                    nome,
+                    valor,
+                    tipo,
+                    categoria,
+                    data_realizada,
+                    MONTH(data_realizada) AS mes
+                FROM tb_registro
+                WHERE fk_usuario_id = %s
+                ORDER BY data_realizada DESC
+            """
+            dados_lidos = db.pd_consultar(query, self.cliente_id)
 
         if dados_lidos.empty:
             return False
