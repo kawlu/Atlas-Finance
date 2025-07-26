@@ -12,7 +12,7 @@ from src.util import icons_rc
 from src.util.db_manager import ConsultaSQL
 
 from src.util.qt_util import MessageBox
-from src.util.crypto import criptografar
+from src.util.crypto import CryptoManager
 
 import json
 from pathlib import Path
@@ -64,8 +64,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
             data_util = json.load(f)
 
         
-        lista_paises = data_util['lista_paises']
-        lista_ocupacoes = data_util['lista_ocupacoes']
+        lista_paises = data_util['list']['lista_paises']
+        lista_ocupacoes = data_util['list']['lista_ocupacoes']
 
         usuario = self.get_usuario()
 
@@ -195,7 +195,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         if os.path.exists("lembrete_login.bin"):
             dados = f"{email}\n{senha}"
             with open("lembrete_login.bin", "wb") as f:
-                f.write(criptografar(dados))
+                f.write(CryptoManager.criptografar(dados))
 
         MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
         

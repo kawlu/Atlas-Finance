@@ -17,7 +17,7 @@ UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "signup.ui"
 
 #TODO quando cadastrar, logar direto e ir pra dashboard_view
 
-class CadastroWindow(QMainWindow):
+class SignUp(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi(UI_PATH, self)
@@ -28,8 +28,8 @@ class CadastroWindow(QMainWindow):
         with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)
         
-        lista_ocupacoes = data_util['lista_ocupacoes']
-        lista_paises = data_util['lista_paises']
+        lista_paises = data_util['list']['lista_paises']
+        lista_ocupacoes = data_util['list']['lista_ocupacoes']
         
         # Preenche os comboboxes
         self.cmb_ocupacao.addItems(lista_ocupacoes)
