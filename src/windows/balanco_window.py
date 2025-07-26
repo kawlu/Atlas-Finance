@@ -7,7 +7,7 @@ import sys
 import re
 
 from src.util.qt_util import MessageBox
-from src.util.database import ConsultaSQL
+from src.util.db_manager import ConsultaSQL
 from src.util import icons_rc
 
 db = ConsultaSQL()

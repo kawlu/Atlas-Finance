@@ -5,10 +5,14 @@ from PyQt6.QtCore import Qt
 import pymysql
 import re
 
-from src.util.database import ConsultaSQL
+from src.util.db_manager import ConsultaSQL
 from src.util.qt_util import MessageBox
 from src.util import icons_rc
-from src.util import lista
+
+import json
+from pathlib import Path
+
+DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 
 class CadastroWindow(QMainWindow):
     def __init__(self):
@@ -18,8 +22,12 @@ class CadastroWindow(QMainWindow):
         self.foto_bytes = None
         self.sql = ConsultaSQL()
         
-        lista_ocupacoes = lista.lista_ocupacoes
-        lista_paises = lista.lista_paises
+        with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+        
+        lista_ocupacoes = data_util.lista_ocupacoes
+        lista_paises = data_util.lista_paises
+        
         # Preenche os comboboxes
         self.cmb_ocupacao.addItems(lista_ocupacoes)
         self.cmb_pais.addItems(lista_paises)

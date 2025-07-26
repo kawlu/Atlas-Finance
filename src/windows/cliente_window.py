@@ -8,11 +8,16 @@ import re
 import os
 
 from src.util import icons_rc
-from src.util import lista
-from src.util.database import ConsultaSQL
+
+from src.util.db_manager import ConsultaSQL
 
 from src.util.qt_util import MessageBox
 from src.util.crypto import criptografar
+
+import json
+from pathlib import Path
+
+DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -54,8 +59,12 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_celular.setFocus()
     
     def set_labels(self):
-        lista_paises = lista.lista_paises
-        lista_ocupacoes = lista.lista_ocupacoes
+        with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+
+        
+        lista_paises = data_util['lista_paises']
+        lista_ocupacoes = data_util['lista_ocupacoes']
 
         usuario = self.get_usuario()
 

@@ -1,7 +1,7 @@
 from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QDialog
 
-from src.util.database import ConsultaSQL
+from src.util.db_manager import ConsultaSQL
 from src.util import icons_rc
 
 from reportlab.pdfgen import canvas

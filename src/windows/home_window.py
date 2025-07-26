@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow
 from src.windows import cliente_window, balanco_window, relatorio_window
 from src.windows.balanco_window import tratar_valor_para_exibir
 
-from src.util.database import ConsultaSQL
+from src.util.db_manager import ConsultaSQL
 from src.util.atualizar_dados import Grafico
 from src.util import icons_rc
 

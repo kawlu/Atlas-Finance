@@ -4,13 +4,17 @@ from PyQt6 import uic
 
 import os
 
-from src.util.database import ConsultaSQL
+from src.util.db_manager import ConsultaSQL
 from src.util.crypto import criptografar, descriptografar
 from src.util import icons_rc
 
 from src.windows.cadastro_window import CadastroWindow
 from src.windows.home_window import HomeWindow
 from src.util.qt_util import MessageBox
+
+from pathlib import Path
+
+DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_login.bin"
 
 class LoginWindow(QMainWindow):
     def __init__(self):
@@ -28,9 +32,9 @@ class LoginWindow(QMainWindow):
         self.carregar_lembrete()
 
     def carregar_lembrete(self):
-        if os.path.exists("lembrete_login.bin"):
+        if DATA_PATH:
             try:
-                with open("lembrete_login.bin", "rb") as f:
+                with open(DATA_PATH, "rb") as f:
                     dados_criptografados = f.read()
                     dados = descriptografar(dados_criptografados).splitlines()
                 if len(dados) >= 2:
