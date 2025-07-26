@@ -11,7 +11,7 @@ from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
 from src.util import icons_rc
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "NovoRegistroWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "new_transaction.ui"
 
 db = ConsultaSQL()
 

@@ -13,7 +13,7 @@ from src.util import icons_rc
 
 from src.windows.transaction_form_view import NewTransactionWindow
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "BalancoWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "transactions.ui"
 
 db = ConsultaSQL()
 

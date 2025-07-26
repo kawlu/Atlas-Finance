@@ -15,7 +15,7 @@ from src.util.qt_util import MessageBox
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_login.bin"
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "LoginWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "login.ui"
 
 class LoginWindow(QMainWindow):
     def __init__(self):

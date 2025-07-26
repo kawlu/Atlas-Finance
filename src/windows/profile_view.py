@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "ClienteWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "profile.ui"
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -185,7 +185,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
             else:
                 query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %sWHERE pk_usuario_id = %s"
                 params = (email, senha, ocupacao, celular, salario, pais, self.get_usuario()["pk_usuario_id"].iloc[0])
-            #print(params)
             df = self.sql.editar(query, params)
         except Exception as e:
             MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
@@ -199,9 +198,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 f.write(criptografar(dados))
 
         MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
-
-        print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
-              "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
+        
+        #DEBUG
+        # print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
+        #       "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
     def logoff(self):
         from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular

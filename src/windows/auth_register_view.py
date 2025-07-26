@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "CadastroWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "signup.ui"
 
 #TODO quando cadastrar, logar direto e ir pra dashboard_view
 

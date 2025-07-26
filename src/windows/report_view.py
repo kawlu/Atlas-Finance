@@ -15,7 +15,7 @@ from src.util.qt_util import MessageBox
 from datetime import datetime as dt
 import os
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "RelatorioWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "report.ui"
 
 class RelatorioWindow(QDialog):
     def __init__(self, cliente_id):

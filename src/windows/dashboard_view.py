@@ -3,13 +3,13 @@ import sys
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMainWindow
 
-from src.windows import profile_view, transactions_view, report_export_view
+from src.windows import profile_view, transactions_view, report_view
 
 from src.util.db_manager import ConsultaSQL
 from src.util.atualizar_dados import Grafico
 from src.util import icons_rc
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "HomeWindow.ui"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "dashboard.ui"
 
 class HomeWindow(QMainWindow):
     def __init__(self, cliente_id, login_status):
@@ -42,7 +42,7 @@ class HomeWindow(QMainWindow):
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
-        popup = report_export_view.RelatorioWindow(self.cliente_id)
+        popup = report_view.RelatorioWindow(self.cliente_id)
         popup.exec()
         
     def btn_balanco(self):
