@@ -85,11 +85,32 @@ class GerarPDF:
     def gerar(self, nome_arquivo="relatorio_atlas_finance.pdf"):
         db = ConsultaSQL()
         if self.mes_selecionado:
-            query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s AND MONTH = %s"
-            params = self.cliente_id, self.mes_selecionado
+            query = """
+                SELECT 
+                    nome,
+                    valor,
+                    tipo,
+                    categoria,
+                    data_realizada
+                FROM tb_registro
+                WHERE MONTH(data_realizada) = %s AND fk_usuario_id = %s
+                ORDER BY data_realizada DESC
+            """
+            params = self.mes_selecionado, self.cliente_id
             dados_lidos = db.pd_consultar(query, params)
         else:
-            query = "SELECT * FROM tb_registro WHERE fk_usuario_id = %s"
+            query = """
+                SELECT
+                    nome,
+                    valor,
+                    tipo,
+                    categoria,
+                    data_realizada,
+                    MONTH(data_realizada) AS mes
+                FROM tb_registro
+                WHERE fk_usuario_id = %s
+                ORDER BY data_realizada DESC
+            """
             dados_lidos = db.pd_consultar(query, self.cliente_id)
 
         if dados_lidos.empty:
