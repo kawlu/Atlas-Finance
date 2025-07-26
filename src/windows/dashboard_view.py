@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QMainWindow
 from src.windows import profile_view, transactions_view, report_view
 
 from src.util.db_manager import ConsultaSQL
-from src.util.atualizar_dados import Grafico
+from src.util.dashboard_manager import Grafico
 from src.util import icons_rc
 
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "dashboard.ui"

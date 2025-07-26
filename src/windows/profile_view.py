@@ -64,8 +64,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
             data_util = json.load(f)
 
         
-        lista_paises = data_util['lista_paises']
-        lista_ocupacoes = data_util['lista_ocupacoes']
+        lista_paises = data_util['list']['lista_paises']
+        lista_ocupacoes = data_util['list']['lista_ocupacoes']
 
         usuario = self.get_usuario()
 
