@@ -1,3 +1,4 @@
+from pathlib import Path
 from PyQt6 import uic, QtWidgets
 from PyQt6.QtWidgets import QDialog
 
@@ -11,13 +12,15 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from src.util.qt_util import MessageBox
 
-import datetime
+from datetime import datetime as dt
 import os
+
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "RelatorioWindow.ui"
 
 class RelatorioWindow(QDialog):
     def __init__(self, cliente_id):
         super().__init__()
-        uic.loadUi("ui/RelatorioWindow.ui", self)
+        uic.loadUi(UI_PATH, self)
         self.cliente_id = cliente_id
         self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)
         self.btn_nao.clicked.connect(self.close)
@@ -125,7 +128,7 @@ class GerarPDF:
         def desenhar_rodape():
             pdf.setFont("Helvetica", 9)
             pdf.setFillColor(colors.black)
-            data_hora = datetime.now().strftime("Gerado em %d/%m/%Y às %H:%M:%S")
+            data_hora = dt.now().strftime("Gerado em %d/%m/%Y às %H:%M:%S")
             texto_pagina = f"Página {numero_pagina}"
             pdf.drawString(self.margem_esquerda, 30, data_hora)
             pdf.drawRightString(self.largura_pagina - self.margem_esquerda, 30, texto_pagina)

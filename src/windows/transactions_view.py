@@ -1,3 +1,4 @@
+from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
 from PyQt6.QtCore import pyqtSignal
@@ -9,6 +10,10 @@ import re
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
 from src.util import icons_rc
+
+from src.windows.transaction_form_view import NewTransactionWindow
+
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "BalancoWindow.ui"
 
 db = ConsultaSQL()
 
@@ -26,63 +31,7 @@ def tratar_valor_para_banco(valor_str):
 def tratar_valor_para_exibir(valor_float):
     return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
-class NovoRegistroWindow(QDialog):
-    def __init__(self, balanco_window, cliente_id):
-        super().__init__()
-        uic.loadUi("ui/NovoRegistroWindow.ui", self)
-        self.input_Data.setDate(datetime.now())
-        self.balanco_window = balanco_window
-        self.cliente_id = cliente_id
-        self.btn_Confirmar.clicked.connect(self.adicionar_registro)
-
-    def adicionar_registro(self):
-        nome = self.input_Nome.text()
-        tipo = self.cbox_Tipo.currentText().lower()
-        categoria = self.cbox_Categoria.currentText()
-        data_realizada = self.input_Data.text()
-        valor = self.input_Valor.text()
-
-        if nome and tipo and categoria and data_realizada and valor:
-            try:
-                data_banco = tratar_data_para_banco(data_realizada)
-                valor_banco = tratar_valor_para_banco(valor)
-
-                query = """
-                    INSERT INTO tb_registro (nome, valor, tipo, categoria, data_realizada, fk_usuario_id)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                """
-                valores = (nome, valor_banco, tipo, categoria, data_banco, self.cliente_id)
-
-                db.editar(query, valores)
-
-                transacao_id = db.consultar("SELECT LAST_INSERT_ID()")[0][0]
-
-                self.balanco_window.adicionar_na_tabela(
-                    (transacao_id, nome, tipo, categoria, data_banco, valor_banco)
-                )
-
-                self.balanco_window.atualizar_saldo_total()
-                self.balanco_window.grafico_atualizado.emit()
-                self.balanco_window.transacoes_atualizadas.emit()
-                self.balanco_window.totais_atualizados.emit()
-
-                self.limpar_campos()
-                self.close()
-                
-
-            except Exception as e:
-                MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro ao inserir registro:\n{e}")
-        else:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Preencha todos os campos corretamente.")
-
-    def limpar_campos(self):
-        self.input_Nome.clear()
-        self.cbox_Tipo.setCurrentIndex(0)
-        self.cbox_Categoria.setCurrentIndex(0)
-        self.input_Data.setDate(datetime.now())
-        self.input_Valor.clear()
-
-class BalancoWindow(QDialog):
+class TransactionsWindow(QDialog):
     
     grafico_atualizado = pyqtSignal()
     transacoes_atualizadas = pyqtSignal()
@@ -90,7 +39,7 @@ class BalancoWindow(QDialog):
         
     def __init__(self, cliente_id):
         super().__init__()
-        uic.loadUi("ui/BalancoWindow.ui", self)
+        uic.loadUi(UI_PATH, self)
         
         self.novo_registro_window = None
 
@@ -105,7 +54,7 @@ class BalancoWindow(QDialog):
 
     def abrir_novo_registro(self):
         if not self.novo_registro_window:
-            self.novo_registro_window = NovoRegistroWindow(self, self.cliente_id)
+            self.novo_registro_window = NewTransactionWindow(self, self.cliente_id)
         self.novo_registro_window.exec()
 
     def carregar_registros(self):
@@ -181,7 +130,6 @@ class BalancoWindow(QDialog):
             except Exception as erro:
                 MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro ao excluir registro:\n{erro}")
 
-
     def atualizar_saldo_total(self):
         try:
             query = "SELECT tipo, valor FROM tb_registro WHERE fk_usuario_id = %s"
@@ -200,9 +148,3 @@ class BalancoWindow(QDialog):
 
         except Exception as e:
             print("Erro ao atualizar saldo total:", e)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = BalancoWindow()
-    window.show()
-    sys.exit(app.exec())

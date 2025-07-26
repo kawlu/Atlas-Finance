@@ -18,6 +18,7 @@ import json
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "ClienteWindow.ui"
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -30,7 +31,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
     def __init__(self, cliente_id, login_status, home_window):
         super().__init__()
 
-        uic.loadUi('ui/ClienteWindow.ui', self)
+        uic.loadUi(UI_PATH, self)
 
         self.sql = ConsultaSQL()
         
@@ -203,7 +204,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
               "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
     def logoff(self):
-        from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
         self.close()
         self.home_window.close()
         self.login_window = LoginWindow()
@@ -225,7 +226,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 
                 MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
 
-                from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+                from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
                 self.close()
                 self.home_window.close()
                 self.login_window = LoginWindow()

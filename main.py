@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
-from src.windows.login_window import LoginWindow
+from src.windows.auth_login_view import LoginWindow
 
 def main():
     app = QApplication(sys.argv)

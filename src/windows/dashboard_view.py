@@ -1,19 +1,21 @@
+from pathlib import Path
 import sys
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QMainWindow
 
-from src.windows import cliente_window, balanco_window, relatorio_window
-from src.windows.balanco_window import tratar_valor_para_exibir
+from src.windows import profile_view, transactions_view, report_export_view
 
 from src.util.db_manager import ConsultaSQL
 from src.util.atualizar_dados import Grafico
 from src.util import icons_rc
 
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "HomeWindow.ui"
+
 class HomeWindow(QMainWindow):
     def __init__(self, cliente_id, login_status):
         super().__init__()
 
-        uic.loadUi("ui/HomeWindow.ui", self)
+        uic.loadUi(UI_PATH, self)
 
         # Janela secundária
         self.balanco_window = None
@@ -40,12 +42,12 @@ class HomeWindow(QMainWindow):
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
-        popup = relatorio_window.RelatorioWindow(self.cliente_id)
+        popup = report_export_view.RelatorioWindow(self.cliente_id)
         popup.exec()
         
     def btn_balanco(self):
         if not self.balanco_window:
-            self.balanco_window = balanco_window.BalancoWindow(self.cliente_id)
+            self.balanco_window = transactions_view.TransactionsWindow(self.cliente_id)
 
             # Conexões com os sinais
             self.balanco_window.grafico_atualizado.connect(self.atualizar_grafico_global)
@@ -56,7 +58,7 @@ class HomeWindow(QMainWindow):
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = cliente_window.ClienteWindow(self.cliente_id, self.login_status, self)
+            self.perfil_window = profile_view.ClienteWindow(self.cliente_id, self.login_status, self)
         self.perfil_window.set_labels()
         
         
@@ -67,7 +69,7 @@ class HomeWindow(QMainWindow):
  
 
     def logoff(self):
-        from src.windows.login_window import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
         self.close()
         self.login_window = LoginWindow()
         self.login_window.show()
@@ -105,10 +107,10 @@ class HomeWindow(QMainWindow):
                 nome_formatado = str(nome).title()
 
                 if tipo.lower() == 'saída':
-                    valor_formatado = f"- {tratar_valor_para_exibir(float(valor))}"
+                    valor_formatado = f"- {transactions_view.tratar_valor_para_exibir(float(valor))}"
                     cor = "#8D0A0A"
                 else:
-                    valor_formatado = tratar_valor_para_exibir(float(valor))
+                    valor_formatado = transactions_view.tratar_valor_para_exibir(float(valor))
                     cor = "#147117"
                 
                 labels_nome[i].setText(nome_formatado)
@@ -136,9 +138,9 @@ class HomeWindow(QMainWindow):
 
             saldo = receita - despesa
 
-            receita_formatada = tratar_valor_para_exibir(receita)
-            despesa_formatada = tratar_valor_para_exibir(despesa)
-            saldo_formatada = tratar_valor_para_exibir(saldo)
+            receita_formatada = transactions_view.tratar_valor_para_exibir(receita)
+            despesa_formatada = transactions_view.tratar_valor_para_exibir(despesa)
+            saldo_formatada = transactions_view.tratar_valor_para_exibir(saldo)
 
             # Aplica nos labels
             self.lbl_value_receita.setText(receita_formatada)
@@ -157,10 +159,3 @@ class HomeWindow(QMainWindow):
 
         except Exception as e:
             print(f"Erro ao carregar totais: {e}")
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = HomeWindow()
-    window.showMaximized()
-    sys.exit(app.exec())

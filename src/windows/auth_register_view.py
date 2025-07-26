@@ -13,11 +13,14 @@ import json
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "CadastroWindow.ui"
+
+#TODO quando cadastrar, logar direto e ir pra dashboard_view
 
 class CadastroWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/CadastroWindow.ui", self)
+        uic.loadUi(UI_PATH, self)
 
         self.foto_bytes = None
         self.sql = ConsultaSQL()
@@ -25,8 +28,8 @@ class CadastroWindow(QMainWindow):
         with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)
         
-        lista_ocupacoes = data_util.lista_ocupacoes
-        lista_paises = data_util.lista_paises
+        lista_ocupacoes = data_util['lista_ocupacoes']
+        lista_paises = data_util['lista_paises']
         
         # Preenche os comboboxes
         self.cmb_ocupacao.addItems(lista_ocupacoes)
@@ -39,7 +42,7 @@ class CadastroWindow(QMainWindow):
         self.edit_foto.clicked.connect(self.buscar_foto)
 
     def voltar_login(self):
-        from src.windows.login_window import LoginWindow  # <- Importa aqui para evitar importações circulares
+        from src.windows.auth_login_view import LoginWindow  # <- Importa aqui para evitar importações circulares
         self.login_window = LoginWindow()
         self.login_window.show()
         self.close()
@@ -163,8 +166,6 @@ class CadastroWindow(QMainWindow):
         except pymysql.MySQLError as e:
             MessageBox.show_custom_messagebox(self, "error", "Erro no banco de dados", str(e))
 
-
-
     def checar_campos(self, nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
         combobox_false = (
             ocupacao.startswith("Selecione") or
@@ -189,7 +190,6 @@ class CadastroWindow(QMainWindow):
             return False
 
         return True
-
 
     def checar_nome(self, nome):
         if not nome.isalpha() or len(nome) < 4:

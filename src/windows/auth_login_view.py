@@ -8,18 +8,19 @@ from src.util.db_manager import ConsultaSQL
 from src.util.crypto import criptografar, descriptografar
 from src.util import icons_rc
 
-from src.windows.cadastro_window import CadastroWindow
-from src.windows.home_window import HomeWindow
+from src.windows.auth_register_view import CadastroWindow
+from src.windows.dashboard_view import HomeWindow
 from src.util.qt_util import MessageBox
 
 from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_login.bin"
+UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "LoginWindow.ui"
 
 class LoginWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/LoginWindow.ui", self)
+        uic.loadUi(UI_PATH, self)
         self.sql = ConsultaSQL()
         
         self.cliente_id = 0
