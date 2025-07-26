@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 from src.util.db_manager import ConsultaSQL
 
 # Bibliotecas para plotagem e manipulação de arrays numéricos
@@ -10,6 +12,8 @@ import locale
 
 # Backend que integra matplotlib com interfaces Qt (PyQt5/PyQt6)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+
+DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 
 # Classe responsável por exibir gráficos em um layout Qt
 class Grafico():
@@ -104,10 +108,12 @@ class Grafico():
             valores_saida = [df_neg.loc[a, "total"] if a in df_neg.index else 0 for a in anos]
 
             # Nomes dos meses em português (manual, evita problemas com locale)
-            MESES_PT = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-
-            nome_mes = MESES_PT[mes_selecionado]  # Nome do mês escolhido
+            
+            with open(DATA_PATH, "r", encoding="utf-8") as f:
+                data_util = json.load(f)
+            
+            meses_traduzidos = data_util["list"]["lista_meses"]["PT_BR"]
+            nome_mes = meses_traduzidos[mes_selecionado]  # Nome do mês escolhido
             
             # Plota gráfico comparativo por ano
             self._plotar_grafico(

@@ -236,6 +236,23 @@
       "Vietnã",
       "Zâmbia",
       "Zimbábue"
-    ]
+    ],
+    "lista_meses": {
+      "PT_BR": [
+        "",
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro"
+      ]
+    }
   }
 }
