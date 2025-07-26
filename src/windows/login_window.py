@@ -53,8 +53,8 @@ class LoginWindow(QMainWindow):
             except Exception as e:
                 print(f"Erro ao salvar lembrete criptografado: {e}")
         else:
-            if os.path.exists("lembrete_login.bin"):
-                os.remove("lembrete_login.bin")
+            if os.path.exists(DATA_PATH):
+                os.remove(DATA_PATH)
 
     def login(self):
         email = self.lineEdit.text()
