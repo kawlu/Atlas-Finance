@@ -1,4 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QTranslator
 from PyQt6 import uic
 
 
@@ -6,6 +8,7 @@ import os
 
 from src.util.db_manager import ConsultaSQL
 from src.util.crypto import CryptoManager as cm
+from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
 from src.windows.auth_register_view import SignUp
@@ -26,11 +29,10 @@ class Login(QMainWindow):
         
         self.cliente_id = 0
         self.login_status = False
+        self.linguagem_atual = 'pt'
 
-        self.btn_login.clicked.connect(self.fazer_login)
-        self.btn_cadastro.clicked.connect(self.cadastro)
-        
-        self.checkBox.stateChanged.connect(self.salvar_lembrete)
+        self.conectar_sinais()
+        self.carregar_lembrete()
         self.carregar_lembrete()
 
     def carregar_lembrete(self):
@@ -105,5 +107,30 @@ class Login(QMainWindow):
     
     def abrir_homewindow(self):
         self.hide()
-        self.home = HomeWindow(self.cliente_id, self.login_status)
+        self.home = HomeWindow(self.cliente_id, self.login_status, self.linguagem_atual)
         self.home.showMaximized()
+
+    def trocar_linguagem(self, linguagem):
+        self.linguagem_atual = linguagem
+        translator = QTranslator()
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem)
+
+        email_temp = self.lineEdit.text()
+        senha_temp = self.lineEdit_2.text()
+        lembrete_temp = self.checkBox.isChecked()
+
+        uic.loadUi(UI_PATH, self)
+        self.conectar_sinais()
+
+        self.lineEdit.setText(email_temp)
+        self.lineEdit_2.setText(senha_temp)
+        self.checkBox.setChecked(lembrete_temp)
+
+        #self.retranslateUi()  só existe quando o .ui é convertido para .py
+
+    def conectar_sinais(self):
+        self.btn_login.clicked.connect(self.fazer_login)
+        self.btn_cadastro.clicked.connect(self.cadastro)
+        self.switchPtBr.triggered.connect(lambda: self.trocar_linguagem('pt'))
+        self.switchEnUs.triggered.connect(lambda: self.trocar_linguagem('en'))
+        self.checkBox.stateChanged.connect(self.salvar_lembrete)

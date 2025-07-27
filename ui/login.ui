@@ -461,10 +461,6 @@ color: rgb(13, 25, 43)
               <height>0</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(219, 219, 219);
-</string>
-            </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:600;&quot;&gt;Sobre o Atlas Finance&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Registre despesas e receitas, acompanhe &lt;br/&gt;saldos e organize seu dinheiro com clareza.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ideal para quem quer controlar o orçamento &lt;br/&gt;sem complicação.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -531,6 +527,55 @@ color: rgb(13, 25, 43)
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1080</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(219, 219, 219);
+
+color: rgb(13, 25, 43)</string>
+   </property>
+   <widget class="QMenu" name="menuOpcoes">
+    <property name="title">
+     <string>Opções</string>
+    </property>
+    <widget class="QMenu" name="menuLinguagem">
+     <property name="title">
+      <string>Linguagem</string>
+     </property>
+     <addaction name="switchPtBr"/>
+     <addaction name="switchEnUs"/>
+    </widget>
+    <addaction name="menuLinguagem"/>
+   </widget>
+   <addaction name="menuOpcoes"/>
+  </widget>
+  <action name="actionPT_BR">
+   <property name="text">
+    <string>PT-BR</string>
+   </property>
+  </action>
+  <action name="actionEN_US">
+   <property name="text">
+    <string>EN-US</string>
+   </property>
+  </action>
+  <action name="switchPtBr">
+   <property name="text">
+    <string>PT-BR</string>
+   </property>
+  </action>
+  <action name="switchEnUs">
+   <property name="text">
+    <string>EN-US</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../assets/png/icons_.qrc"/>

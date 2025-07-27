@@ -2,19 +2,26 @@ from pathlib import Path
 import sys
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtCore import QTranslator
 
 from src.windows import profile_view, transactions_view, report_view
 from src.util.formatter import Formatter
 
 from src.util.db_manager import ConsultaSQL
 from src.util.dashboard_manager import Grafico
+from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "dashboard.ui"
 
 class HomeWindow(QMainWindow):
-    def __init__(self, cliente_id, login_status):
+    def __init__(self, cliente_id, login_status, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
 
         uic.loadUi(UI_PATH, self)
 
@@ -59,7 +66,7 @@ class HomeWindow(QMainWindow):
 
     def btn_cliente(self):
         if not self.perfil_window:
-            self.perfil_window = profile_view.ClienteWindow(self.cliente_id, self.login_status, self)
+            self.perfil_window = profile_view.ClienteWindow(self.cliente_id, self.login_status, self, self.linguagem_atual)
         self.perfil_window.set_labels()
         
         

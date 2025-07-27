@@ -1,6 +1,8 @@
 from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
+from PyQt6.QtCore import QTranslator
+from PyQt6.QtWidgets import QApplication
 from pathlib import Path
 
 import sys
@@ -13,6 +15,7 @@ from src.util.db_manager import ConsultaSQL
 
 from src.util.qt_util import MessageBox
 from src.util.crypto import CryptoManager
+from src.util.language_manager import LanguageManager as lm
 
 import json
 from pathlib import Path
@@ -28,8 +31,11 @@ sys.path.append(str(parent_directory))
 class ClienteWindow(QtWidgets.QMainWindow):
     btn_home_pressed = pyqtSignal()
     
-    def __init__(self, cliente_id, login_status, home_window):
+    def __init__(self, cliente_id, login_status, home_window, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
 
         uic.loadUi(UI_PATH, self)
 
