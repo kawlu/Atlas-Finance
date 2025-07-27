@@ -35,6 +35,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
         lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
 
         uic.loadUi(UI_PATH, self)
@@ -210,10 +211,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
         #       "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
         
     def logoff(self):
-        from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.auth_login_view import Login #importação tardia pra evitar importação circular
         self.close()
         self.home_window.close()
-        self.login_window = LoginWindow()
+        self.login_window = Login(self.linguagem_atual)
         self.login_window.show()
         
     def reopen_home(self):

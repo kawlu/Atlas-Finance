@@ -1,7 +1,7 @@
 from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, QTranslator
 
 from datetime import datetime
 import sys
@@ -9,6 +9,7 @@ import re
 
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
+from src.util.language_manager import LanguageManager as lm
 from src.util.formatter import Formatter
 from src.util import icons_rc
 
@@ -23,8 +24,13 @@ class TransactionsWindow(QDialog):
     transacoes_atualizadas = pyqtSignal()
     totais_atualizados = pyqtSignal()
         
-    def __init__(self, cliente_id):
+    def __init__(self, cliente_id, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
+
         uic.loadUi(UI_PATH, self)
         
         self.novo_registro_window = None
@@ -40,7 +46,7 @@ class TransactionsWindow(QDialog):
 
     def abrir_novo_registro(self):
         if not self.novo_registro_window:
-            self.novo_registro_window = NewTransactionWindow(self, self.cliente_id)
+            self.novo_registro_window = NewTransactionWindow(self, self.cliente_id, self.linguagem_atual)
         self.novo_registro_window.exec()
 
     def carregar_registros(self):

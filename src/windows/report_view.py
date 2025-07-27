@@ -1,9 +1,11 @@
 import json
 from pathlib import Path
 from PyQt6 import uic, QtWidgets
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtWidgets import QDialog, QApplication
+from PyQt6.QtCore import QTranslator
 
 from src.util.db_manager import ConsultaSQL
+from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
 from reportlab.pdfgen import canvas
@@ -18,8 +20,13 @@ DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "report.ui"
 
 class ReportWindow(QDialog):
-    def __init__(self, cliente_id, mes_selecionado):
+    def __init__(self, cliente_id, mes_selecionado, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
+
         uic.loadUi(UI_PATH, self)
         self.cliente_id = cliente_id
         self.btn_sim.clicked.connect(self.gerar_pdf_e_popup)

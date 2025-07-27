@@ -12,6 +12,6 @@ class LanguageManager:
         path_qm = f"{str(TRANSLATE_PATH)}/translations_{idioma}.qm"
         if translator.load(path_qm):
             app.installTranslator(translator)
-            print(f"Idioma trocado para {idioma}")
+            #print(f"Idioma trocado para {idioma}") #DEBUG
         else:
             print(f"Não foi possível carregar o arquivo {path_qm}")

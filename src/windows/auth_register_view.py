@@ -1,12 +1,13 @@
 from PyQt6 import uic, QtWidgets, QtGui
 from PyQt6.QtGui import QPixmap, QPainter
-from PyQt6.QtWidgets import QMessageBox, QMainWindow
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QMessageBox, QMainWindow, QApplication
+from PyQt6.QtCore import Qt, QTranslator
 import pymysql
 import re
 
 from src.util.db_manager import ConsultaSQL
 from src.util.qt_util import MessageBox
+from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
 import json
@@ -18,8 +19,13 @@ UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "signup.ui"
 #TODO quando cadastrar, logar direto e ir pra dashboard_view
 
 class SignUp(QMainWindow):
-    def __init__(self):
+    def __init__(self, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
+
         uic.loadUi(UI_PATH, self)
 
         self.foto_bytes = None
@@ -43,7 +49,7 @@ class SignUp(QMainWindow):
 
     def voltar_login(self):
         from src.windows.auth_login_view import Login  # <- Importa aqui para evitar importações circulares
-        self.login_window = Login()
+        self.login_window = Login(self.linguagem_atual)
         self.login_window.show()
         self.close()
 
@@ -156,7 +162,7 @@ class SignUp(QMainWindow):
 
             self.sql.editar(insert_query, valores)
 
-            QMessageBox.information(self, "Sucesso", "Cadastro realizado com sucesso!")
+            MessageBox.show_custom_messagebox(self, "information", "Sucesso", "Cadastro realizado com sucesso!")
             self.limpar_campos()
             
             self.voltar_login()

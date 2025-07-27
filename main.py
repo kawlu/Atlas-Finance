@@ -11,7 +11,7 @@ def main():
     translator = QTranslator()
     translator.load(str(TRANSLATE_PATH))
     app.installTranslator(translator)
-    window = Login()
+    window = Login('pt')
     window.show()
     sys.exit(app.exec())
 

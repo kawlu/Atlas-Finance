@@ -22,14 +22,19 @@ DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_l
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "login.ui"
 
 class Login(QMainWindow):
-    def __init__(self):
+    def __init__(self, linguagem_atual):
         super().__init__()
+
+        self.linguagem_atual = linguagem_atual
+
+        translator = QTranslator()
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
+
         uic.loadUi(UI_PATH, self)
         self.sql = ConsultaSQL()
         
         self.cliente_id = 0
         self.login_status = False
-        self.linguagem_atual = 'pt'
 
         self.conectar_sinais()
         self.carregar_lembrete()
@@ -82,8 +87,8 @@ class Login(QMainWindow):
             
     def cadastro(self):
         self.hide()
-        self.home = SignUp()
-        self.home.show()
+        self.cadastro = SignUp(self.linguagem_atual)
+        self.cadastro.show()
     
     def consulta_login(self, email, senha):
         query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"

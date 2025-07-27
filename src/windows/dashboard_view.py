@@ -50,12 +50,12 @@ class HomeWindow(QMainWindow):
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
-        popup = report_view.ReportWindow(self.cliente_id, self.cmb_mes.currentIndex())
+        popup = report_view.ReportWindow(self.cliente_id, self.cmb_mes.currentIndex(), self.linguagem_atual)
         popup.exec()
         
     def btn_balanco(self):
         if not self.balanco_window:
-            self.balanco_window = transactions_view.TransactionsWindow(self.cliente_id)
+            self.balanco_window = transactions_view.TransactionsWindow(self.cliente_id, self.linguagem_atual)
 
             # Conexões com os sinais
             self.balanco_window.grafico_atualizado.connect(self.atualizar_grafico_global)
@@ -77,9 +77,9 @@ class HomeWindow(QMainWindow):
  
 
     def logoff(self):
-        from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
+        from src.windows.auth_login_view import Login #importação tardia pra evitar importação circular
         self.close()
-        self.login_window = LoginWindow()
+        self.login_window = Login(self.linguagem_atual)
         self.login_window.show()
 
     def atualizar_grafico_global(self):

@@ -1,7 +1,7 @@
 from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import pyqtSignal, QTranslator
 
 from datetime import datetime
 import sys
@@ -9,6 +9,7 @@ import re
 
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
+from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 from src.util.formatter import Formatter
 
@@ -17,8 +18,13 @@ UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "new_transactio
 db = ConsultaSQL()
 
 class NewTransactionWindow(QDialog):
-    def __init__(self, balanco_window, cliente_id):
+    def __init__(self, balanco_window, cliente_id, linguagem_atual):
         super().__init__()
+
+        translator = QTranslator()
+        self.linguagem_atual = linguagem_atual
+        lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
+
         uic.loadUi(UI_PATH, self)
         self.input_Data.setDate(datetime.now())
         self.balanco_window = balanco_window
