@@ -28,6 +28,10 @@ parent_directory = current_script_path.parent.parent
 sys.path.append(str(parent_directory / 'assets/png'))
 sys.path.append(str(parent_directory))
 
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate = data_util['traducao']['mensage_box']
+
 class ClienteWindow(QtWidgets.QMainWindow):
     btn_home_pressed = pyqtSignal()
     
@@ -67,10 +71,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.edit_celular.setFocus()
     
     def set_labels(self):
-        with open(DATA_PATH, "r", encoding="utf-8") as f:
-            data_util = json.load(f)
-
-        
         lista_paises = data_util['list']['lista_paises']
         lista_ocupacoes = data_util['list']['lista_ocupacoes']
 
@@ -126,7 +126,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
             # Verifica se é imagem válida
             if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
-                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['invalid_image_format'])
                 return
             
             with open(file_path, 'rb') as f:
@@ -159,16 +159,13 @@ class ClienteWindow(QtWidgets.QMainWindow):
 
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         if not re.match(regex_email, email_temp):
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_email'])
             return
-        if len(senha_temp) < 6:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha deve ter ao menos 6 caracteres.")
-            return
-        elif ' ' in senha_temp:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "A senha não pode conter espaços.")
+        if len(senha_temp) < 6 or ' ' in senha_temp:
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['password_mismatch'])
             return
         if not len(celular_temp) == 13:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['phone_length'])
             return
         ddi = celular_temp[0:2]
         ddd = celular_temp[2:4]
@@ -192,9 +189,9 @@ class ClienteWindow(QtWidgets.QMainWindow):
             else:
                 query = "UPDATE tb_usuario SET email = %s, senha = %s, ocupacao = %s, celular = %s, salario = %s, pais = %sWHERE pk_usuario_id = %s"
                 params = (email, senha, ocupacao, celular, salario, pais, int(self.get_usuario()["pk_usuario_id"].iloc[0]))
-            df = self.sql.editar(query, params)
+            self.sql.editar(query, params)
         except Exception as e:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível alterar os dados de usuário.")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['update_user_error'])
             print(e)
             return
         
@@ -203,9 +200,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
             dados = f"{email}\n{senha}"
             with open("lembrete_login.bin", "wb") as f:
                 f.write(CryptoManager.criptografar(dados))
-
-        MessageBox.show_custom_messagebox(self, "information", "Alterar dados", "Dados de perfil atualizados com sucesso.")
         
+        
+        MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['user_update_sucess'])
+            
         #DEBUG
         # print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
         #       "\nCelular: " + celular, "\nSalário: " + salario, "\nPaís: " + pais, "\n")
@@ -222,7 +220,8 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.hide()
     
     def desativar_conta(self):
-        confirmado = MessageBox.ask_confirmation(self, "Confirmação", "Tem certeza que deseja desativar a conta?")
+        confirmado = MessageBox.ask_confirmation(parent=self, title=translate[self.linguagem_atual]['confirmation'], message=translate[self.linguagem_atual]['deactivate_account_confirm'])
+            
         if confirmado:
             try:
                 query = "UPDATE tb_usuario SET situacao = 'desativada' WHERE pk_usuario_id = %s"
@@ -231,7 +230,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 if os.path.exists("lembrete_login.bin"):
                     os.remove("lembrete_login.bin")
                 
-                MessageBox.show_custom_messagebox(self, "information", "Conta desativada", "Conta desativada com sucesso.")
+                MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['deactivate_account_information'])
 
                 from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
                 self.close()
@@ -239,6 +238,6 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 self.login_window = LoginWindow()
                 self.login_window.show()
             except Exception as e:
-                MessageBox.show_custom_messagebox(self, "error", "Erro", "Não foi possível desativar a conta.")
+                MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['account_deactivation_error'])
                 print(e)
                 return

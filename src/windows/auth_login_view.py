@@ -1,3 +1,4 @@
+import json
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QTranslator
@@ -17,9 +18,13 @@ from src.util.qt_util import MessageBox
 
 from pathlib import Path
 
-#TODO criar lembrete se nao existir
-DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_login.bin"
+BIN_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "lembrete_login.bin"
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "login.ui"
+DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate = data_util['traducao']['mensage_box']
 
 class Login(QMainWindow):
     def __init__(self, linguagem_atual):
@@ -41,9 +46,9 @@ class Login(QMainWindow):
         self.carregar_lembrete()
 
     def carregar_lembrete(self):
-        if DATA_PATH:
+        if BIN_PATH:
             try:
-                with open(DATA_PATH, "rb") as f:
+                with open(BIN_PATH, "rb") as f:
                     dados_criptografados = f.read()
                     dados = cm.descriptografar(dados_criptografados).splitlines()
                 if len(dados) >= 2:
@@ -51,7 +56,7 @@ class Login(QMainWindow):
                     self.lineEdit_2.setText(dados[1])
                     self.checkBox.setChecked(True)
             except FileNotFoundError:
-                print("Lembrete não existe.")
+                ...
                     
             except Exception as e:
                 print(f"Erro ao tentar ler lembrete criptografado: {e}")
@@ -60,13 +65,13 @@ class Login(QMainWindow):
         if self.checkBox.isChecked():
             dados = f"{self.lineEdit.text()}\n{self.lineEdit_2.text()}"
             try:
-                with open(DATA_PATH, "wb") as f:
+                with open(BIN_PATH, "wb") as f:
                     f.write(cm.criptografar(dados))
             except Exception  as e:
                 print(f"Erro ao salvar lembrete criptografado: {e}")
         else:
-            if os.path.exists(DATA_PATH):
-                os.remove(DATA_PATH)
+            if os.path.exists(BIN_PATH):
+                os.remove(BIN_PATH)
 
     def fazer_login(self):
         email = self.lineEdit.text()
@@ -75,7 +80,7 @@ class Login(QMainWindow):
         login_status = False
 
         if not email or not senha:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Preencha o email e a senha.")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['fill_email_password'])
             return
             
         client_id, login_status = self.consulta_login(email, senha)    
@@ -96,17 +101,17 @@ class Login(QMainWindow):
         
         if not df.empty:
             if df['situacao'].iloc[0] != 'ativa':
-                MessageBox.show_custom_messagebox(self, "error", "Erro", "Conta desativada!")
+                MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['error_account_deactivated'])
                 return 0, False
-            MessageBox.show_custom_messagebox(self, "information", "Login", "Login bem-sucedido!")
+            
+            MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['information'], message=translate[self.linguagem_atual]['login_success'])
 
             self.cliente_id = df['pk_usuario_id'].iloc[0]
             self.login_status = True
             
             self.salvar_lembrete()
-        
         else:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Email ou senha incorretos!")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['wrong_email_password'])
         
         return self.cliente_id, self.login_status
     

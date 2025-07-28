@@ -1,3 +1,5 @@
+-- PSQL
+
 CREATE TABLE IF NOT EXISTS tb_usuario (
     pk_usuario_id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -16,8 +18,9 @@ CREATE TABLE IF NOT EXISTS tb_registro (
     transacao_id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
-    tipo VARCHAR(10) CHECK (tipo IN ('entrada','saída')),
-    categoria VARCHAR(20) CHECK (categoria IN ('alimentação','contas','estudo','lazer','saúde','outros','transporte')),
+    tipo VARCHAR(10) CHECK (tipo IN ('in','out')),
+    categoria VARCHAR(20) CHECK (categoria IN ('alimentacao', 'contas', 'estudo', 'lazer', 'saude', 
+    'transporte', 'outros', 'investimento', 'comissao', 'freelance')),
     data_realizada DATE NOT NULL,
     fk_usuario_id INT NOT NULL,
     FOREIGN KEY (fk_usuario_id) REFERENCES tb_usuario(pk_usuario_id) ON DELETE CASCADE

@@ -1,23 +1,22 @@
-import json
-from pathlib import Path
-from PyQt6 import uic, QtWidgets
+from PyQt6 import uic
 from PyQt6.QtWidgets import QDialog, QApplication
 from PyQt6.QtCore import QTranslator
 
-from src.util.db_manager import ConsultaSQL
 from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
-
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from src.util.qt_util import MessageBox
 from src.util.pdf_util import PDFGenerator
 
+from pathlib import Path
+import json
+
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "report.ui"
+
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate = data_util['traducao']['mensage_box']
 
 class ReportWindow(QDialog):
     def __init__(self, cliente_id, mes_selecionado, linguagem_atual):
@@ -34,14 +33,14 @@ class ReportWindow(QDialog):
         self.mes_selecionado = mes_selecionado
 
     def gerar_pdf_e_popup(self):
-        pdf = PDFGenerator(cliente_id=self.cliente_id, mes_selecionado=self.mes_selecionado)
+        pdf = PDFGenerator(cliente_id=self.cliente_id, mes_selecionado=self.mes_selecionado, linguagem_atual=self.linguagem_atual)
         sucesso = pdf.gerar()
 
         if sucesso is True:
-            MessageBox.show_custom_messagebox(self, "information", "Sucesso", "PDF foi gerado com sucesso!")
+            MessageBox.show_custom_messagebox(parent=self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['pdf_generated_success'])
             self.close()
         elif sucesso is None:
             self.close()
         else:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Não há registros disponíveis.")
+            MessageBox.show_custom_messagebox(parent=self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['no_records_pdf'])
             self.close()

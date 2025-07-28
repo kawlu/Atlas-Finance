@@ -286,7 +286,7 @@
     <message>
         <location filename="../ui/dashboard.ui" line="0"/>
         <source>Dezembro</source>
-        <translation>Dezember</translation>
+        <translation>December</translation>
     </message>
     <message>
         <location filename="../ui/dashboard.ui" line="0"/>

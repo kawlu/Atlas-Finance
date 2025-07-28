@@ -16,6 +16,10 @@ from pathlib import Path
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "signup.ui"
 
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate = data_util['traducao']['mensage_box']
+
 #TODO quando cadastrar, logar direto e ir pra dashboard_view
 
 class SignUp(QMainWindow):
@@ -30,9 +34,6 @@ class SignUp(QMainWindow):
 
         self.foto_bytes = None
         self.sql = ConsultaSQL()
-        
-        with open(DATA_PATH, "r", encoding="utf-8") as f:
-            data_util = json.load(f)
         
         lista_paises = data_util['list']['lista_paises']
         lista_ocupacoes = data_util['list']['lista_ocupacoes']
@@ -78,7 +79,7 @@ class SignUp(QMainWindow):
 
             # Verifica se é imagem válida
             if not file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
-                MessageBox.show_custom_messagebox(self, "error", "Erro", "Selecione uma imagem válida (.png, .jpg, .jpeg).")
+                MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['invalid_image_format'])
                 return
             
             with open(file_path, 'rb') as f:
@@ -119,7 +120,7 @@ class SignUp(QMainWindow):
         termos = self.checkBox.isChecked()
 
         if not termos:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Você precisa aceitar os termos.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['terms_required'])
             return
 
         # Validação de campos obrigatórios
@@ -127,19 +128,19 @@ class SignUp(QMainWindow):
             return
         
         if not len(celular) == 13:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "O número de celular deve conter 13 dígitos numéricos.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['phone_length'])
             return
 
         # Verifica duplicidade de e-mail
         email_query = "SELECT 1 FROM tb_usuario WHERE email = %s LIMIT 1"
         if not self.sql.pd_consultar(email_query, (email,)).empty:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "E-mail já cadastrado.")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['email_exists'])
             return
 
         # Verifica duplicidade de celular
         celular_query = "SELECT 1 FROM tb_usuario WHERE celular = %s LIMIT 1"
         if not self.sql.pd_consultar(celular_query, (celular,)).empty:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "Celular já cadastrado.")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['phone_exists'])
             return
         
         ddi = celular[0:2]
@@ -162,15 +163,18 @@ class SignUp(QMainWindow):
 
             self.sql.editar(insert_query, valores)
 
-            MessageBox.show_custom_messagebox(self, "information", "Sucesso", "Cadastro realizado com sucesso!")
+            MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['registration_success'])
+                
             self.limpar_campos()
             
             self.voltar_login()
 
         except pymysql.err.IntegrityError as e:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro de integridade: {e}")
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['db_error'])
+            print(f"Erro de integridade: {e}")
         except pymysql.MySQLError as e:
-            MessageBox.show_custom_messagebox(self, "error", "Erro no banco de dados", str(e))
+            MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['db_error'])
+            print(str(e))
 
     def checar_campos(self, nome, email, senha, confirmar_senha, celular, ocupacao, objetivo, faixa, pais, nascimento):
         combobox_false = (
@@ -181,7 +185,7 @@ class SignUp(QMainWindow):
         )
 
         if not all([nome, email, senha, confirmar_senha, celular]) or combobox_false:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Todos os campos devem ser preenchidos.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['fill_fields'])
             return False
 
         if not self.checar_nome(nome):
@@ -198,27 +202,27 @@ class SignUp(QMainWindow):
         return True
 
     def checar_nome(self, nome):
-        if not nome.isalpha() or len(nome) < 4:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Nome inválido.")
+        if not nome.isalpha() or len(nome) < 3:
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_name'])
             return False
         return True
 
     def checar_senha(self, senha):
         if ' ' in senha or len(senha) < 6:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Senha inválida, evite espaços e insira pelo menos 6 caracteres.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_password'])
             return False
         return True
 
     def checar_confirmar_senha(self, senha, confirmar_senha):
         if senha != confirmar_senha:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "As senhas não coincidem.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['password_mismatch'])
             return False
         return True
 
     def checar_email(self, email):
         regex_email = r"^[^@]+@[^@]+\.[^@]+$"
         if not re.match(regex_email, email):
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Email inválido.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_email'])
             return False
         return True
 
@@ -228,9 +232,9 @@ class SignUp(QMainWindow):
             data_nascimento = datetime.strptime(nascimento, "%Y-%m-%d")
             idade = (datetime.today() - data_nascimento).days // 365
             if idade < 8:
-                MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Idade mínima é de 8 anos.")
+                MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['minimum_age'])
                 return False
         except ValueError:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Data de nascimento inválida.")
+            MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_birthdate'])
             return False
         return True

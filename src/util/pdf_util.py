@@ -11,10 +11,17 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 
 from src.util.db_manager import ConsultaSQL
 
+#TODO pegar rows da tabela transaction_form_view (assim que ela estiver ajeitada)
+
 DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
 
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate_PDF = data_util['traducao']['PDF']
+            translate_month = data_util['traducao']['meses']
+
 class PDFGenerator:
-    def __init__(self, cliente_id, mes_selecionado):
+    def __init__(self, cliente_id, mes_selecionado, linguagem_atual):
         self.cliente_id = cliente_id
         self.mes_selecionado = mes_selecionado
         self.largura_pagina, self.altura_pagina = A4
@@ -26,8 +33,18 @@ class PDFGenerator:
         self.tamanho_titulo = 26
         self.tamanho_cabecalho = 14
         self.tamanho_texto = 12
+        self.linguagem_atual = linguagem_atual
+        
+        self.lang = translate_PDF[self.linguagem_atual]
 
-        self.colunas = ["Nome", "Valor", "Tipo", "Categoria", "Data"]
+        self.colunas = [
+            self.lang['name'],
+            self.lang['amount'],
+            self.lang['type'],
+            self.lang['category'],
+            self.lang['date']
+        ]
+        
         self.col_x = [self.margem_esquerda, 180, 260, 350, 460]
         self.col_widths = [
             self.col_x[i+1] - self.col_x[i] if i+1 < len(self.col_x) else 100
@@ -52,10 +69,7 @@ class PDFGenerator:
         nome_mes = None
 
         if self.mes_selecionado:
-            with open(DATA_PATH, "r", encoding="utf-8") as f:
-                data_util = json.load(f)
-            meses_traduzidos = data_util["list"]["lista_meses"]["PT_BR"]
-            nome_mes = meses_traduzidos[self.mes_selecionado]
+            nome_mes = translate_month[self.linguagem_atual][self.mes_selecionado]
 
             query = """
                 SELECT nome, valor, tipo, categoria, data_realizada
@@ -75,8 +89,9 @@ class PDFGenerator:
         return dados, nome_mes
 
     def _montar_nome_arquivo(self, nome_mes):
-        base = "relatorio_financeiro"
-        return f"{base}_{nome_mes.lower()}" if nome_mes else f"{base}_completo"
+        
+        base = self.lang['archive_name']
+        return f"{base}_{nome_mes.lower()}" if nome_mes else f"{base}_{self.lang['complete']}"
 
     def _obter_caminho_salvar(self, nome_arquivo):
         downloads_path = Path(os.environ['USERPROFILE']) / 'Downloads'
@@ -101,7 +116,7 @@ class PDFGenerator:
             pdf.line(self.margem_esquerda, self.margem_topo - 10, self.largura_pagina - self.margem_esquerda, self.margem_topo - 10)
             pdf.setFont(self.fonte_texto, 16)
             pdf.setFillColor(colors.black)
-            subtitulo = f"Relatório de Transações Registradas - {nome_mes}" if nome_mes else "Relatório de Todas Transações Registradas"
+            subtitulo = f"{self.lang['subtitle']} - {nome_mes}" if nome_mes else self.lang['subtitle_alt']
             pdf.drawString(self.margem_esquerda, self.margem_topo - 40, subtitulo)
 
         def desenhar_titulos_tabela(y_inicio):
@@ -118,9 +133,11 @@ class PDFGenerator:
         def desenhar_rodape():
             pdf.setFont("Helvetica", 9)
             pdf.setFillColor(colors.black)
-            data_hora = dt.now().strftime("Gerado em %d/%m/%Y às %H:%M:%S")
+            
+            data_hora = dt.now().strftime(self.lang['gen_datetime'])
+            
             pdf.drawString(self.margem_esquerda, 30, data_hora)
-            pdf.drawRightString(self.largura_pagina - self.margem_esquerda, 30, f"Página {numero_pagina}")
+            pdf.drawRightString(self.largura_pagina - self.margem_esquerda, 30, f"{self.lang['page']} {numero_pagina}")
 
         def draw_centered_text(text, x1, x2, y):
             largura = stringWidth(text, self.fonte_texto, self.tamanho_texto)

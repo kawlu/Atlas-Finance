@@ -33,7 +33,7 @@ class HomeWindow(QMainWindow):
         self.login_status = login_status
 
         # Gráfico
-        self.grafico = Grafico(self.frame_grafico.layout(), self.cliente_id)
+        self.grafico = Grafico(self.frame_grafico.layout(), self.cliente_id, self.linguagem_atual)
         self.cmb_mes.currentIndexChanged.connect(self.atualizar_grafico_global)
 
         # Carrega inicialmente
@@ -46,7 +46,6 @@ class HomeWindow(QMainWindow):
         self.btn_logoff.clicked.connect(self.logoff)
         self.btn_editar.clicked.connect(self.btn_balanco)
         self.btn_perfil.clicked.connect(self.btn_cliente)
-
 
     # === MÉTODOS DOS BOTÕES ===
     def btn_gerar_relatorio(self):
@@ -114,7 +113,7 @@ class HomeWindow(QMainWindow):
             for i, (nome, valor, tipo) in enumerate(registros):
                 nome_formatado = str(nome).title()
 
-                if tipo.lower() == 'saída':
+                if tipo.lower() == 'saida':
                     valor_formatado = f"- {Formatter.format_value_to_display(float(valor))}"
                     cor = "#8D0A0A"
                 else:
@@ -142,7 +141,7 @@ class HomeWindow(QMainWindow):
                 despesa = 0
             else:
                 receita = dados[dados['tipo'] == 'entrada']['valor'].sum()
-                despesa = dados[dados['tipo'] == 'saída']['valor'].sum()
+                despesa = dados[dados['tipo'] == 'saida']['valor'].sum()
 
             saldo = receita - despesa
 

@@ -3,9 +3,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
 from PyQt6.QtCore import pyqtSignal, QTranslator
 
-from datetime import datetime
-import sys
-import re
+import json
 
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
@@ -16,6 +14,11 @@ from src.util import icons_rc
 from src.windows.transaction_form_view import NewTransactionWindow
 
 UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "transactions.ui"
+DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+
+with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data_util = json.load(f)
+            translate = data_util['traducao']['mensage_box']
 
 db = ConsultaSQL()
 
@@ -92,7 +95,11 @@ class TransactionsWindow(QDialog):
         linha_selecionada = self.tabela_Registros.currentRow()
 
         if linha_selecionada < 0:
-            MessageBox.show_custom_messagebox(self, "warning", "Aviso", "Selecione um registro para excluir")
+            MessageBox.show_custom_messagebox(
+                parent=self,
+                tipo="warning",
+                title=translate[self.linguagem_atual]['warning'],
+                message=translate[self.linguagem_atual]['select_record_to_delete'])
             return
 
         transacao_id = self.tabela_Registros.item(linha_selecionada, 0).text()
@@ -101,11 +108,14 @@ class TransactionsWindow(QDialog):
         try:
             transacao_id = int(transacao_id)
         except ValueError:
-            MessageBox.show_custom_messagebox(self, "error", "Erro", "ID inválido para exclusão.")
+            MessageBox.show_custom_messagebox(parent=self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['invalid_id_delete'])
             return
 
-        confirmado = MessageBox.ask_confirmation(self, "Confirmação", f"Tem certeza que deseja excluir o registro \"{nome_registro}\"?")
-
+        confirmado = MessageBox.ask_confirmation(
+            parent=self,
+            title="confirmation",
+            message=translate[self.linguagem_atual]['delete_confirmation'].format(nome_registro=nome_registro))
+    
         if confirmado:
             try:
                 sql = "DELETE FROM tb_registro WHERE transacao_id = %s"
@@ -117,10 +127,19 @@ class TransactionsWindow(QDialog):
                 self.transacoes_atualizadas.emit()
                 self.totais_atualizados.emit()
 
-                MessageBox.show_custom_messagebox(self, "information", "Sucesso", f"Registro \"{nome_registro}\" excluído com sucesso.")
+                MessageBox.show_custom_messagebox(
+                parent=self,
+                tipo="information",
+                title=translate[self.linguagem_atual]['success'],
+                message=translate[self.linguagem_atual]['delete_success'].format(nome_registro=nome_registro))
 
             except Exception as erro:
-                MessageBox.show_custom_messagebox(self, "error", "Erro", f"Erro ao excluir registro:\n{erro}")
+                MessageBox.show_custom_messagebox(
+                parent=self,
+                tipo="error",
+                title=translate[self.linguagem_atual]['error'], 
+                message=translate[self.linguagem_atual]['delete_error'])
+                print(erro)
 
     def atualizar_saldo_total(self):
         try:
