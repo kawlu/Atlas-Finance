@@ -448,7 +448,7 @@
         "subtitle": "Registered Transactions Report",
         "subtitle_alt": "Report of All Registered Transactions",
         "page": "Page",
-        "gen_datetime": "Generated on %Y/%m/%d at %H:%M:%S"
+        "gen_datetime": "Generated on %m/%d/%Y at %H:%M:%S"
       }
     }
   }

@@ -4,3 +4,4 @@ __pycache__/
 teste*
 *txt
 *bin
+.env

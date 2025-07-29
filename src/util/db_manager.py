@@ -1,11 +1,22 @@
+import json
 import psycopg2
 import pandas as pd
+from pathlib import Path
+
+import os
+from dotenv import load_dotenv
+
+dotenv_file = Path(__file__).resolve().parent.parent.parent / '.env'
+
+load_dotenv(dotenv_file)
+
+uri = os.getenv("POSTGRES_URI")
+if not uri:
+    raise RuntimeError("Configure o banco de dados no arquivo .env")
 
 class ConsultaSQL:
     def __init__(self):
-        self.banco = psycopg2.connect(
-            "postgresql://neondb_owner:npg_IBv8FpAe3YMD@ep-orange-sun-ac4zcq1w-pooler.sa-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-        )
+        self.banco = psycopg2.connect(uri)
 
     def _normalize_params(self, params):
         if params is None:

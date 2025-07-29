@@ -141,6 +141,6 @@ class Login(QMainWindow):
     def conectar_sinais(self):
         self.btn_login.clicked.connect(self.fazer_login)
         self.btn_cadastro.clicked.connect(self.cadastro)
-        self.switchPtBr.triggered.connect(lambda: self.trocar_linguagem('pt'))
-        self.switchEnUs.triggered.connect(lambda: self.trocar_linguagem('en'))
+        self.switchPtBr.triggered.connect(lambda: self.trocar_linguagem('pt_BR'))
+        self.switchEnUs.triggered.connect(lambda: self.trocar_linguagem('en_US'))
         self.checkBox.stateChanged.connect(self.salvar_lembrete)

@@ -7,3 +7,4 @@ PyQt6==6.9.1
 PySide6==6.9.1
 reportlab==4.4.2
 psycopg==2-2.9.10
+dotenv==0.9.9
