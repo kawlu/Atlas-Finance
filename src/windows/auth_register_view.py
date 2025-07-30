@@ -202,7 +202,9 @@ class SignUp(QMainWindow):
         return True
 
     def checar_nome(self, nome):
-        if not nome.isalpha() or len(nome) < 3:
+        quantidade_espacos = nome.count(' ')
+        nome_sem_espacos = nome.replace(' ', '')
+        if not nome_sem_espacos.isalpha() or len(nome_sem_espacos) < 3 or quantidade_espacos < 1:
             MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_name'])
             return False
         return True
