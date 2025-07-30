@@ -357,6 +357,7 @@ QComboBox QAbstractItemView {
     min-width: 100px;  /* &lt;-- isso evita o corte */
     padding: 5px;
     border: 1px solid #999;
+	border-radius: 6px;
     selection-background-color: rgb(13, 25, 43);
 	color: rgb(13, 25, 43);
 }

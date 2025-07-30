@@ -323,6 +323,18 @@ QComboBox:hover{
 	background-color: #C9C9C9
 }
 
+QComboBox QAbstractItemView {
+    selection-color: #0D192B;
+    border: 1px solid #2E3B55;
+	border-radius:6px;
+	background-color: #DBDBDB;
+    color: rgb(13, 25, 43);
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    selection-background-color:#C9C9C9;
+	color: rgb(13, 25, 43);
+}
+
 </string>
                      </property>
                      <item>
@@ -370,6 +382,18 @@ QComboBox:hover{
     min-width: 80px;
     min-height: 25px;
 	background-color: #C9C9C9
+}
+
+QComboBox QAbstractItemView {
+    selection-color: #0D192B;
+    border: 1px solid #2E3B55;
+	border-radius:6px;
+	background-color: #DBDBDB;
+    color: rgb(13, 25, 43);
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    selection-background-color:#C9C9C9;
+	color: rgb(13, 25, 43);
 }
 
 </string>
@@ -587,6 +611,18 @@ QComboBox:hover{
 	background-color: #C9C9C9
 }
 
+QComboBox QAbstractItemView {
+    selection-color: #0D192B;
+    border: 1px solid #2E3B55;
+	border-radius:6px;
+	background-color: #DBDBDB;
+    color: rgb(13, 25, 43);
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    selection-background-color:#C9C9C9;
+	color: rgb(13, 25, 43);
+}
+
 </string>
                      </property>
                      <item>
@@ -643,12 +679,24 @@ QComboBox:hover{
 	border-radius: 10px;
     border: 2px solid #DBDBDB;
     padding: 5px 10px;
-    background-color: rgb(219, 219, 219);
     color: rgb(13, 25, 43);
     min-width: 80px;
     min-height: 25px;
 	background-color: #C9C9C9
 }
+
+QComboBox QAbstractItemView {
+    selection-color: #0D192B;
+    border: 1px solid #2E3B55;
+	border-radius:6px;
+	background-color: #DBDBDB;
+    color: rgb(13, 25, 43);
+    min-width: 100px;  /* &lt;-- isso evita o corte */
+    padding: 5px;
+    selection-background-color:#C9C9C9;
+	color: rgb(13, 25, 43);
+}
+
 
 </string>
                      </property>

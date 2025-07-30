@@ -176,13 +176,13 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
@@ -200,6 +200,7 @@
 	max-width:500px;
 	border: 1px solid rgb(219, 219, 219);;
 	border-radius: 6px;
+	padding-left: 10px;
 }
 
 QLineEdit:hover{
@@ -269,13 +270,13 @@ QLineEdit:hover{
               </property>
               <property name="minimumSize">
                <size>
-                <width>502</width>
+                <width>0</width>
                 <height>52</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
@@ -295,8 +296,8 @@ QLineEdit:hover{
     border-radius: 6px;
 	min-height: 50px;
 	max-height: 50px;
-	min-width:500px;
 	max-width:500px;
+	padding-left: 10px;
 }
 
 QComboBox QAbstractItemView {
@@ -385,13 +386,13 @@ QComboBox:hover{
               </property>
               <property name="minimumSize">
                <size>
-                <width>502</width>
+                <width>0</width>
                 <height>52</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
@@ -411,8 +412,8 @@ QComboBox:hover{
     border-radius: 6px;
 	min-height: 50px;
 	max-height: 50px;
-	min-width:500px;
 	max-width:500px;
+	padding-left: 10px;
 }
 
 QComboBox QAbstractItemView {
@@ -488,13 +489,13 @@ QComboBox:hover{
               </property>
               <property name="minimumSize">
                <size>
-                <width>502</width>
+                <width>0</width>
                 <height>52</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
@@ -514,8 +515,8 @@ QComboBox:hover{
 	color: #DBDBDB;
 	min-height: 50px;
 	max-height: 50px;
-	min-width:500px;
 	max-width:500px;
+	padding-left: 10px;
 }
 
 QDateEdit:hover{
@@ -589,13 +590,13 @@ QDateEdit:hover{
               </property>
               <property name="minimumSize">
                <size>
-                <width>502</width>
+                <width>0</width>
                 <height>52</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>502</width>
+                <width>512</width>
                 <height>52</height>
                </size>
               </property>
@@ -609,10 +610,10 @@ QDateEdit:hover{
 	color: rgb(219, 219, 219);
 	min-height: 50px;
 	max-height: 50px;
-	min-width:500px;
 	max-width:500px;
 	border: 1px solid rgb(219, 219, 219);;
 	border-radius: 6px;
+	padding-left: 10px;
 }
 
 QLineEdit:hover{
