@@ -11,6 +11,8 @@ from src.util.qt_util import MessageBox
 from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
+from src.windows.dashboard_view import HomeWindow
+
 import json
 from pathlib import Path
 
@@ -168,7 +170,8 @@ class SignUp(QMainWindow):
                 
             self.limpar_campos()
             
-            self.voltar_login()
+            self.logar(email, senha)
+            self.hide()
 
         except IntegrityError as e:
             MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['db_error'])
@@ -241,3 +244,11 @@ class SignUp(QMainWindow):
             MessageBox.show_custom_messagebox(self, tipo="warning", title=translate[self.linguagem_atual]['warning'], message=translate[self.linguagem_atual]['invalid_birthdate'])
             return False
         return True
+
+    def logar(self, email, senha):
+        query = "SELECT * FROM tb_usuario WHERE email = %s AND senha = %s"
+        df = self.sql.pd_consultar(query, (email, senha))
+        client_id = df['pk_usuario_id'].iloc[0]
+        self.home = HomeWindow(client_id, True, self.linguagem_atual)
+        self.home.showMaximized()
+        
