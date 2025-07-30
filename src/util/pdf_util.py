@@ -2,8 +2,10 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime as dt
+import sys
 
 from PyQt6 import QtWidgets
+from dotenv import load_dotenv
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
@@ -13,7 +15,15 @@ from src.util.db_manager import ConsultaSQL
 
 #TODO pegar rows da tabela transaction_form_view (assim que ela estiver ajeitada)
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)

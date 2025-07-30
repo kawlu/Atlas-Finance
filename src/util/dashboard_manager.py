@@ -1,5 +1,9 @@
 import json
+import os
 from pathlib import Path
+import sys
+
+from dotenv import load_dotenv
 from src.util.db_manager import ConsultaSQL
 
 # Bibliotecas para plotagem e manipulação de arrays numéricos
@@ -9,7 +13,15 @@ import numpy as np
 # Backend que integra matplotlib com interfaces Qt (PyQt5/PyQt6)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)

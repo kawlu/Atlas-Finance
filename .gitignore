@@ -5,3 +5,5 @@ teste*
 *txt
 *bin
 .env
+.py
+build/

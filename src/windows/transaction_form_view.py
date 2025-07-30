@@ -1,10 +1,12 @@
+import os
+import sys
+import json
 from pathlib import Path
+from datetime import datetime
+
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog
 from PyQt6.QtCore import QTranslator
-
-from datetime import datetime
-import json
 
 from src.util.qt_util import MessageBox
 from src.util.db_manager import ConsultaSQL
@@ -12,8 +14,18 @@ from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 from src.util.formatter import Formatter
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "new_transaction.ui"
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+from dotenv import load_dotenv
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+UI_PATH = BASE_DIR / "ui" / "new_transaction.ui"
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)

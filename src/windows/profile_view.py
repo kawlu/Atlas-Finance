@@ -2,7 +2,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QRegion, QBitmap
 from PyQt6 import QtCore, QtWidgets, QtGui, uic
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 from PyQt6.QtCore import QTranslator
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from pathlib import Path
 
 import sys
@@ -20,8 +20,19 @@ from src.util.language_manager import LanguageManager as lm
 import json
 from pathlib import Path
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "profile.ui"
+from dotenv import load_dotenv
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
+UI_PATH = BASE_DIR / "ui" / "profile.ui"
+PNG_PATH = BASE_DIR / "assets" / "png" / "user.png"
 
 current_script_path = Path(__file__).resolve()
 parent_directory = current_script_path.parent.parent
@@ -32,7 +43,7 @@ with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)
             translate = data_util['traducao']['mensage_box']
 
-class ClienteWindow(QtWidgets.QMainWindow):
+class ClienteWindow(QMainWindow):
     btn_home_pressed = pyqtSignal()
     
     def __init__(self, cliente_id, login_status, home_window, linguagem_atual):
@@ -104,7 +115,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         if foto:
             self.set_foto(foto)
         else:
-            with open(str(parent_directory / 'assets/png/user.png'), 'rb') as f:
+            with open(PNG_PATH, 'rb') as f:
                 self.foto_bytes = f.read()
             self.set_foto(self.foto_bytes)
 
@@ -202,7 +213,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 f.write(CryptoManager.criptografar(dados))
         
         
-        MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['user_update_sucess'])
+        MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['user_update_success'])
             
         #DEBUG
         # print("\nEmail: " + email, "\nSenha: " + senha, "\nOcupação: " + ocupacao,
@@ -232,10 +243,10 @@ class ClienteWindow(QtWidgets.QMainWindow):
                 
                 MessageBox.show_custom_messagebox(self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['deactivate_account_information'])
 
-                from src.windows.auth_login_view import LoginWindow #importação tardia pra evitar importação circular
+                from src.windows.auth_login_view import Login #importação tardia pra evitar importação circular
                 self.close()
                 self.home_window.close()
-                self.login_window = LoginWindow()
+                self.login_window = Login(self.linguagem_atual)
                 self.login_window.show()
             except Exception as e:
                 MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['account_deactivation_error'])

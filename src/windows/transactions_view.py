@@ -1,4 +1,6 @@
+import os
 from pathlib import Path
+import sys
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import pyqtSignal, QTranslator
@@ -13,8 +15,18 @@ from src.util import icons_rc
 
 from src.windows.transaction_form_view import NewTransactionWindow
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "transactions.ui"
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
+from dotenv import load_dotenv
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
+UI_PATH = BASE_DIR / "ui" / "transactions.ui"
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)

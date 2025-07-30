@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import sys
 from PyQt6 import uic
@@ -13,7 +14,17 @@ from src.util.dashboard_manager import Grafico
 from src.util.language_manager import LanguageManager as lm
 from src.util import icons_rc
 
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "dashboard.ui"
+from dotenv import load_dotenv
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+UI_PATH = BASE_DIR / "ui" / "dashboard.ui"
 
 class HomeWindow(QMainWindow):
     def __init__(self, cliente_id, login_status, linguagem_atual):

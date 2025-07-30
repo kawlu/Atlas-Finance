@@ -6,9 +6,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-dotenv_file = Path(__file__).resolve().parent.parent.parent / '.env'
 
-load_dotenv(dotenv_file)
+#ENV_PATH = Path(__file__).resolve().parent.parent.parent / '.env'
+load_dotenv()
 
 uri = os.getenv("POSTGRES_URI")
 if not uri:

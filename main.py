@@ -1,17 +1,26 @@
-import sys
-import locale
 from PyQt6.QtCore import QTranslator
 from PyQt6.QtWidgets import QApplication
 from src.windows.auth_login_view import Login
-from pathlib import Path
 
-TRANSLATE_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "translations_pt_BR.qm"
+from pathlib import Path
+from dotenv import load_dotenv
+import locale
+import sys
+import os
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
 default_locale = locale.getlocale()  # Retorna tupla: ('pt_BR', 'xxxxxx')
 
 def main():
     app = QApplication(sys.argv)
     translator = QTranslator()
-    translator.load(str(TRANSLATE_PATH))
     app.installTranslator(translator)
     try:
         window = Login(linguagem_atual=default_locale[0])

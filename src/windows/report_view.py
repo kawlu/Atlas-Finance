@@ -1,3 +1,5 @@
+import os
+import sys
 from PyQt6 import uic
 from PyQt6.QtWidgets import QDialog, QApplication
 from PyQt6.QtCore import QTranslator
@@ -11,8 +13,18 @@ from src.util.pdf_util import PDFGenerator
 from pathlib import Path
 import json
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "util" / "data_util.json"
-UI_PATH = Path(__file__).resolve().parent.parent.parent / "ui" / "report.ui"
+from dotenv import load_dotenv
+
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+
+DATA_PATH = BASE_DIR / "src" / "util" / "data_util.json"
+UI_PATH = BASE_DIR / "ui" / "report.ui"
 
 with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)

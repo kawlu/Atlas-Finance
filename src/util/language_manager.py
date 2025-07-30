@@ -1,9 +1,20 @@
+import os
+import sys
 from PyQt6.QtCore import QTranslator
 from PyQt6.QtWidgets import QApplication
 from pathlib import Path
 
-TRANSLATE_PATH = Path(__file__).resolve().parent.parent.parent / "data"
+from dotenv import load_dotenv
 
+load_dotenv()
+DEBUG_MODE = os.getenv("DEBUG_MODE", "True").lower() == "true"
+
+if DEBUG_MODE:
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
+else:
+    BASE_DIR = Path(sys.executable).parent
+    
+TRANSLATE_PATH = BASE_DIR  / "data"
 
 class LanguageManager:
     def trocar_linguagem(app: QApplication, translator: QTranslator, idioma: str):
