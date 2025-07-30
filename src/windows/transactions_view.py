@@ -52,6 +52,12 @@ class TransactionsWindow(QDialog):
             self.novo_registro_window = NewTransactionWindow(self, self.cliente_id, self.linguagem_atual)
         self.novo_registro_window.exec()
 
+    def traduzir_registro(self, tipo, categoria):
+        traducao = data_util['traducao']['categoria'][self.linguagem_atual]
+        tipo_traduzido = traducao.get(tipo, tipo)
+        categoria_traduzida = traducao.get(categoria, categoria)
+        return tipo_traduzido, categoria_traduzida
+
     def carregar_registros(self):
         try:
             query = """
@@ -61,10 +67,13 @@ class TransactionsWindow(QDialog):
             """
             registros = db.consultar(query, int(self.cliente_id))
 
+
             self.tabela_Registros.setRowCount(0)
 
             for row_data in registros:
-                self.adicionar_na_tabela(row_data)
+                transacao_id, nome, tipo, categoria, data_realizada, valor = row_data
+                tipo_traduzido, categoria_traduzida = self.traduzir_registro(tipo, categoria)
+                self.adicionar_na_tabela((transacao_id, nome, tipo_traduzido, categoria_traduzida, data_realizada, valor))
 
             self.atualizar_saldo_total()
 
@@ -150,7 +159,7 @@ class TransactionsWindow(QDialog):
                 saldo = 0
             else:
                 entradas = df[df['tipo'] == 'entrada']['valor'].sum()
-                saidas = df[df['tipo'] == 'saída']['valor'].sum()
+                saidas = df[df['tipo'] == 'saida']['valor'].sum()
                 saldo = entradas - saidas
 
             saldo_formatado = Formatter.format_value_to_display(saldo)

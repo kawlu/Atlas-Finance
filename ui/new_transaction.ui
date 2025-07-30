@@ -110,9 +110,7 @@
          <item>
           <widget class="QFrame" name="frame_9">
            <property name="styleSheet">
-            <string notr="true">
-
-</string>
+            <string notr="true"/>
            </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
@@ -417,41 +415,6 @@ QComboBox QAbstractItemView {
     border: 1px solid #2E3B55;
 }</string>
               </property>
-              <item>
-               <property name="text">
-                <string>Alimentação</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Contas</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Estudo</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Lazer</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Saúde</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Outros</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Transporte</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item>

@@ -34,7 +34,7 @@ class ReportWindow(QDialog):
 
     def gerar_pdf_e_popup(self):
         pdf = PDFGenerator(cliente_id=self.cliente_id, mes_selecionado=self.mes_selecionado, linguagem_atual=self.linguagem_atual)
-        sucesso = pdf.gerar()
+        sucesso = pdf.gerar(self.linguagem_atual)
 
         if sucesso is True:
             MessageBox.show_custom_messagebox(parent=self, tipo="information", title=translate[self.linguagem_atual]['success'], message=translate[self.linguagem_atual]['pdf_generated_success'])

@@ -19,6 +19,7 @@ with open(DATA_PATH, "r", encoding="utf-8") as f:
             data_util = json.load(f)
             translate_PDF = data_util['traducao']['PDF']
             translate_month = data_util['traducao']['meses']
+            translate_to_display = data_util['traducao']['categoria']
 
 class PDFGenerator:
     def __init__(self, cliente_id, mes_selecionado, linguagem_atual):
@@ -51,7 +52,7 @@ class PDFGenerator:
             for i in range(len(self.col_x))
         ]
 
-    def gerar(self):
+    def gerar(self, linguagem_atual):
         dados_lidos, nome_mes = self._buscar_dados()
         if dados_lidos.empty:
             return False
@@ -61,7 +62,7 @@ class PDFGenerator:
         if not caminho:
             return None
 
-        self._gerar_pdf(dados_lidos, caminho, nome_mes)
+        self._gerar_pdf(dados_lidos, caminho, nome_mes, linguagem_atual)
         return True
 
     def _buscar_dados(self):
@@ -103,7 +104,7 @@ class PDFGenerator:
         )
         return caminho
 
-    def _gerar_pdf(self, dados, caminho, nome_mes):
+    def _gerar_pdf(self, dados, caminho, nome_mes, linguagem_atual):
         pdf = canvas.Canvas(caminho, pagesize=A4)
         numero_pagina = 1
 
@@ -167,11 +168,14 @@ class PDFGenerator:
         pdf.setFont(self.fonte_texto, self.tamanho_texto)
         desenhar_rodape()
 
+        self.lang_category = translate_to_display[linguagem_atual]
+        
         for _, linha in dados.iterrows():
+            #TODO traduzir agui
             nome = str(linha.get("nome") or "Sem nome").title()
             valor = f'R$ {linha["valor"]:.2f}'.replace('.', ',')
-            tipo = str(linha["tipo"]).capitalize()
-            categoria = str(linha["categoria"]).capitalize()
+            tipo = self.lang_category[str(linha["tipo"])].capitalize()
+            categoria = self.lang_category[str(linha["categoria"])].capitalize()
             data = str(linha["data_realizada"])
 
             linhas_nome = wrap_text(nome, self.col_widths[0] - 10)

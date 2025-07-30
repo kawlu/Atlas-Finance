@@ -30,25 +30,34 @@ class NewTransactionWindow(QDialog):
         lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
 
         uic.loadUi(UI_PATH, self)
+        
+        self.add_categorias_traduzidas()
+        
         self.input_Data.setDate(datetime.now())
         self.balanco_window = balanco_window
         self.cliente_id = cliente_id
         self.btn_Confirmar.clicked.connect(self.adicionar_registro)
 
-    def adicionar_registro(self):
-        #TODO arrumar sa porra
-        categoria_nomes = {
-            'food':'alimentação',
-            'bills':'contas',
-            'study':'estudo',
-            'leisure':'lazer',
-            'health':'saúde',
-            'others':'outros',
-            'transportation':'transporte'
+    def add_categorias_traduzidas(self):
+        db = data_util['traducao']['categoria']['database']
+        traducao = data_util['traducao']['categoria'][self.linguagem_atual]
+        
+        categorias_traduzidas = [
+            traducao[db[k]] for k in sorted(db.keys(), key=int) if db[k] in traducao
+        ]
+
+        # Salva mapeamento reverso (visível → interno)
+        self.categorias_map = {
+            traducao[db[k]]: db[k] for k in sorted(db.keys(), key=int) if db[k] in traducao
         }
-        tipo_opcoes = {
-            'incoming':'entrada',
-            'outgoing':'saída'
+
+        self.cbox_Categoria.addItems(categorias_traduzidas)
+
+    def adicionar_registro(self):
+        traducao_tipo = data_util['traducao']['categoria'][self.linguagem_atual]
+        
+        self.tipo_map = {
+            traducao_tipo[k]: k for k in ['entrada', 'saida']
         }
         
         nome = self.input_Nome.text()
@@ -56,17 +65,10 @@ class NewTransactionWindow(QDialog):
         valor = self.input_Valor.text()
         
         tipo = self.cbox_Tipo.currentText()
-        categoria = self.cbox_Categoria.currentText()
+        valor_interno_tipo = self.tipo_map[tipo] 
         
-        if self.linguagem_atual == 'pt':
-            categoria_db = categoria.lower()
-            tipo_db = tipo.lower()
-        else:
-            categoria_db = categoria.lower()
-            categoria_db = categoria_nomes[categoria_db]
-            
-            tipo_db = tipo.lower()
-            tipo_db = tipo_opcoes[tipo_db]
+        categoria = self.cbox_Categoria.currentText()
+        valor_categoria_interna = self.categorias_map[categoria]
 
         if nome and tipo and categoria and data_realizada and valor:
             try:
@@ -79,7 +81,7 @@ class NewTransactionWindow(QDialog):
                     RETURNING transacao_id
                 """
 
-                valores = (nome, valor_banco, tipo_db, categoria_db, data_banco, int(self.cliente_id))
+                valores = (nome, valor_banco, valor_interno_tipo, valor_categoria_interna, data_banco, int(self.cliente_id))
                     
                 transacao_id = db.executar_retorno(query, valores)[0]
 
