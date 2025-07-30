@@ -144,6 +144,9 @@
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_nome">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Nome Completo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -158,10 +161,22 @@
                       </sizepolicy>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;</string>
+                      <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
+
+</string>
                      </property>
                      <property name="inputMethodHints">
                       <set>Qt::ImhPreferLowercase|Qt::ImhPreferUppercase</set>
@@ -173,6 +188,9 @@ padding: 10px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_senha">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="frameShape">
                       <enum>QFrame::NoFrame</enum>
                      </property>
@@ -190,10 +208,22 @@ padding: 10px;</string>
                       </sizepolicy>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;</string>
+                      <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
+
+</string>
                      </property>
                      <property name="text">
                       <string/>
@@ -208,6 +238,9 @@ padding: 10px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_celular">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Celular&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -222,10 +255,22 @@ padding: 10px;</string>
                       </sizepolicy>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;</string>
+                      <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
+
+</string>
                      </property>
                      <property name="inputMethodHints">
                       <set>Qt::ImhNone</set>
@@ -246,6 +291,9 @@ padding: 10px;</string>
                        <verstretch>0</verstretch>
                       </sizepolicy>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Qual é a sua ocupação? &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -263,6 +311,18 @@ padding: 10px;</string>
     min-width: 80px;
     min-height: 25px;
 }
+
+QComboBox:hover{
+	border-radius: 10px;
+    border: 2px solid #DBDBDB;
+    padding: 5px 10px;
+    background-color: rgb(219, 219, 219);
+    color: rgb(13, 25, 43);
+    min-width: 80px;
+    min-height: 25px;
+	background-color: #C9C9C9
+}
+
 </string>
                      </property>
                      <item>
@@ -279,6 +339,9 @@ padding: 10px;</string>
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
                      </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Quais são seus objetivos?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -297,6 +360,18 @@ padding: 10px;</string>
     min-width: 80px;
     min-height: 25px;
 }
+
+QComboBox:hover{
+	border-radius: 10px;
+    border: 2px solid #DBDBDB;
+    padding: 5px 10px;
+    background-color: rgb(219, 219, 219);
+    color: rgb(13, 25, 43);
+    min-width: 80px;
+    min-height: 25px;
+	background-color: #C9C9C9
+}
+
 </string>
                      </property>
                      <item>
@@ -343,7 +418,8 @@ padding: 10px;</string>
                    <item>
                     <widget class="QLabel" name="lbl_email">
                      <property name="styleSheet">
-                      <string notr="true">font-size: 15px</string>
+                      <string notr="true">font-size: 15px;
+color: rgb(219, 219, 219);</string>
                      </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Email&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -359,10 +435,20 @@ padding: 10px;</string>
                       </sizepolicy>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;
+                      <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
 
 </string>
                      </property>
@@ -379,6 +465,9 @@ padding: 10px;
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_confirmar_senha">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Confirmar Senha&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -387,10 +476,22 @@ padding: 10px;
                    <item>
                     <widget class="QLineEdit" name="input_confirmar_senha">
                      <property name="styleSheet">
-                      <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;</string>
+                      <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
+
+</string>
                      </property>
                      <property name="inputMethodHints">
                       <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData</set>
@@ -405,6 +506,9 @@ padding: 10px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_nascimento">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Data de Nascimento&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -426,12 +530,34 @@ padding: 10px;</string>
     background-color: rgb(13, 25, 43);
     color: rgb(219, 219, 219);
     min-height: 35px;
-}</string>
+}
+
+QDateEdit:hover{
+	border-radius: 10px;
+    border: 2px solid #DBDBDB;
+    padding: 0 10px;
+    background-color: rgb(13, 25, 43);
+    color: rgb(219, 219, 219);
+    min-height: 35px;
+	background-color: #081221
+}
+
+</string>
+                     </property>
+                     <property name="minimumDate">
+                      <date>
+                       <year>1909</year>
+                       <month>8</month>
+                       <day>21</day>
+                      </date>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_salario">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Qual sua Faixa Salarial?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -449,6 +575,18 @@ padding: 10px;</string>
     min-width: 80px;
     min-height: 25px;
 }
+
+QComboBox:hover{
+	border-radius: 10px;
+    border: 2px solid #DBDBDB;
+    padding: 5px 10px;
+    background-color: rgb(219, 219, 219);
+    color: rgb(13, 25, 43);
+    min-width: 80px;
+    min-height: 25px;
+	background-color: #C9C9C9
+}
+
 </string>
                      </property>
                      <item>
@@ -480,6 +618,9 @@ padding: 10px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="lbl_pais">
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(219, 219, 219);</string>
+                     </property>
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;País de Residência&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
@@ -496,7 +637,20 @@ padding: 10px;</string>
     color: rgb(13, 25, 43);
     min-width: 80px;
     min-height: 25px;
-}</string>
+}
+
+QComboBox:hover{
+	border-radius: 10px;
+    border: 2px solid #DBDBDB;
+    padding: 5px 10px;
+    background-color: rgb(219, 219, 219);
+    color: rgb(13, 25, 43);
+    min-width: 80px;
+    min-height: 25px;
+	background-color: #C9C9C9
+}
+
+</string>
                      </property>
                      <item>
                       <property name="text">
@@ -515,6 +669,9 @@ padding: 10px;</string>
               <widget class="QCheckBox" name="checkBox">
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="styleSheet">
                 <string notr="true">color: rgb(219, 219, 219);
@@ -667,6 +824,12 @@ max-height: 215px;</string>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">background-color: none;
 color: rgb(219, 219, 219);
@@ -724,22 +887,54 @@ text-decoration: underline;
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="styleSheet">
-                <string notr="true">background-color: #DBDBDB;
-color: #0D192B;
-border: 2px solid rgb(219, 219, 219);
+                <string notr="true">QPushButton{
+	background-color: #DBDBDB;
+	color: #0D192B;
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-margin-bottom: 10px;
-border-radius: 2px;
-padding: 5px 10px;
+QPushButton:hover{
+	background-color: #C9C9C9;
+	color: #0D192B;
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
+	padding-top: 8px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-border-radius: 5px;
-min-width:100px;
-min-height: 25px;
+QPushButton:pressed{
+	background-color: #BDBDBD;
+	color: #0D192B;
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 6px 10px;
+	padding-top: 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-font-size: 15px;
-
-font-weight: bold;
 </string>
                </property>
                <property name="text">
@@ -752,22 +947,53 @@ font-weight: bold;
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="styleSheet">
-                <string notr="true">background-color: #0D192B;
-color: rgb(219, 219, 219);
-border: 2px solid rgb(219, 219, 219);
+                <string notr="true">QPushButton{
+	background-color: #0D192B;
+	color: rgb(219, 219, 219);
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-margin-bottom: 10px;
-border-radius: 2px;
-padding: 5px 10px;
+QPushButton:hover{
+	background-color: #081221;
+	color: rgb(219, 219, 219);
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
+	padding-top: 8px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-border-radius: 5px;
-min-width:100px;
-min-height: 25px;
-
-font-size: 15px;
-
-font-weight: bold;</string>
+QPushButton:pressed {
+	background-color: #060F1C;
+	color: rgb(219, 219, 219);
+	border: 2px solid rgb(219, 219, 219);
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
+	padding-top: 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 25px;
+	font-size: 15px;
+	font-weight: bold;
+}</string>
                </property>
                <property name="text">
                 <string>Crie sua conta</string>

@@ -94,12 +94,24 @@
          <bool>true</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: #147117;
-color: #DBDBDB;
-border-radius: 5px;
-padding: 5px 10px;
-max-height: 80px;
-max-width: 300px;</string>
+         <string notr="true">QPushButton{
+	background-color: #147117;
+	color: #DBDBDB;
+	border-radius: 5px;
+	padding: 5px 10px;
+	max-height: 80px;
+	max-width: 300px;
+}
+
+QPushButton:hover{
+	background-color: #116514;
+	padding-top: 7px;
+}
+                          
+QPushButton:pressed {
+	 background-color: #0D570F;
+	padding-top: 9px;
+}</string>
         </property>
         <property name="text">
          <string>Sim</string>
@@ -126,12 +138,24 @@ max-width: 300px;</string>
          <bool>true</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: #8D0A0A;
-color: #DBDBDB;
-border-radius: 5px;
-padding: 5px 10px;
-max-height: 80px;
-max-width: 300px;
+         <string notr="true">QPushButton{
+	background-color: #8D0A0A;
+	color: #DBDBDB;
+	border-radius: 5px;
+	padding: 5px 10px;
+	max-height: 80px;
+	max-width: 300px;
+}
+
+QPushButton:hover {
+	background-color: #790A0A;
+	padding-top: 7px;
+}
+                          
+QPushButton:pressed {
+	background-color: #770909;
+	padding-top: 9px;
+}
 </string>
         </property>
         <property name="text">

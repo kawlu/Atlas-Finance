@@ -125,7 +125,7 @@ min-width: 75px;
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item alignment="Qt::AlignVCenter">
+          <item>
            <widget class="QPushButton" name="btn_home">
             <property name="cursor">
              <cursorShape>ArrowCursor</cursorShape>
@@ -141,10 +141,13 @@ font-size: 16px;</string>
             </property>
            </widget>
           </item>
-          <item alignment="Qt::AlignHCenter">
+          <item>
            <widget class="QPushButton" name="btn_perfil">
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
@@ -175,6 +178,9 @@ font-size: 16px;</string>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 min-width: 10px;
@@ -187,6 +193,17 @@ font-size: 16px;</string>
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="styleSheet">
+          <string notr="true">background-color:  rgb(168, 168, 168);
+</string>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
         </widget>
        </item>
       </layout>
@@ -270,14 +287,41 @@ font-size: 16px;</string>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(219, 219, 219);
-color: rgb(13, 25, 43);
+             <string notr="true">QPushButton {
+	background-color: rgb(219, 219, 219);
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width: 100px;
+	min-height: 20px;
+	font-weight:bold;
+}
 
-padding: 5px 10px;
-border-radius: 5px;
-min-width: 100px;
-min-height: 20px;</string>
+QPushButton:hover {
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width: 100px;
+	min-height: 20px;
+	padding-top: 6px;
+	background-color: #C9C9C9;
+	font-weight:bold;
+}
+
+QPushButton:pressed{
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width: 100px;
+	min-height: 20px;
+	padding-top: 7px;
+	background-color: #BDBDBD;
+	font-weight:bold;
+}</string>
             </property>
             <property name="text">
              <string>Gerar Relatório</string>
@@ -303,18 +347,30 @@ min-height: 20px;</string>
     border-radius: 5px;
     min-width: 80px;
     min-height: 25px;
+	font-weight: bold;
 }
 
 /* Estilo da lista suspensa (popup de opções) */
 QComboBox QAbstractItemView {
-    background-color: white;
+    background-color: rgb(219, 219, 219);
     color: rgb(13, 25, 43);
     min-width: 100px;  /* &lt;-- isso evita o corte */
     padding: 5px;
     border: 1px solid #999;
     selection-background-color: rgb(13, 25, 43);
 	color: rgb(13, 25, 43);
-}</string>
+}
+
+QComboBox:hover{
+    color: rgb(13, 25, 43);
+    padding: 5px 10px;
+    border-radius: 5px;
+    min-width: 80px;
+    min-height: 25px;
+	background-color: #C9C9C9
+}
+
+</string>
             </property>
             <item>
              <property name="text">
@@ -690,14 +746,41 @@ font-weight: bold;</string>
                         <property name="cursor">
                          <cursorShape>PointingHandCursor</cursorShape>
                         </property>
+                        <property name="focusPolicy">
+                         <enum>Qt::NoFocus</enum>
+                        </property>
                         <property name="styleSheet">
-                         <string notr="true">color: rgb(219, 219, 219);
-background-color: rgb(13, 25, 43);
+                         <string notr="true">QPushButton{
+	color: rgb(219, 219, 219);
+	background-color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 30px;
+}
 
-padding: 5px 10px;
-border-radius: 5px;
-min-width:100px;
-min-height: 30px;</string>
+QPushButton:hover {
+	color: rgb(219, 219, 219);
+	background-color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 30px;
+	padding-top: 6px;
+	background-color: #081221;
+}
+
+
+QPushButton:pressed {
+	color: rgb(219, 219, 219);
+	background-color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 30px;
+	padding-top: 7px;
+	background-color: #060F1C;
+}</string>
                         </property>
                         <property name="text">
                          <string>Editar</string>

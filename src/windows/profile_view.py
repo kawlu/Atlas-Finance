@@ -220,7 +220,7 @@ class ClienteWindow(QtWidgets.QMainWindow):
         self.hide()
     
     def desativar_conta(self):
-        confirmado = MessageBox.ask_confirmation(parent=self, title=translate[self.linguagem_atual]['confirmation'], message=translate[self.linguagem_atual]['deactivate_account_confirm'])
+        confirmado = MessageBox.ask_confirmation(parent=self, title=translate[self.linguagem_atual]['confirm'], message=translate[self.linguagem_atual]['deactivate_account_confirm'])
             
         if confirmado:
             try:

@@ -170,6 +170,9 @@ color: rgb(219, 219, 219);</string>
                 </item>
                 <item alignment="Qt::AlignHCenter">
                  <widget class="QLabel" name="label_6">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
                   <property name="text">
                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#dbdbdb;&quot;&gt;Seus números, seus gráficos, suas decisões&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
@@ -204,10 +207,20 @@ color: rgb(219, 219, 219);</string>
                 <item>
                  <widget class="QLineEdit" name="lineEdit">
                   <property name="styleSheet">
-                   <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;
+                   <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}
 
 </string>
                   </property>
@@ -232,11 +245,20 @@ padding: 10px;
                 <item>
                  <widget class="QLineEdit" name="lineEdit_2">
                   <property name="styleSheet">
-                   <string notr="true">margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #DBDBDB;
-padding: 10px;
-</string>
+                   <string notr="true">QLineEdit{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+}
+
+QLineEdit:hover{
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #DBDBDB;
+	padding: 10px;
+	background-color: #081221
+}</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -275,22 +297,40 @@ padding: 10px;
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #0D192B;
-color: rgb(219, 219, 219);
-border: 2px solid #DBDBDB;
+                   <string notr="true">QPushButton{
+	background-color: #0D192B;
+	color: rgb(219, 219, 219);
+	border: 2px solid #DBDBDB;
 
-margin-bottom: 10px;
-border-radius: 2px;
-padding: 5px 10px;
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
 
-border-radius: 5px;
-min-width:100px;
-min-height: 20px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 20px;
 
-font-size: 15px;
+	font-size: 15px;
 
-font-weight: bold;</string>
+	font-weight: bold;
+}
+
+QPushButton:hover {
+	padding-top: 6px;
+	background-color: #081221;
+	border: 2px solid #DBDBDB;
+}
+
+
+QPushButton:pressed {
+	padding-top: 7px;
+	background-color: #060F1C;
+	border: 2px solid #DBDBDB;
+}</string>
                   </property>
                   <property name="text">
                    <string>Crie sua conta</string>
@@ -301,6 +341,9 @@ font-weight: bold;</string>
                  <widget class="QCheckBox" name="checkBox">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">color: rgb(219, 219, 219);</string>
@@ -321,23 +364,38 @@ font-weight: bold;</string>
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #DBDBDB;
-color: #0D192B;
-border: 2px solid #DBDBDB;
+                   <string notr="true">QPushButton {
+	background-color: #DBDBDB;
+	color: #0D192B;
+	border: 2px solid #DBDBDB;
 
-margin-bottom: 10px;
-border-radius: 2px;
-padding: 5px 10px;
+	margin-bottom: 10px;
+	border-radius: 2px;
+	padding: 5px 10px;
 
-border-radius: 5px;
-min-width:100px;
-min-height: 20px;
+	border-radius: 5px;
+	min-width:100px;
+	min-height: 20px;
 
-font-size: 15px;
+	font-size: 15px;
+	font-weight: bold;
+}
 
-font-weight: bold;
-</string>
+QPushButton:hover {
+	padding-top: 6px;
+	background-color: #C9C9C9;
+	border: 2px solid #DBDBDB;
+}
+
+QPushButton:pressed{
+	padding-top: 7px;
+	background-color: #BDBDBD;
+	border: 2px solid #DBDBDB;
+}</string>
                   </property>
                   <property name="text">
                    <string>Login</string>

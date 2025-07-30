@@ -1,6 +1,6 @@
 from pathlib import Path
 from PyQt6 import uic
-from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QDialog, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import pyqtSignal, QTranslator
 
 import json
@@ -35,6 +35,9 @@ class TransactionsWindow(QDialog):
         lm.trocar_linguagem(QApplication.instance(), translator, linguagem_atual)
 
         uic.loadUi(UI_PATH, self)
+
+        self.tabela_Registros.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
+        self.tabela_Registros.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         
         self.novo_registro_window = None
 

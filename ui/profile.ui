@@ -135,6 +135,9 @@ border: none;</string>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 border-radius: 2px;
@@ -179,6 +182,9 @@ font-size: 16px;</string>
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string notr="true">padding: 5px 10px;
 border-radius: 2px;
@@ -192,6 +198,17 @@ font-size: 16px;</string>
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="styleSheet">
+          <string notr="true">background-color:  rgb(168, 168, 168);
+</string>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
         </widget>
        </item>
       </layout>
@@ -467,11 +484,22 @@ color: #0D192B;</string>
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">margin-left: 15px;
-margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #0D192B;
-padding: 10px;</string>
+                   <string notr="true">QLineEdit{
+	margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+}
+
+QLineEdit:focus {
+	margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+	background-color: #C9C9C9;
+}</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -580,11 +608,22 @@ color: #0D192B;</string>
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">margin-left: 15px;
-margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #0D192B;
-padding: 10px;</string>
+                   <string notr="true">QLineEdit{
+	margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+}
+
+QLineEdit:focus {
+	margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+	background-color: #C9C9C9;
+}</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -675,22 +714,35 @@ color: #0D192B;</string>
                    <bool>false</bool>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">margin-left: 15px;
-margin-bottom: 10px;
-border-radius: 10px;
-border: 2px solid #0D192B;
-padding: 10px;
+                   <string notr="true">QComboBox{
+	margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+}
 
 /* Estilo da lista suspensa (popup de opções) */
 QComboBox QAbstractItemView {
-    background-color: white;
+    background-color: #DBDBDB;
     color: rgb(13, 25, 43);
     min-width: 100px;  /* &lt;-- isso evita o corte */
     padding: 5px;
     border: 1px solid #999;
 	selection-background-color: rgb(13, 25, 43);
     color: rgb(13, 25, 43);
-}</string>
+}
+
+QComboBox:hover{
+    margin-left: 15px;
+	margin-bottom: 10px;
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	padding: 10px;
+	background-color: #C9C9C9
+}
+
+</string>
                   </property>
                  </widget>
                 </item>
@@ -896,10 +948,20 @@ QComboBox QAbstractItemView {
                          </font>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">border-radius: 10px;
-border: 2px solid #0D192B;
-min-width: 200px;
-padding: 10px;</string>
+                         <string notr="true">QLineEdit{
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	min-width: 200px;
+	padding: 10px;
+}
+
+QLineEdit:focus {
+	border-radius: 10px;
+	border: 2px solid #0D192B;
+	min-width: 200px;
+	padding: 10px;
+	background-color: #C9C9C9;
+}</string>
                         </property>
                         <property name="text">
                          <string/>
@@ -945,26 +1007,38 @@ padding: 10px;</string>
                          <cursorShape>PointingHandCursor</cursorShape>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    background-color: rgb(219, 219, 219);
-    color: rgb(13, 25, 43);
-    padding: 5px 10px;
-    border-radius: 5px;
+                         <string notr="true">QComboBox{
+	background-color: rgb(219, 219, 219);
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
 	border: 2px solid #0D192B;
-    min-width: 80px;
-    min-height: 25px;
+	min-width: 80px;
+	min-height: 25px;
 }
 
 /* Estilo da lista suspensa (popup de opções) */
 QComboBox QAbstractItemView {
-    background-color: white;
+    background-color: #DBDBDB;
     color: rgb(13, 25, 43);
     min-width: 100px;  /* &lt;-- isso evita o corte */
     padding: 5px;
     border: 1px solid #999;
-    selection-background-color: rgb(13, 25, 43);
+	selection-background-color: rgb(13, 25, 43);
     color: rgb(13, 25, 43);
-}</string>
+}
+
+QComboBox:hover{
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 2px solid #0D192B;
+	min-width: 80px;
+	min-height: 25px;
+	background-color: #C9C9C9
+}
+
+</string>
                         </property>
                        </widget>
                       </item>
@@ -1096,6 +1170,9 @@ max-height: 375px;
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">color: #0D192B;</string>
                   </property>
@@ -1170,25 +1247,42 @@ color: #0D192B;</string>
                        <pointsize>16</pointsize>
                       </font>
                      </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
                      <property name="styleSheet">
-                      <string notr="true">background-color: rgb(219, 219, 219);
-color: rgb(13, 25, 43);
-padding: 5px 10px;
-border-radius: 5px;
-border: 2px solid #0D192B;
-min-width: 80px;
-min-height: 40px;
+                      <string notr="true">QComboBox{
+	background-color: rgb(219, 219, 219);
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 2px solid #0D192B;
+	min-width: 80px;
+	min-height: 40px;
+}
 
 /* Estilo da lista suspensa (popup de opções) */
 QComboBox QAbstractItemView {
-    background-color: white;
+    background-color: #DBDBDB;
     color: rgb(13, 25, 43);
     min-width: 100px;  /* &lt;-- isso evita o corte */
     padding: 5px;
     border: 1px solid #999;
 	selection-background-color: rgb(13, 25, 43);
     color: rgb(13, 25, 43);
-}</string>
+}
+
+QComboBox:hover{
+	color: rgb(13, 25, 43);
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 2px solid #0D192B;
+	min-width: 80px;
+	min-height: 40px;
+	background-color: #C9C9C9
+}
+
+</string>
                      </property>
                      <item>
                       <property name="text">
@@ -1244,13 +1338,28 @@ QComboBox QAbstractItemView {
                      <property name="cursor">
                       <cursorShape>PointingHandCursor</cursorShape>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="styleSheet">
-                      <string notr="true">background-color: #8D0A0A;
-color: #DBDBDB;
-border-radius: 5px;
-padding: 5px 10px;
-min-width: 80px;
-min-height: 40px;</string>
+                      <string notr="true">QPushButton{
+	background-color: #8D0A0A;
+	color: #DBDBDB;
+	border-radius: 5px;
+	padding: 5px 10px;
+	min-width: 80px;
+	min-height: 40px;
+}
+
+QPushButton:hover {
+	background-color: #790A0A;
+	padding-top: 7px;
+}
+
+QPushButton:pressed {
+	background-color: #770909;
+	padding-top: 9px;
+}</string>
                      </property>
                      <property name="text">
                       <string>Desativar Conta</string>
@@ -1329,8 +1438,20 @@ min-height: 50px;</string>
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
                <property name="styleSheet">
-                <string notr="true">background-color: #DBDBDB;
-color: #0D192B;</string>
+                <string notr="true">QPushButton{
+	background-color: #DBDBDB;
+	color: #0D192B;
+}
+
+QPushButton:hover {
+	padding-top:12px;
+	background-color: #C9C9C9;
+}
+
+QPushButton:pressed{
+	padding-top: 14px;
+	background-color: #BDBDBD;
+}</string>
                </property>
                <property name="text">
                 <string>Salvar</string>

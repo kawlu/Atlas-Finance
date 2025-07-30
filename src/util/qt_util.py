@@ -37,6 +37,12 @@ class MessageBox():
 
                 QPushButton:hover {
                     background-color: #1A2A46;
+                    padding-top: 7px;
+                }
+                              
+                QPushButton:pressed {
+                    background-color: #1A2A46;
+                    padding-top: 8px;
                 }
             """)
 
@@ -89,8 +95,24 @@ class MessageBox():
                 font-weight: bold;
             }
                           
-            QPushButton:hover {
-                background-color: #1A2A46;
+            QPushButton#btn_sim:hover {
+                padding-top: 7px;
+                background-color: #116514;
+            }
+                          
+            QPushButton#btn_sim:pressed {
+                padding-top: 9px;
+                background-color: #0D570F;
+            }
+                          
+            QPushButton#btn_nao:hover {
+                padding-top: 7px;
+                background-color: #790A0A;
+            }
+                          
+            QPushButton#btn_nao:pressed {
+                padding-top: 9px;
+                background-color: #770909;
             }
         """)
 
