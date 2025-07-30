@@ -2,7 +2,8 @@ from PyQt6 import uic, QtWidgets, QtGui
 from PyQt6.QtGui import QPixmap, QPainter
 from PyQt6.QtWidgets import QMessageBox, QMainWindow, QApplication
 from PyQt6.QtCore import Qt, QTranslator
-import pymysql
+import psycopg2
+from psycopg2 import IntegrityError, DatabaseError
 import re
 
 from src.util.db_manager import ConsultaSQL
@@ -169,10 +170,10 @@ class SignUp(QMainWindow):
             
             self.voltar_login()
 
-        except pymysql.err.IntegrityError as e:
+        except IntegrityError as e:
             MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['db_error'])
             print(f"Erro de integridade: {e}")
-        except pymysql.MySQLError as e:
+        except DatabaseError as e:
             MessageBox.show_custom_messagebox(self, tipo="error", title=translate[self.linguagem_atual]['error'], message=translate[self.linguagem_atual]['db_error'])
             print(str(e))
 
