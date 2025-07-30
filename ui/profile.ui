@@ -493,6 +493,7 @@ color: #0D192B;</string>
 }
 
 QLineEdit:focus {
+	color: #0D192B;
 	margin-left: 15px;
 	margin-bottom: 10px;
 	border-radius: 10px;
@@ -617,6 +618,7 @@ color: #0D192B;</string>
 }
 
 QLineEdit:focus {
+	color: #0D192B;
 	margin-left: 15px;
 	margin-bottom: 10px;
 	border-radius: 10px;
@@ -715,6 +717,7 @@ color: #0D192B;</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true">QComboBox{
+	color: #0D192B;
 	margin-left: 15px;
 	margin-bottom: 10px;
 	border-radius: 10px;
@@ -956,6 +959,7 @@ QComboBox:hover{
 }
 
 QLineEdit:focus {
+	color: #0D192B;
 	border-radius: 10px;
 	border: 2px solid #0D192B;
 	min-width: 200px;
