@@ -31,27 +31,44 @@ class NewTransactionWindow(QDialog):
 
         uic.loadUi(UI_PATH, self)
         
-        self.add_categorias_traduzidas()
+        # seta tipo categorias por tipo
+        tipo_inicial = self.cbox_Tipo.currentText()
+        self.on_tipo_changed(tipo_inicial)
         
         self.input_Data.setDate(datetime.now())
         self.balanco_window = balanco_window
         self.cliente_id = cliente_id
         self.btn_Confirmar.clicked.connect(self.adicionar_registro)
+        self.cbox_Tipo.currentTextChanged.connect(self.on_tipo_changed)
 
-    def add_categorias_traduzidas(self):
-        db = data_util['traducao']['categoria']['database']
+    def add_categorias_traduzidas(self, tipo):
         traducao = data_util['traducao']['categoria'][self.linguagem_atual]
         
+        categorias_por_tipo = {
+            "entrada": ["salario", "bonus", "freelance", "comissao", "investimento", "vendas", "reembolso", "outros"],
+            "saida": ["alimentacao", "contas", "moradia", "transporte", "saude", "educacao", "lazer", "impostos", "assinaturas", "outros"]
+        }
+        
+        categorias_validas = categorias_por_tipo.get(tipo, [])
+        
         categorias_traduzidas = [
-            traducao[db[k]] for k in sorted(db.keys(), key=int) if db[k] in traducao
+            traducao[cat] for cat in categorias_validas if cat in traducao
         ]
 
-        # Salva mapeamento reverso (visível → interno)
         self.categorias_map = {
-            traducao[db[k]]: db[k] for k in sorted(db.keys(), key=int) if db[k] in traducao
+            traducao[cat]: cat for cat in categorias_validas if cat in traducao
         }
 
+        self.cbox_Categoria.clear()
         self.cbox_Categoria.addItems(categorias_traduzidas)
+
+    def on_tipo_changed(self, texto_tipo):
+        traducao = data_util['traducao']['categoria'][self.linguagem_atual]
+        # Inverte o dicionário (valor para chave) com case insensitive
+        inverso = {v.lower(): k for k, v in traducao.items()}
+        tipo_interno = inverso.get(texto_tipo.lower(), None)
+        if tipo_interno:
+            self.add_categorias_traduzidas(tipo_interno)
 
     def adicionar_registro(self):
         traducao_tipo = data_util['traducao']['categoria'][self.linguagem_atual]
